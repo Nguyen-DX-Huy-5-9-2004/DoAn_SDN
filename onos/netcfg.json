@@ -1,0 +1,101 @@
+{
+  "devices": {
+
+    "of:0000000000000001": {
+      "basic": {
+        "name": "CORE ROUTER",
+        "driver": "ovs",
+        "latitude": 0,
+        "longitude": 0
+      }
+    },
+
+    "of:0000000000000002": {
+      "basic": {
+        "name": "BOTNET DISTRIBUTION",
+        "driver": "ovs",
+        "latitude": -10,
+        "longitude": -20
+      }
+    },
+
+    "of:0000000000000003": {
+      "basic": {
+        "name": "CLIENT DISTRIBUTION",
+        "driver": "ovs",
+        "latitude": -10,
+        "longitude": 20
+      }
+    },
+
+    "of:0000000000000004": {
+      "basic": {
+        "name": "BOTNET ACCESS",
+        "driver": "ovs",
+        "latitude": -25,
+        "longitude": -20
+      }
+    },
+
+    "of:0000000000000005": {
+      "basic": {
+        "name": "DATACENTER FABRIC",
+        "driver": "ovs",
+        "latitude": -25,
+        "longitude": 20
+      }
+    }
+  },
+
+  "hosts": {
+
+    "00:00:00:00:00:70/None": {
+      "basic": {
+        "name": "WEB SERVER",
+        "latitude": -40,
+        "longitude": 23
+      }
+    },
+
+    "00:00:00:00:00:71/None": {
+      "basic": {
+        "name": "DNS SERVER",
+        "latitude": -41,
+        "longitude": 21
+      }
+    },
+
+    "00:00:00:00:00:72/None": {
+      "basic": {
+        "name": "API SERVER",
+        "latitude": -42,
+        "longitude": 24
+      }
+    },
+
+    "00:00:00:00:00:80/None": {
+      "basic": {
+        "name": "GNN IDS",
+        "latitude": -38,
+        "longitude": 16
+      }
+    },
+
+    "00:00:00:00:00:81/None": {
+      "basic": {
+        "name": "HONEYPOT",
+        "latitude": -39,
+        "longitude": 14
+      }
+    },
+
+    "00:00:00:00:00:82/None": {
+      "basic": {
+        "name": "NETWORK MONITOR",
+        "latitude": -37,
+        "longitude": 18
+      }
+    }
+
+  }
+}

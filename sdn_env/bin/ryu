@@ -1,0 +1,10 @@
+#!/home/tugendfakas/DoAn_SDN/sdn_env/bin/python3.10
+# PBR Generated from 'console_scripts'
+
+import sys
+
+from ryu.cmd.ryu_base import main
+
+
+if __name__ == "__main__":
+    sys.exit(main())

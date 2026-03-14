@@ -1,0 +1,17 @@
+sudo mn -c
+docker restart onos-controller
+sudo python3 system.py
+
+mininet> py from attack.attack_orchestrator import syn_flood
+mininet> py syn_flood(net,"10.0.0.100")
+
+attack dạng wave
+mininet> py from attack.attack_orchestrator import wave_attack
+mininet> py wave_attack(net,"10.0.0.100")
+
+stealth scan
+mininet> py from attack.attack_orchestrator import stealth_scan
+mininet> py stealth_scan(net,"10.0.0.100")
+
+Stop attack
+mininet> py from attack.attack_orchestrator import stop_attack

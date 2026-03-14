@@ -1,0 +1,11 @@
+[console_scripts]
+topology = topology.__main__:__main__
+
+[pytest11]
+topology = topology.pytest.plugin
+
+[topology_library_10]
+common = topology.libraries.common
+
+[topology_platform_10]
+debug = topology.platforms.debug:DebugPlatform
