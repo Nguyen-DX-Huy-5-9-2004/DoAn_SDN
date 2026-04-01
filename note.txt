@@ -1,0 +1,292 @@
+sudo systemctl stop docker
+sudo systemctl stop openvswitch-switch
+sudo ip -all netns delete
+docker rm -f web1 db1 2>/dev/null
+sudo fuser -k 6653/tcp 6633/tcp 8181/tcp
+sudo pkill -9 -f mininet
+sudo pkill -9 -f mnexec
+sudo mn -c
+docker rm -f onos 2>/dev/null
+docker rm -f onos
+sudo systemctl start openvswitch-switch
+sudo systemctl start docker
+docker run -t -d --name onos \
+-p 8181:8181 -p 6653:6653 -p 8101:8101 \
+-e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
+onosproject/onos:latest
+sleep 5
+sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
+
+cd ~/Documents/DoAn_SDN
+sudo ./start.sh
+
+docker run -t -d --name onos \
+  -m 4g \
+  --cpus="5.0" \
+  -p 8181:8181 -p 6653:6653 -p 8101:8101 \
+  -e "JAVA_OPTS=-Xms1G -Xmx2G" \
+  -e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
+  onosproject/onos:latest
+
+-m 2g (Giới hạn RAM phần cứng): Lệnh này "trói" container ONOS lại, không cho phép nó chạm tới quá 2GB RAM vật lý của máy.
+--cpus="2.0" (Giới hạn CPU): Thay vì để ONOS dùng toàn bộ 8 luồng CPU (góp phần làm máy chạy lên 97% như bạn thấy trước đó), cờ này giới hạn ONOS chỉ được sử dụng tối đa sức mạnh tương đương 2 luồng CPU. Phần CPU còn lại sẽ được nhường cho Mininet, các container Web/DB và script Python của bạn.
+-e "JAVA_OPTS=-Xms1G -Xmx1.5G" (Chặn đứng sự tham lam của Java):
+Đây là "bùa chú" quan trọng nhất. Nếu bạn chỉ giới hạn -m 2g của Docker mà không có dòng này, Java vẫn sẽ nghĩ nó có rất nhiều RAM, nó sẽ cố gắng xin cấp phát vượt quá 2GB và kết quả là container sẽ bị hệ điều hành "giết" đột ngột (lỗi OOMKilled).
+-Xms1G: Yêu cầu Java khi khởi động chỉ dùng đúng 1GB RAM.
+-Xmx1.5G: Khống chế mức trần tối đa Java được phép phình ra là 1.5GB RAM.
+
+nvidia-smi pmon -c 1
+
+# ONOS UI & TOPOLOGY MAPPING
+[Sau khi system chạy thành công]
+1. Mở ONOS UI: http://localhost:8181/onos/ui
+2. Đăng nhập: onos / rocks
+3. Topology sẽ hiển thị với switches spread rộng ở trung tâm
+4. Links sẽ ổn định (màu xanh) sau ~1-2 phút khi network converge
+5. Vào Settings → Enable "Force Layout" để drag nodes
+6. Kéo CORE SWITCH hoặc các host để thấy hiệu ứng nổi
+
+mở onos:
+docker exec -it onos ./apache-karaf-4.2.14/bin/client
+kiểm tra:
+apps -a -s
+
+Lỗi 505
+# Tạo container mới và bật sẵn GUI cùng các app cần thiết qua biến môi trường
+docker rm -f onos
+docker run -t -d --name onos \
+-p 8181:8181 -p 6653:6653 -p 8101:8101 \
+-e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
+onosproject/onos:latest
+
+Lỗi 500:
+ssh -p 8101 karaf@localhost (pass karaf)
+apps -a -s | grep gui
+
+docker stop onos
+docker rm onos
+
+# Chạy lại (Nhớ map các cổng như cũ)
+docker run -d --name onos -p 8181:8181 -p 8101:8101 -p 6653:6653 onosproject/onos:latest
+
+
+đăng nhập ONOS CLI:
+1. Xóa "ký ức" cũ về SSH
+Copy và dán lệnh này vào terminal:
+
+ssh-keygen -f '/home/tgf/.ssh/known_hosts' -R '[localhost]:8101'
+2. Đăng nhập lại (Lệnh "lách" luật cho dân Dev)
+Để sau này không bị lỗi này làm phiền mỗi khi restart Docker, bạn nên dùng thêm 2 tham số để máy không kiểm tra key nữa:
+
+Bash
+ssh -p 8101 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null karaf@localhost
+(Password vẫn là: karaf)
+
+# FIXES APPLIED (LATEST)
+✅ FIX 1: Docker hosts (web1, db1) IP warning
+   - Added docker_ips dict in system.py for manual IP assignment
+   - Fallback: if host.IP() returns None, uses manual dict entry
+   - No more warnings for web1, db1
+
+✅ FIX 2: Host positioning + Geographic layout + Link stability (UPDATED 2025-03)
+   - Layout redesign: Tọa độ địa lý Châu Á, spread rộng khớp với background map
+   - Switches (spread 67°–118°E, 12°–35°N):
+     * s1 CORE: (25, 100) - Trung tâm backbone
+     * s2 BOTNET DIST: (22, 88)
+     * s3 CLIENT DIST: (35, 118) - Đông Á
+     * s4 BOTNET ACCESS: (18, 82) - Tây Nam
+     * s5 DATACENTER: (12, 105) - Đông Nam Á
+     * s6 WEB SERVER: (15, 112)
+   - Botnet hosts (h1-h20): Giữ pattern vòng tròn đẹp quanh s4, long 67-96
+   - Client hosts (h60-h65): Trải rộng quanh s3, lat 32-38, long 112-120
+   - Service hosts (h70-h82): Rải quanh s5/s6, lat 9-16, long 101-112
+   - Giảm mật độ, không còn overlap, khớp với bản đồ thế giới phía sau
+   - FIX link nét đứt đỏ (flapping): Keep-alive 30s + stagger, normal traffic 2-5s,
+     StableOVSSwitch reconnectms=5s, convergence wait 90s
+   - FIX liên thông pingall: Cross-subnet discovery phase - mỗi host ping các IP
+     ở subnet khác để ONOS cài flow reactive
+   - Host icons (netcfg uiType): Bot h1-h20=endstation (server rack), Client h60-h65=endstation (PC),
+     Data/Web h70-h82=router (stack). Nếu pingall còn X: chạy pingall lần 2
+
+✅ FIX 3: Keep-alive logic (CRITICAL FIX)
+   - Changed from inter-host pings to GATEWAY-ONLY pings
+   - Each host pings ONLY its gateway (10.0.x.1) every 15 seconds
+   - NO inter-host pinging (completely removed to stop ping storms)
+   - This prevents:
+     * ARP storms (nguyên nhân của link flapping)
+     * Host state oscillation (hosts ẩn đi rồi lại xuất hiện)
+     * Unnecessary network congestion
+   - Explanation added in system.py with KEEP-ALIVE STRATEGY block
+
+✅ FIX 4: Interface cleanup before net.start()
+   - Added cleanup script before network startup
+   - Removes old interfaces from previous runs
+   - Deletes old OVS bridges (s1-s6 if exist)
+   - Prevents artifact links/hosts from appearing
+
+✅ FIX 5: Spam output when "Starting CLI"
+   - init_db.py output redirected to /tmp/init_db.log
+   - highlight_bot.py output redirected to /tmp/highlight_bot.log
+   - Added DEBUG INFO before CLI:
+     * Number of switches/hosts
+     * Service status
+     * UI control instructions
+     * Log file locations
+   - Now system shows useful info, not DB spam
+
+Other fixes:
+- Gateway: .1 (thay .254) - match với switch interfaces
+- Wait 60s sau push_netcfg để ONOS stabilize routes
+- Staggered batch discovery (10 hosts, 1s delay, skip Phase 2)
+- Removed inter-host ping storm (keep-alive enough)
+
+# ATTACK COMMANDS (tại mininet CLI)
+mininet> py from attack.attack_orchestrator import syn_flood
+mininet> py syn_flood(net,"10.0.0.100")
+
+attack dạng wave
+mininet> py from attack.attack_orchestrator import wave_attack
+mininet> py wave_attack(net,"10.0.0.100")
+
+stealth scan
+mininet> py from attack.attack_orchestrator import stealth_scan
+mininet> py stealth_scan(net,"10.0.0.100")
+
+Stop attack
+mininet> py from attack.attack_orchestrator import stop_attack
+
+# TOPOLOGY INFO
+netcfg.json: 6 Switches + 62 Hosts (với 3 loại subnet)
+- Switch s1 (of:1): CORE SWITCH
+- Switch s2 (of:2): BOTNET DISTRIBUTION
+- Switch s3 (of:3): CLIENT DISTRIBUTION
+- Switch s4 (of:4): BOTNET ACCESS
+- Switch s5 (of:5): DATACENTER FABRIC
+- Switch s6 (of:6): WEB SERVER SWITCH
+
+Hosts:
+- h1-h50: Botnet (10.0.1.x, gắn vào s4)
+- h60-h65: Clients (10.0.2.x, gắn vào s3)
+- h70: WEB SERVER (10.0.0.100, gắn vào s6)
+- h71: DNS (10.0.0.101, gắn vào s5)
+- h72: API (10.0.0.102, gắn vào s5)
+- h80: IDS (10.0.0.200, gắn vào s5)
+- h81: HONEYPOT (10.0.0.201, gắn vào s5)
+- h82: MONITOR (10.0.0.202, gắn vào s5)
+- web1 (Docker): Django (10.0.0.10, gắn vào s6)
+- db1 (Docker): PostgreSQL (10.0.0.20, gắn vào s5)
+
+# WEB SERVER
+Web server Django chạy trên container web1:
+- URL: http://10.0.0.10
+- Login: admin / admin123
+- Database: PostgreSQL trên db1 (10.0.0.20)
+- Truy cập từ client host (h60-h65): curl http://10.0.0.10
+
+
+Sửa lỗi "REMOTE HOST IDENTIFICATION HAS CHANGED"
+Bạn chỉ cần chạy lệnh sau để xóa "ký ức" cũ về ONOS trong máy:
+
+Bash
+ssh-keygen -f '/home/tgf/.ssh/known_hosts' -R '[localhost]:8101'
+Sau khi chạy lệnh này, bạn hãy thử SSH lại:
+
+Bash
+ssh -p 8101 onos@localhost
+Nó sẽ hỏi Are you sure you want to continue connecting (yes/no/[fingerprint])?: Gõ yes.
+
+Mật khẩu: rocks.
+
+Các thành phần icon:
+1. Nhóm thiết bị đầu cuối (Hosts/Endstations)
+Đây là những icon phù hợp nhất để thay thế cho h61, h62, web1, db1:
+m_home: Hình ngôi nhà (bạn đã biết).
+m_office: Hình tòa nhà văn phòng.
+m_endstation: Hình máy tính trạm (mặc định cho host).
+m_endstation1 / m_endstation2: Các biến thể khác của máy trạm.
+m_terminal: Hình màn hình dòng lệnh (rất hợp cho các máy Attacker).
+m_cellPhone: Hình điện thoại di động.
+m_slrCamera: Hình máy ảnh.
+m_videoCamera: Hình camera giám sát (hợp nếu giả lập Botnet từ thiết bị IoT).
+m_laptop: Hình máy tính xách tay.
+
+2. Nhóm bảo mật & Giám sát (Dành riêng cho đồ án DDoS)
+Vì bạn đang làm về phát hiện tấn công, hãy thử các icon này cho các node quản lý hoặc node "nạn nhân":
+m_firewall: Hình bức tường lửa (Cực kỳ hợp cho node chạy AI Detection).
+m_ips: Icon hệ thống ngăn chặn xâm nhập.
+m_ids: Icon hệ thống phát hiện xâm nhập.
+m_balancer: Hình bộ cân bằng tải (Load Balancer).
+lock: Hình ổ khóa.
+
+3. Nhóm hạ tầng mạng (Infrastructure)
+Dùng cho các Switch (s1-s6) hoặc các node trung tâm:
+m_switch: Hình switch (mặc định).
+m_router: Hình router tròn.
+m_controller: Hình bộ điều khiển (Dùng cho node ONOS).
+m_virtual: Hình thiết bị ảo.
+m_cloud: Hình đám mây.
+m_tower: Hình tháp truyền thông.
+
+4. Nhóm đặc biệt & "Vui vẻ"
+bird: Hình chú chim ONOS.
+m_thatsNoMoon: Một "trứng phục sinh" (Easter Egg) hình Death Star trong Star Wars.
+crown: Hình vương miện.
+garbage: Hình thùng rác (Có thể dùng cho các gói tin rác DDoS?).
+
+
+  tgf@tgf-Inspiron-5577:~$ ssh -T git@github.com
+The authenticity of host 'github.com (20.205.243.166)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
+Hi Nguyen-DX-Huy-5-9-2004! You've successfully authenticated, but GitHub does not provide shell access.
+tgf@tgf-Inspiron-5577:~$ git remote set-url origin git
+Bạn đã kết nối SSH với GitHub thành công rồi 🎉. Thông báo “Hi Nguyen-DX-Huy-5-9-2004! You've successfully authenticated, but GitHub does not provide shell access.” nghĩa là SSH key của bạn đã hoạt động, chỉ là GitHub không cho truy cập shell trực tiếp (điều này hoàn toàn bình thường).
+
+🔧 Tiếp theo bạn cần làm
+Hoàn tất việc đổi remote sang SSH
+
+Lúc trước bạn gõ git remote set-url origin git... nhưng chưa xong. Hãy chạy đầy đủ:
+
+bash
+git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
+Kiểm tra lại:
+
+bash
+git remote -v
+→ phải thấy URL dạng git@github.com:... thay vì https://....
+
+Push code lên GitHub
+
+Nếu branch của bạn là main:
+git push origin main
+Nếu branch mặc định là master:
+
+bash
+git push origin master
+Nếu có passphrase khi tạo key
+
+Mỗi lần push sẽ hỏi passphrase. Bạn có thể dùng ssh-agent để lưu:
+
+bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+Sau đó sẽ không phải nhập lại passphrase cho đến khi khởi động lại máy.
+
+git add .
+git commit -m "Mở web"
+git push -f origin main
+
+test: h60 ping -c 4 10.0.0.10
+
+(terminal thường)xhost
+mininet> xterm h60
+microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 &
+
+xterm web1
+
+py web1.cmd('python /app/manage.py runserver 0.0.0.0:8000 > /dev/null 2>&1 &')
+py h60.cmd('microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 > /dev/null 2>&1 &')
+
+py h60.cmd('microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 &')
