@@ -274,8 +274,13 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
 Sau đó sẽ không phải nhập lại passphrase cho đến khi khởi động lại máy.
 
+git init
+git remote add origin https://github.com/Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
+git remote -v
+
 git add .
 git commit -m "Mở web"
+git branch -M main
 git push -f origin main
 
 test: h60 ping -c 4 10.0.0.10
