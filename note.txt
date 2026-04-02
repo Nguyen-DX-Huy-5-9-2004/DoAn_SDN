@@ -17,7 +17,7 @@ onosproject/onos:latest
 sleep 5
 sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
 
-cd ~/Documents/DoAn_SDN
+cd ~/Documents/DoAn_SDN-main
 sudo ./start.sh
 
 docker run -t -d --name onos \
@@ -295,3 +295,20 @@ py web1.cmd('python /app/manage.py runserver 0.0.0.0:8000 > /dev/null 2>&1 &')
 py h60.cmd('microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 > /dev/null 2>&1 &')
 
 py h60.cmd('microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 &')
+
+# Tắt toàn bộ các cửa sổ Edge đang bị kẹt
+sudo pkill -9 -f msedge
+sudo pkill -9 -f edge
+
+# Tắt các script python chạy ngầm từ hôm qua (như tạo traffic, ids, v.v.)
+sudo pkill -9 -f "python3 traffic/normal.py"
+sudo pkill -9 -f "python3 services/"
+sudo pkill -9 -f "python3 ids/gnn_ids.py"
+sudo pkill -9 -f "python manage.py runserver"
+
+# Dọn dẹp lại Mininet một lần nữa cho chắc chắn
+sudo mn -c
+
+docker build -t doan_sdn_web1:py39 -f docker/web1/Dockerfile .
+
+xhost +local:root

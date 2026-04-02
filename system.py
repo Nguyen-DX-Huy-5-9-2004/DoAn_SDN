@@ -171,14 +171,15 @@ def enable_apps():
 # DOCKER / CONTAINERNET — cấu hình dataplane (không dùng ifconfig)
 # -------------------------------------------------
 def _ensure_iproute2_web1(web1) -> None:
-    """Kiểm tra `ip`/`ping` trong web1.
-
-    Khuyến nghị: dùng image build sẵn (docker/web1/Dockerfile) để tránh phụ thuộc Internet lúc runtime.
-    """
-    ok = web1.cmd("bash -lc 'command -v ip >/dev/null && command -v ping >/dev/null && echo OK'").strip()
-    if ok.endswith("OK"):
+    """Kiểm tra `ip`/`ping` trong web1 bằng cách gọi trực tiếp lệnh."""
+    # Gọi thẳng lệnh 'ip -V' thay vì thông qua bash phức tạp
+    check_ip = web1.cmd("ip -V 2>&1").strip()
+    
+    # Nếu kết quả trả về có chứa chữ 'ip utility' hoặc 'iproute2' là đã cài đặt thành công
+    if "ip utility" in check_ip.lower() or "iproute2" in check_ip.lower():
         print("[DOCKER] web1: đã có `ip` và `ping`.")
         return
+        
     print(
         "[DOCKER] web1: THIẾU `ip` hoặc `ping`.\n"
         "  - Hãy build image web1 trước khi chạy lab:\n"
@@ -258,6 +259,7 @@ def start_network():
         mem_limit="256m",
         cpu_quota=25000,
         volumes=[f"{PROJECT_ROOT}/services/my_web_app:/app"],
+        port_bindings={8000: 8000},
         dcmd="tail -f /dev/null",
     )
     db1 = net.addDocker(
@@ -582,10 +584,13 @@ def main():
     
     web1.cmd('python /app/manage.py runserver 0.0.0.0:8000 > /dev/null 2>&1 &')
     time.sleep(2)
-    h60.cmd('microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 > /dev/null 2>&1 &')
-    
-    print("[HỆ THỐNG] Sẵn sàng! Giao diện web đã bật trên h60.")
-    
+    print("[HỆ THỐNG] Sẵn sàng! Web server đang chạy tại http://10.0.0.10:8000")
+    print("[HỆ THỐNG] Đang mở trình duyệt trên máy thật...")
+
+    # Lấy DISPLAY từ môi trường hiện tại
+    display = os.environ.get('DISPLAY', ':1')
+    h60.cmd(f'export DISPLAY={display} && microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 > /dev/null 2>&1 &')
+    print(f"[HỆ THỐNG] Sẵn sàng! Giao diện web đã bật trên h60 (DISPLAY={display}).")
     CLI(net)
     net.stop()
 

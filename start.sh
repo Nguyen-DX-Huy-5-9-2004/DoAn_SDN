@@ -8,6 +8,7 @@ sudo pkill -9 -f mininet
 sudo pkill -9 -f mnexec
 sudo mn -c 2>/dev/null
 docker rm -f onos 2>/dev/null
+docker build -t doan_sdn_web1:py39 -f docker/web1/Dockerfile .
 sudo systemctl start openvswitch-switch
 sudo systemctl start docker
 docker run -t -d --name onos \
@@ -17,5 +18,4 @@ docker run -t -d --name onos \
   -e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
   onosproject/onos:latest
 sleep 5
-docker build -t doan_sdn_web1:py39 -f docker/web1/Dockerfile .
 sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN-main/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
