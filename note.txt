@@ -19,6 +19,7 @@ sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-package
 
 cd ~/Documents/DoAn_SDN-main
 sudo ./start.sh
+./start.sh
 
 docker run -t -d --name onos \
   -m 4g \
@@ -274,6 +275,7 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
 Sau đó sẽ không phải nhập lại passphrase cho đến khi khởi động lại máy.
 
+git clone git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git init
 git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v

@@ -788,7 +788,55 @@ def main():
     print("[HỆ THỐNG] Sẵn sàng! Web server đang chạy tại http://10.0.0.10:8000")
     print("[HỆ THỐNG] Đang mở trình duyệt trên máy thật...")
 
+
+
+
     url_topo = "http://10.0.0.10:8000"
+    url_local = f"http://127.0.0.1:{WEB1_HOST_PORT}"
+
+    # Cố gắng thiết lập proxy ra máy thật (Cách của Bản 1 để chống lag)
+    if not _django_on_localhost_ok():
+        print(f"[HỆ THỐNG] Đang thử bật proxy ra máy thật để tránh lag đồ họa...")
+        try:
+            _ensure_web1_localhost_proxy()
+            for _ in range(30):
+                time.sleep(0.5)
+                if _django_on_localhost_ok():
+                    break
+        except Exception as e:
+            print(f"[!] Proxy gặp lỗi: {e}")
+
+    # Chạy kịch bản gộp:
+    if _django_on_localhost_ok():
+        print(f"[HỆ THỐNG] Đã proxy ra máy thật thành công. Đang gọi Microsoft Edge...")
+        
+        # Lấy tên user thật (người đã gõ lệnh sudo) và DISPLAY
+        real_user = os.environ.get('SUDO_USER')
+        display_env = os.environ.get('DISPLAY', ':0')
+        
+        if real_user:
+            # Chạy Edge dưới quyền user bình thường -> Hiện cửa sổ ngay lập tức, không bị crash, không tàng hình
+            cmd = f"sudo -u {real_user} env DISPLAY={display_env} microsoft-edge-stable {url_local} > /dev/null 2>&1 &"
+        else:
+            # Fallback nếu không tìm thấy
+            cmd = f"env DISPLAY={display_env} microsoft-edge-stable --no-sandbox --user-data-dir=/tmp/root_edge_profile {url_local} > /dev/null 2>&1 &"
+            
+        os.system(cmd)
+        print(f"[HỆ THỐNG] Đã mở {url_local} trên máy thật. Mượt mà 100%.")
+    else:
+        # Nếu proxy thất bại -> Trở về cách của Bản 2 (Dùng cho máy bạn)
+        print("[HỆ THỐNG] Mở qua máy thật thất bại. Chuyển sang mở Microsoft Edge trực tiếp trên node h60...")
+        display = os.environ.get('DISPLAY', ':0')
+        h60.cmd(f'export DISPLAY={display} && microsoft-edge-stable --no-sandbox {url_topo} > /dev/null 2>&1 &')
+        print(f"[HỆ THỐNG] Sẵn sàng! Giao diện web đã bật trên h60 (DISPLAY={display}).")
+
+    CLI(net)
+    net.stop()
+
+
+
+
+    '''url_topo = "http://10.0.0.10:8000"
     url_local = f"http://127.0.0.1:{WEB1_HOST_PORT}"
 
     # Containernet: web1 gắn OVS nên docker -p 8000:8000 thường không tới host — bật proxy qua docker exec.
@@ -811,7 +859,7 @@ def main():
         else:
             print(f"[!] Không khởi chạy được trình duyệt. Mở tay: {url_local} hoặc {url_topo}")
     else:
-        display = os.environ.get("DISPLAY", ":0")
+        display = os.environ.get("DISPLAY", ":1")
         browser = _pick_gui_browser()
         if not browser:
             print(
@@ -830,7 +878,7 @@ def main():
                 f"trên netns h60 tới {url_topo} (DISPLAY={display})."
             )
     CLI(net)
-    net.stop()
+    net.stop()'''
 
 if __name__ == "__main__":
     setLogLevel("info")

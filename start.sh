@@ -6,7 +6,7 @@ sudo systemctl stop docker
 sudo systemctl stop openvswitch-switch
 sudo ip -all netns delete
 docker rm -f web1 db1 2>/dev/null
-sudo fuser -k 6653/tcp 6633/tcp 8181/tcp
+sudo fuser -k 6653/tcp 6633/tcp 8181/tcp 8000/tcp
 sudo pkill -9 -f mininet
 sudo pkill -9 -f mnexec
 sudo mn -c 2>/dev/null
