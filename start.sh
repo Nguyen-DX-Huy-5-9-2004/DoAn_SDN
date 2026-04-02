@@ -1,4 +1,7 @@
 #!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 sudo systemctl stop docker
 sudo systemctl stop openvswitch-switch
 sudo ip -all netns delete
@@ -18,4 +21,9 @@ docker run -t -d --name onos \
   -e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
   onosproject/onos:latest
 sleep 5
-sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN-main/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
+# sudo xóa DISPLAY/XAUTHORITY mặc định → trình duyệt từ h60 không mở được; truyền rõ + PYTHONPATH theo thư mục clone.
+sudo env \
+  DISPLAY="${DISPLAY:-:0}" \
+  XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}" \
+  "PYTHONPATH=${SCRIPT_DIR}/sdn_env/lib/python3.12/site-packages" \
+  "${SCRIPT_DIR}/sdn_env/bin/python3" "${SCRIPT_DIR}/system.py"

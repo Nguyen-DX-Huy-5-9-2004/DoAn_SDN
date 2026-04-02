@@ -2,6 +2,10 @@
 from requests.auth import HTTPBasicAuth
 
 import os
+import shlex
+import shutil
+import socket
+import threading
 import time
 import subprocess
 import requests
@@ -19,6 +23,203 @@ from mininet.link import TCLink, Intf
 
 # Thư mục gốc dự án (tránh hard-code /home/tgf/... khi chạy máy khác)
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+
+def _pick_gui_browser():
+    for name in (
+        "microsoft-edge-stable",
+        "google-chrome-stable",
+        "chromium-browser",
+        "chromium",
+        "firefox",
+    ):
+        path = shutil.which(name)
+        if path:
+            return path
+    return shutil.which("xdg-open")
+
+
+def _chromium_family(basename):
+    return basename in (
+        "microsoft-edge-stable",
+        "google-chrome-stable",
+        "chromium-browser",
+        "chromium",
+        "chrome",
+        "brave-browser",
+    )
+
+
+def _build_browser_argv(browser: str, url: str, *, isolated_profile: bool):
+    """isolated_profile: profile riêng tránh khóa với Edge/Chrome đang mở; cần khi spawn từ script/root."""
+    base = os.path.basename(browser)
+    argv = [browser]
+    if _chromium_family(base):
+        argv.append("--no-sandbox")
+        if isolated_profile:
+            tag = (os.environ.get("SUDO_USER") or str(os.geteuid())).replace("/", "_")
+            argv.extend(
+                [
+                    "--disable-dev-shm-usage",
+                    f"--user-data-dir=/tmp/doan_sdn_browser_{tag}",
+                    "--new-window",
+                ]
+            )
+        argv.append(url)
+    elif base == "firefox" and isolated_profile:
+        argv.extend(["-no-remote", "-private-window", url])
+    else:
+        argv.append(url)
+    return argv
+
+
+# Tên container Containernet (dnameprefix + tên node)
+DOCKER_WEB1_CNAME = "mn.web1"
+WEB1_HOST_PORT = 8000
+WEB1_CONTAINER_DJANGO_PORT = 8000
+
+_web1_proxy_lock = threading.Lock()
+_web1_proxy_started = False
+
+
+def _django_on_localhost_ok():
+    try:
+        r = requests.get(f"http://127.0.0.1:{WEB1_HOST_PORT}/", timeout=5)
+        return r.status_code < 600
+    except requests.RequestException:
+        return False
+
+
+def _relay_web1_via_docker_exec(client: socket.socket, container: str, django_port: int) -> None:
+    try:
+        proc = subprocess.Popen(
+            [
+                "docker",
+                "exec",
+                "-i",
+                container,
+                "python3",
+                "-u",
+                "/app/tunnel_peer.py",
+                str(django_port),
+            ],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            bufsize=0,
+        )
+    except OSError:
+        client.close()
+        return
+
+    def client_to_proc():
+        try:
+            while True:
+                data = client.recv(65536)
+                if not data:
+                    break
+                proc.stdin.write(data)
+                proc.stdin.flush()
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            pass
+        finally:
+            try:
+                proc.stdin.close()
+            except OSError:
+                pass
+
+    def proc_to_client():
+        try:
+            while True:
+                data = proc.stdout.read(65536)
+                if not data:
+                    break
+                client.sendall(data)
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            pass
+        finally:
+            try:
+                client.shutdown(socket.SHUT_WR)
+            except OSError:
+                pass
+
+    t = threading.Thread(target=client_to_proc, daemon=True)
+    t.start()
+    try:
+        proc_to_client()
+    finally:
+        t.join(timeout=2)
+        proc.terminate()
+        try:
+            client.close()
+        except OSError:
+            pass
+
+
+def _ensure_web1_localhost_proxy():
+    """Khi Docker port_publish không tới host (web1 chỉ có veth OVS), lắng nghe 127.0.0.1 và chuyển tiếp qua docker exec."""
+    global _web1_proxy_started
+    with _web1_proxy_lock:
+        if _web1_proxy_started:
+            return
+        srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            srv.bind(("127.0.0.1", WEB1_HOST_PORT))
+        except OSError as e:
+            print(
+                f"[!] Không bind proxy tại 127.0.0.1:{WEB1_HOST_PORT} ({e}). "
+                "Thử đóng tiến trình đang giữ cổng hoặc mở tay http://10.0.0.10:8000 từ topo."
+            )
+            return
+        srv.listen(128)
+        _web1_proxy_started = True
+
+    def accept_loop():
+        while True:
+            try:
+                conn, _ = srv.accept()
+            except OSError:
+                break
+            threading.Thread(
+                target=_relay_web1_via_docker_exec,
+                args=(conn, DOCKER_WEB1_CNAME, WEB1_CONTAINER_DJANGO_PORT),
+                daemon=True,
+            ).start()
+
+    threading.Thread(target=accept_loop, daemon=True).start()
+
+
+def _spawn_browser_on_desktop(url: str) -> bool:
+    """Mở browser trong session desktop (không qua netns h60) — tránh Edge “có icon nhưng không bật cửa sổ”."""
+    browser = _pick_gui_browser()
+    if not browser:
+        return False
+    display = os.environ.get("DISPLAY", ":0")
+    xauth = os.environ.get("XAUTHORITY", "")
+    argv = _build_browser_argv(browser, url, isolated_profile=True)
+    env = os.environ.copy()
+    env["DISPLAY"] = display
+    if xauth:
+        env["XAUTHORITY"] = xauth
+    sudo_user = os.environ.get("SUDO_USER")
+    try:
+        if sudo_user and sudo_user not in ("root", ""):
+            cmd = ["sudo", "-u", sudo_user, "-E", *argv]
+        else:
+            cmd = argv
+        subprocess.Popen(
+            cmd,
+            env=env,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+        return True
+    except OSError:
+        return False
+
 
 # MAC khớp onos/netcfg.json — phải truyền rõ vào addDocker để autoSetMacs=True không ghi đè (00:21, 00:22).
 DOCKER_WEB1_MAC = "00:00:00:00:00:10"
@@ -587,10 +788,47 @@ def main():
     print("[HỆ THỐNG] Sẵn sàng! Web server đang chạy tại http://10.0.0.10:8000")
     print("[HỆ THỐNG] Đang mở trình duyệt trên máy thật...")
 
-    # Lấy DISPLAY từ môi trường hiện tại
-    display = os.environ.get('DISPLAY', ':1')
-    h60.cmd(f'export DISPLAY={display} && microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 > /dev/null 2>&1 &')
-    print(f"[HỆ THỐNG] Sẵn sàng! Giao diện web đã bật trên h60 (DISPLAY={display}).")
+    url_topo = "http://10.0.0.10:8000"
+    url_local = f"http://127.0.0.1:{WEB1_HOST_PORT}"
+
+    # Containernet: web1 gắn OVS nên docker -p 8000:8000 thường không tới host — bật proxy qua docker exec.
+    if not _django_on_localhost_ok():
+        print(
+            "[HỆ THỐNG] 127.0.0.1:8000 chưa có (bình thường với web1 trên OVS) — "
+            f"bật proxy → container {DOCKER_WEB1_CNAME}…"
+        )
+        _ensure_web1_localhost_proxy()
+        for _ in range(30):
+            time.sleep(0.5)
+            if _django_on_localhost_ok():
+                break
+
+    if _django_on_localhost_ok():
+        if _spawn_browser_on_desktop(url_local):
+            print(
+                f"[HỆ THỐNG] Đã mở {url_local} (cùng Django với {url_topo} trong topo SDN)."
+            )
+        else:
+            print(f"[!] Không khởi chạy được trình duyệt. Mở tay: {url_local} hoặc {url_topo}")
+    else:
+        display = os.environ.get("DISPLAY", ":0")
+        browser = _pick_gui_browser()
+        if not browser:
+            print(
+                f"[!] Không mở được qua localhost/proxy và không có trình duyệt. Mở tay: {url_topo}"
+            )
+        else:
+            exports = [f"export DISPLAY={shlex.quote(display)}"]
+            xauth = os.environ.get("XAUTHORITY")
+            if xauth:
+                exports.append(f"export XAUTHORITY={shlex.quote(xauth)}")
+            argv = _build_browser_argv(browser, url_topo, isolated_profile=True)
+            inner = " ".join(shlex.quote(x) for x in argv)
+            h60.cmd(" && ".join(exports) + f" && {inner} > /dev/null 2>&1 &")
+            print(
+                f"[HỆ THỐNG] Proxy/docker thất bại — đã gọi {os.path.basename(browser)} "
+                f"trên netns h60 tới {url_topo} (DISPLAY={display})."
+            )
     CLI(net)
     net.stop()
 
