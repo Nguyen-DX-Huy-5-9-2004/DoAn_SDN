@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SDN DDoS Monitor Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 16px; background: #f5f7fb; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .card { background: white; padding: 12px; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+    th { background: #fafafa; }
+  </style>
+</head>
+<body>
+  <h2>SDN Out-of-band Monitoring Dashboard</h2>
+  <div class="grid">
+    <div class="card"><canvas id="trafficChart"></canvas></div>
+    <div class="card"><canvas id="systemChart"></canvas></div>
+  </div>
+  <div class="card" style="margin-top: 16px;">
+    <h3>HTTP Request Logs (Mirrored)</h3>
+    <table>
+      <thead><tr><th>Time</th><th>Source IP</th><th>Method</th><th>URL</th><th>Payload Len</th></tr></thead>
+      <tbody id="logBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const trafficChart = new Chart(document.getElementById("trafficChart"), {
+      type: "bar",
+      data: { labels: [], datasets: [{ label: "Byte rate (B/s)", data: [] }] }
+    });
+
+    const systemChart = new Chart(document.getElementById("systemChart"), {
+      type: "line",
+      data: {
+        labels: [],
+        datasets: [
+          { label: "CPU %", data: [], borderColor: "#ff6384" },
+          { label: "RAM %", data: [], borderColor: "#36a2eb" }
+        ]
+      }
+    });
+
+    async function refreshTraffic() {
+      const r = await fetch("/api/onos");
+      const data = await r.json();
+      const hostMap = {};
+      (data.ports || []).forEach((p) => {
+        const key = p.host_ip || `port-${p.port}`;
+        hostMap[key] = (hostMap[key] || 0) + (p.byte_rate || 0);
+      });
+      trafficChart.data.labels = Object.keys(hostMap);
+      trafficChart.data.datasets[0].data = Object.values(hostMap);
+      trafficChart.update();
+    }
+
+    async function refreshSystem() {
+      const r = await fetch("/api/system");
+      const data = await r.json();
+      const now = new Date().toLocaleTimeString();
+      const labels = systemChart.data.labels;
+      labels.push(now);
+      systemChart.data.datasets[0].data.push(data.cpu_percent || 0);
+      systemChart.data.datasets[1].data.push(data.ram_percent || 0);
+      if (labels.length > 20) {
+        labels.shift();
+        systemChart.data.datasets[0].data.shift();
+        systemChart.data.datasets[1].data.shift();
+      }
+      systemChart.update();
+    }
+
+    async function refreshLogs() {
+      const r = await fetch("/api/http_logs");
+      const data = await r.json();
+      const body = document.getElementById("logBody");
+      body.innerHTML = "";
+      (data.rows || []).slice(-25).reverse().forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${row.timestamp || ""}</td><td>${row.src_ip || ""}</td><td>${row.method || ""}</td><td>${row.url || ""}</td><td>${row.payload_len || ""}</td>`;
+        body.appendChild(tr);
+      });
+    }
+
+    async function tick() {
+      await Promise.all([refreshTraffic(), refreshSystem(), refreshLogs()]);
+    }
+    tick();
+    setInterval(tick, 2000);
+  </script>
+</body>
+</html>

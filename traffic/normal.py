@@ -1,13 +1,17 @@
 import requests
 import random
 import time
+import urllib3
+import sys
 
-target = "http://10.0.0.100"
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+target = sys.argv[1] if len(sys.argv) > 1 else "https://10.0.0.10"
 
 while True:
 
     try:
-        requests.get(target)
+        requests.get(target, verify=False, timeout=3)
     except:
         pass
 

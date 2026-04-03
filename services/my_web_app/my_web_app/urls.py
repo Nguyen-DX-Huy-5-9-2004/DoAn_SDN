@@ -1,7 +1,9 @@
 #services/my_web_app/my_web_app/urls.py
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+import os
+import psutil
 
 # Hàm xử lý trang chủ
 def home(request):
@@ -28,8 +30,25 @@ def home(request):
             </body>
         """)
 
+
+def system_status(request):
+    conns = 0
+    try:
+        conns = len([c for c in psutil.net_connections(kind="tcp") if c.status == "ESTABLISHED"])
+    except Exception:
+        conns = 0
+    return JsonResponse(
+        {
+            "cpu_percent": psutil.cpu_percent(interval=0.1),
+            "ram_percent": psutil.virtual_memory().percent,
+            "connections": conns,
+            "hostname": os.uname().nodename,
+        }
+    )
+
 urlpatterns = [
     path('admin/', admin.site.urls), 
     path('', home),
+    path('api/system_status', system_status),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

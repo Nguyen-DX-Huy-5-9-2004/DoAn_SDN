@@ -40,7 +40,8 @@
     "00:00:00:00:00:80/-1": { "basic": { "name": "h80", "latitude": 8.0, "longitude": 104.0, "ips": ["10.0.0.200"], "uiType": "endstation" }},
     "00:00:00:00:00:81/-1": { "basic": { "name": "h81", "latitude": 4.0, "longitude": 118.0, "ips": ["10.0.0.201"], "uiType": "endstation" }},
     "00:00:00:00:00:82/-1": { "basic": { "name": "h82", "latitude": 2.0, "longitude": 110.0, "ips": ["10.0.0.202"], "uiType": "endstation" }},
-    "00:00:00:00:00:10/-1": { "basic": { "name": "web1", "latitude": 24.0, "longitude": 74.0, "ips": ["10.0.0.10"], "uiType": "router" }},
+    "00:00:00:00:00:10/-1": { "basic": { "name": "web1", "latitude": 24.0, "longitude": 74.0, "ips": ["10.0.0.11"], "uiType": "router" }},
+    "00:00:00:00:00:11/-1": { "basic": { "name": "proxy1", "latitude": 20.0, "longitude": 76.0, "ips": ["10.0.0.10"], "uiType": "router" }},
     "00:00:00:00:00:20/-1": { "basic": { "name": "db1", "latitude": 4.0, "longitude": 105.0, "ips": ["10.0.0.20"], "uiType": "router" }}
   },
   "layout": {

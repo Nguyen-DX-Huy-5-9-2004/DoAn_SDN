@@ -10,6 +10,11 @@ SECRET_KEY = 'django-insecure-sdn-lab-uneti-key-12345'
 DEBUG = True
 # Cho phép tất cả các Host trong mạng SDN (h60, h1, ...) truy cập
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    "https://10.0.0.10",
+    "https://127.0.0.1:8443",
+    "http://10.0.0.11",
+]
 
 # --- CÁC ỨNG DỤNG HỆ THỐNG ---
 INSTALLED_APPS = [

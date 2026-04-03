@@ -85,7 +85,7 @@ class ResearchTopo(Topo):
 
         self.addLink(ids, s5)
         self.addLink(honeypot, s5)
-        self.addLink(monitor, s5)
+        self.addLink(monitor, s6)
 
         # --------------------------
         # BOTNET

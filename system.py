@@ -75,11 +75,15 @@ def _build_browser_argv(browser: str, url: str, *, isolated_profile: bool):
 
 # Tên container Containernet (dnameprefix + tên node)
 DOCKER_WEB1_CNAME = "mn.web1"
+DOCKER_PROXY1_CNAME = "mn.proxy1"
 WEB1_HOST_PORT = 8000
 WEB1_CONTAINER_DJANGO_PORT = 8000
+PROXY1_HOST_HTTPS_PORT = 8443
 
 _web1_proxy_lock = threading.Lock()
 _web1_proxy_started = False
+_proxy1_https_proxy_lock = threading.Lock()
+_proxy1_https_proxy_started = False
 
 
 def _django_on_localhost_ok():
@@ -103,6 +107,64 @@ def _relay_web1_via_docker_exec(client: socket.socket, container: str, django_po
                 "/app/tunnel_peer.py",
                 str(django_port),
             ],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            bufsize=0,
+        )
+    except OSError:
+        client.close()
+        return
+
+    def client_to_proc():
+        try:
+            while True:
+                data = client.recv(65536)
+                if not data:
+                    break
+                proc.stdin.write(data)
+                proc.stdin.flush()
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            pass
+        finally:
+            try:
+                proc.stdin.close()
+            except OSError:
+                pass
+
+    def proc_to_client():
+        try:
+            while True:
+                data = proc.stdout.read(65536)
+                if not data:
+                    break
+                client.sendall(data)
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            pass
+        finally:
+            try:
+                client.shutdown(socket.SHUT_WR)
+            except OSError:
+                pass
+
+    t = threading.Thread(target=client_to_proc, daemon=True)
+    t.start()
+    try:
+        proc_to_client()
+    finally:
+        t.join(timeout=2)
+        proc.terminate()
+        try:
+            client.close()
+        except OSError:
+            pass
+
+
+def _relay_proxy1_https_via_docker_exec(client: socket.socket, container: str) -> None:
+    """Chuyển tiếp TCP thô từ localhost:8443 vào proxy1:443."""
+    try:
+        proc = subprocess.Popen(
+            ["docker", "exec", "-i", container, "sh", "-c", "nc 127.0.0.1 443"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
@@ -190,6 +252,40 @@ def _ensure_web1_localhost_proxy():
     threading.Thread(target=accept_loop, daemon=True).start()
 
 
+def _ensure_proxy1_https_localhost_proxy():
+    """Expose HTTPS proxy ra máy host tại 127.0.0.1:8443."""
+    global _proxy1_https_proxy_started
+    with _proxy1_https_proxy_lock:
+        if _proxy1_https_proxy_started:
+            return
+        srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            srv.bind(("127.0.0.1", PROXY1_HOST_HTTPS_PORT))
+        except OSError as e:
+            print(
+                f"[!] Không bind HTTPS proxy tại 127.0.0.1:{PROXY1_HOST_HTTPS_PORT} ({e}). "
+                "Mở tay trong topo qua https://10.0.0.10 hoặc giải phóng cổng local."
+            )
+            return
+        srv.listen(128)
+        _proxy1_https_proxy_started = True
+
+    def accept_loop():
+        while True:
+            try:
+                conn, _ = srv.accept()
+            except OSError:
+                break
+            threading.Thread(
+                target=_relay_proxy1_https_via_docker_exec,
+                args=(conn, DOCKER_PROXY1_CNAME),
+                daemon=True,
+            ).start()
+
+    threading.Thread(target=accept_loop, daemon=True).start()
+
+
 def _spawn_browser_on_desktop(url: str) -> bool:
     """Mở browser trong session desktop (không qua netns h60) — tránh Edge “có icon nhưng không bật cửa sổ”."""
     browser = _pick_gui_browser()
@@ -223,6 +319,7 @@ def _spawn_browser_on_desktop(url: str) -> bool:
 
 # MAC khớp onos/netcfg.json — phải truyền rõ vào addDocker để autoSetMacs=True không ghi đè (00:21, 00:22).
 DOCKER_WEB1_MAC = "00:00:00:00:00:10"
+DOCKER_PROXY1_MAC = "00:00:00:00:00:11"
 DOCKER_DB1_MAC = "00:00:00:00:00:20"
 
 
@@ -252,7 +349,7 @@ ONOS_BASE = "http://localhost:8181/onos/v1"
 AUTH = ("onos", "rocks")
 
 EXPECTED_SWITCHES = 6
-EXPECTED_HOSTS = 33
+EXPECTED_HOSTS = 35
 
 def wait_for_onos(timeout=120):
     url = "http://127.0.0.1:8181/onos/v1/applications"
@@ -399,6 +496,38 @@ def _ensure_iproute2_db1(db1) -> None:
     print(f"[DOCKER] db1: {tail}")
 
 
+def configure_local_mirroring(net) -> None:
+    """Mirror RX/TX của web1 sang link mirror riêng của h82 trên s6."""
+    s6 = net.get("s6")
+    web1 = net.get("web1")
+    h82 = net.get("h82")
+    s6_web_intf, _ = s6.connectionsTo(web1)[0]
+    h82_default = h82.defaultIntf().name if h82.defaultIntf() else ""
+    mirror_pair = None
+    for s6_i, h82_i in s6.connectionsTo(h82):
+        # Ưu tiên link phụ (không phải default intf) để giữ h82 vẫn liên thông bình thường.
+        if h82_i.name != h82_default:
+            mirror_pair = (s6_i, h82_i)
+            break
+    if not mirror_pair:
+        mirror_pair = s6.connectionsTo(h82)[0]
+    s6_h82_intf, h82_mirror_intf = mirror_pair
+
+    cmd = (
+        "ovs-vsctl -- --id=@src get Port {src} "
+        "-- --id=@dst get Port {dst} "
+        "-- --id=@m create Mirror name=web1_to_h82 select-src-port=@src select-dst-port=@src output-port=@dst "
+        "-- clear Bridge s6 mirrors -- set Bridge s6 mirrors=@m"
+    ).format(src=s6_web_intf.name, dst=s6_h82_intf.name)
+    out = s6.cmd(cmd).strip()
+    if out:
+        print(f"[MIRROR] {out}")
+    print(
+        f"[MIRROR] Đã bật mirror trên s6: {s6_web_intf.name} -> {s6_h82_intf.name} "
+        f"(h82 mirror iface: {h82_mirror_intf.name})"
+    )
+
+
 def _debug_docker_iface(net, hostname: str) -> None:
     h = net.get(hostname)
     intfs = [i.name for i in h.intfList() if i.name != "lo"]
@@ -437,7 +566,11 @@ def start_network():
     topo = ResearchTopo()
     
     print("*** Dọn dẹp môi trường cũ...")
-    subprocess.call(["docker", "rm", "-f", "web1", "db1"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    subprocess.call(
+        ["docker", "rm", "-f", "web1", "db1", "proxy1"],
+        stderr=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+    )
     os.system("sudo ip link show | grep -E '^[0-9]+:' | grep -E '(s[0-9]|h[0-9]|web|db)' | awk '{print $2}' | sed 's/:$//' | while read iface; do sudo ip link del $iface 2>/dev/null; done")
     os.system("sudo ovs-vsctl --if-exists del-br s1 -- --if-exists del-br s2 -- --if-exists del-br s3 -- --if-exists del-br s4 -- --if-exists del-br s5 -- --if-exists del-br s6 2>/dev/null")
     time.sleep(2)
@@ -454,7 +587,7 @@ def start_network():
     print("*** Đang thêm các máy chủ Docker vào hệ thống...")
     web1 = net.addDocker(
         'web1',
-        ip='10.0.0.10',
+        ip='10.0.0.11',
         mac=DOCKER_WEB1_MAC,
         dimage="doan_sdn_web1:py39",
         mem_limit="256m",
@@ -462,6 +595,19 @@ def start_network():
         volumes=[f"{PROJECT_ROOT}/services/my_web_app:/app"],
         port_bindings={8000: 8000},
         dcmd="tail -f /dev/null",
+    )
+    proxy1 = net.addDocker(
+        "proxy1",
+        ip="10.0.0.10",
+        mac=DOCKER_PROXY1_MAC,
+        dimage="doan_sdn_proxy1:latest",
+        mem_limit="128m",
+        cpu_quota=20000,
+        volumes=[
+            f"{PROJECT_ROOT}/docker/proxy/nginx.conf:/etc/nginx/nginx.conf:ro",
+            f"{PROJECT_ROOT}/docker/proxy/certs:/etc/nginx/certs:ro",
+        ],
+        dcmd="/bin/bash",
     )
     db1 = net.addDocker(
         'db1',
@@ -484,13 +630,19 @@ def start_network():
 
     s5 = net.get('s5')
     s6 = net.get('s6')
+    h82 = net.get("h82")
     # MAC cố định trên veth ngay khi tạo (khớp onos/netcfg.json). Đổi MAC sau khi mạng đã chạy
     # khiến ARP cache / ARP tĩnh trỏ nhầm MAC cũ => ping tới web1/db1 thất bại, ONOS học host sai.
     net.addLink(web1, s6, addr1=DOCKER_WEB1_MAC, cls1=IpCompatIntf)
+    net.addLink(proxy1, s6, addr1=DOCKER_PROXY1_MAC, cls1=IpCompatIntf)
     net.addLink(db1, s5, addr1=DOCKER_DB1_MAC, cls1=IpCompatIntf)
+    # Link phụ dành riêng cho mirror, không mang IP để không phá đường truyền chính của h82.
+    net.addLink(h82, s6)
     print("*** Docker: gán IP và bật cổng (tránh ifconfig trong image)...")
-    _finish_docker_dataplane(net, "web1", "10.0.0.10")
+    _finish_docker_dataplane(net, "web1", "10.0.0.11")
+    _finish_docker_dataplane(net, "proxy1", "10.0.0.10")
     _finish_docker_dataplane(net, "db1", "10.0.0.20")
+    h82.cmd("ip link set h82-eth1 up 2>/dev/null || true")
 
     net.start()
 
@@ -552,16 +704,17 @@ def push_netcfg():
 
 def start_services(net):
     print("Starting services (Logs redirected to /tmp/...)")
+    net.get("proxy1").cmd("nginx -g 'daemon off;' > /tmp/nginx_proxy.log 2>&1 &")
     net.get("h70").cmd("python3 services/webserver.py > /tmp/web.log 2>&1 &")
     net.get("h71").cmd("python3 services/dns.py > /tmp/dns.log 2>&1 &")
     net.get("h72").cmd("python3 services/api.py > /tmp/api.log 2>&1 &")
     net.get("h80").cmd("python3 ids/gnn_ids.py > /tmp/gnn_ids.log 2>&1 &")
     net.get("h81").cmd("python3 services/honeypot.py > /tmp/honeypot.log 2>&1 &")
-    net.get("h82").cmd("python3 monitor/capture.py > /tmp/capture.log 2>&1 &")
+    net.get("h82").cmd("sh -c 'pip install -q scapy > /tmp/pip_h82.log 2>&1 && python3 monitor/http_mirror_capture.py > /tmp/capture.log 2>&1 &'")
 
     print("*** Khởi động Django Web Server trên web1...")
     web1 = net.get("web1")
-    web1.cmd("sh -c 'pip install -q django psycopg2-binary > /tmp/pip.log 2>&1 && cd /app && python manage.py runserver 0.0.0.0:80 > /tmp/django.log 2>&1 &'")
+    web1.cmd("sh -c 'cd /app && python manage.py runserver 0.0.0.0:80 > /tmp/django.log 2>&1 &'")
 # -------------------------------------------------
 # NORMAL TRAFFIC
 # -------------------------------------------------
@@ -574,7 +727,7 @@ def start_normal_traffic(net):
 
         client = net.get(f"h{i}")
 
-        client.cmd("python3 traffic/normal.py 10.0.0.100 &")
+        client.cmd("python3 traffic/normal.py https://10.0.0.10 &")
 
 
 # -------------------------------------------------
@@ -609,7 +762,7 @@ def main():
     time.sleep(25)
         
     print("*** Tự động cấu hình Định tuyến Trực tiếp L2 (L2 Flat Routing)...")
-    docker_ips = {'web1': '10.0.0.10', 'db1': '10.0.0.20'}
+    docker_ips = {"web1": "10.0.0.11", "proxy1": "10.0.0.10", "db1": "10.0.0.20"}
     subnets = ['10.0.0.0/24', '10.0.1.0/24', '10.0.2.0/24']
 
     for host in net.hosts:
@@ -653,7 +806,7 @@ def main():
             continue
             
         # Phân loại: Docker slim không có lệnh ping, phải dùng Python UDP
-        if h.name in ['web1', 'db1']:
+        if h.name in ["web1", "proxy1", "db1"]:
             h.cmd("python3 -c 'import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.sendto(b\"\", (\"10.0.0.100\", 80))' &")
         
         # Các host Mininet bình thường thì dùng ping
@@ -669,7 +822,7 @@ def main():
     # Phase 2: Cross-subnet discovery
     print("*** Phase 2: Cross-subnet discovery - Kích hoạt liên thông...")
     cross_targets = [
-        '10.0.0.100', '10.0.0.20', '10.0.0.10', '10.0.0.101', '10.0.0.200',
+        '10.0.0.100', '10.0.0.20', '10.0.0.10', '10.0.0.11', '10.0.0.101', '10.0.0.200',
         '10.0.1.1', '10.0.1.10', '10.0.1.20',
         '10.0.2.60', '10.0.2.61', '10.0.2.65'
     ]
@@ -686,7 +839,7 @@ def main():
             for t in cross_targets:
                 t_subnet = '.'.join(t.split('.')[:3])
                 if t_subnet != my_subnet:
-                    if h.name == 'web1':
+                    if h.name in ("web1", "proxy1"):
                         # web1 KHÔNG có lệnh ping, dùng Python nhồi gói tin UDP
                         h.cmd(f"python3 -c 'import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.sendto(b\"ping\", (\"{t}\", 80))' 2>/dev/null &")
                     else:
@@ -707,7 +860,7 @@ def main():
         for t in cross_targets[:3]: 
             t_subnet = '.'.join(t.split('.')[:3])
             if t_subnet != my_subnet:
-                if h.name == 'web1':
+                if h.name in ("web1", "proxy1"):
                     h.cmd(f"python3 -c 'import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.sendto(b\"ping\", (\"{t}\", 80))' 2>/dev/null &")
                 else:
                     h.cmd(f"ping -c 1 -W 1 {t} 2>/dev/null")
@@ -720,6 +873,7 @@ def main():
     # Đẩy cấu hình tọa độ và tên
     push_netcfg()
     time.sleep(5)
+    configure_local_mirroring(net)
 
     # Khởi chạy các dịch vụ web, dns, ids...
     start_services(net)
@@ -779,56 +933,18 @@ def main():
 
     print("\n[HỆ THỐNG] Đang tự động cài đặt Database và khởi động Web Server...")
     web1 = net.get('web1')
-    h60 = net.get('h60')
     print("[HỆ THỐNG] Đang nạp dữ liệu vào PostgreSQL (xem chi tiết tại /tmp/db_setup.log)...")
     web1.cmd('python /app/setup_db.py > /tmp/db_setup.log 2>&1')
     
-    web1.cmd('python /app/manage.py runserver 0.0.0.0:8000 > /dev/null 2>&1 &')
     time.sleep(2)
-    print("[HỆ THỐNG] Sẵn sàng! Web server đang chạy tại http://10.0.0.10:8000")
-    print("[HỆ THỐNG] Đang mở trình duyệt trên máy thật...")
-
-
-
-
-    url_topo = "http://10.0.0.10:8000"
-    url_local = f"http://127.0.0.1:{WEB1_HOST_PORT}"
-
-    # Cố gắng thiết lập proxy ra máy thật (Cách của Bản 1 để chống lag)
-    if not _django_on_localhost_ok():
-        print(f"[HỆ THỐNG] Đang thử bật proxy ra máy thật để tránh lag đồ họa...")
-        try:
-            _ensure_web1_localhost_proxy()
-            for _ in range(30):
-                time.sleep(0.5)
-                if _django_on_localhost_ok():
-                    break
-        except Exception as e:
-            print(f"[!] Proxy gặp lỗi: {e}")
-
-    # Chạy kịch bản gộp:
-    if _django_on_localhost_ok():
-        print(f"[HỆ THỐNG] Đã proxy ra máy thật thành công. Đang gọi Microsoft Edge...")
-        
-        # Lấy tên user thật (người đã gõ lệnh sudo) và DISPLAY
-        real_user = os.environ.get('SUDO_USER')
-        display_env = os.environ.get('DISPLAY', ':0')
-        
-        if real_user:
-            # Chạy Edge dưới quyền user bình thường -> Hiện cửa sổ ngay lập tức, không bị crash, không tàng hình
-            cmd = f"sudo -u {real_user} env DISPLAY={display_env} microsoft-edge-stable {url_local} > /dev/null 2>&1 &"
-        else:
-            # Fallback nếu không tìm thấy
-            cmd = f"env DISPLAY={display_env} microsoft-edge-stable --no-sandbox --user-data-dir=/tmp/root_edge_profile {url_local} > /dev/null 2>&1 &"
-            
-        os.system(cmd)
-        print(f"[HỆ THỐNG] Đã mở {url_local} trên máy thật. Mượt mà 100%.")
-    else:
-        # Nếu proxy thất bại -> Trở về cách của Bản 2 (Dùng cho máy bạn)
-        print("[HỆ THỐNG] Mở qua máy thật thất bại. Chuyển sang mở Microsoft Edge trực tiếp trên node h60...")
-        display = os.environ.get('DISPLAY', ':0')
-        h60.cmd(f'export DISPLAY={display} && microsoft-edge-stable --no-sandbox {url_topo} > /dev/null 2>&1 &')
-        print(f"[HỆ THỐNG] Sẵn sàng! Giao diện web đã bật trên h60 (DISPLAY={display}).")
+    print("[HỆ THỐNG] Sẵn sàng! HTTPS proxy tại: https://10.0.0.10")
+    _ensure_proxy1_https_localhost_proxy()
+    print(f"[HỆ THỐNG] HTTPS local cho máy thật: https://127.0.0.1:{PROXY1_HOST_HTTPS_PORT}")
+    print("[HỆ THỐNG] Dashboard host (out-of-band): http://127.0.0.1:8050")
+    print("[HỆ THỐNG] Đã tắt auto-open Edge để tránh cửa sổ treo/không click được.")
+    print("[HỆ THỐNG] Mở web từ host bất kỳ trong topo bằng lệnh:")
+    print("  containernet> h60 python3 tools/open_web_from_host.py")
+    print("  containernet> h61 python3 tools/open_web_from_host.py --path /accounts/login/")
 
     CLI(net)
     net.stop()

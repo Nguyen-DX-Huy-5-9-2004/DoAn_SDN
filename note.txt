@@ -314,3 +314,7 @@ sudo mn -c
 docker build -t doan_sdn_web1:py39 -f docker/web1/Dockerfile .
 
 xhost +local:root
+
+dashbroad: http://127.0.0.1:8050
+h60 python3 tools/open_web_from_host.py
+h61 python3 tools/open_web_from_host.py --path /accounts/login/

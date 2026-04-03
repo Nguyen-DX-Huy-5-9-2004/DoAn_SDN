@@ -5,6 +5,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     iputils-ping net-tools iproute2 curl \
     && rm -rf /var/lib/apt/lists/*
 
-# (THÊM DÒNG NÀY) Cài đặt sẵn Django và Psycopg2 trước khi vào Mininet
-RUN pip install --no-cache-dir django psycopg2-binary
+# Cài sẵn dependency để runtime không phụ thuộc Internet.
+RUN pip install --no-cache-dir django psycopg2-binary psutil
 WORKDIR /app
