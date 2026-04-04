@@ -77,7 +77,7 @@ def _build_browser_argv(browser: str, url: str, *, isolated_profile: bool):
 DOCKER_WEB1_CNAME = "mn.web1"
 DOCKER_PROXY1_CNAME = "mn.proxy1"
 WEB1_HOST_PORT = 8000
-WEB1_CONTAINER_DJANGO_PORT = 8000
+WEB1_CONTAINER_DJANGO_PORT = 80
 PROXY1_HOST_HTTPS_PORT = 8443
 
 _web1_proxy_lock = threading.Lock()
@@ -122,9 +122,12 @@ def _relay_web1_via_docker_exec(client: socket.socket, container: str, django_po
                 data = client.recv(65536)
                 if not data:
                     break
-                proc.stdin.write(data)
-                proc.stdin.flush()
-        except (BrokenPipeError, ConnectionResetError, OSError):
+                try:
+                    proc.stdin.write(data)
+                    proc.stdin.flush()
+                except (BrokenPipeError, OSError):
+                    break
+        except (ConnectionResetError, OSError):
             pass
         finally:
             try:
@@ -134,12 +137,18 @@ def _relay_web1_via_docker_exec(client: socket.socket, container: str, django_po
 
     def proc_to_client():
         try:
+            # Use os.read on the fileno to avoid blocking for a full buffer
+            # and to avoid AttributeError: '_io.FileIO' object has no attribute 'read1'
+            fd = proc.stdout.fileno()
             while True:
-                data = proc.stdout.read(65536)
+                data = os.read(fd, 65536)
                 if not data:
                     break
-                client.sendall(data)
-        except (BrokenPipeError, ConnectionResetError, OSError):
+                try:
+                    client.sendall(data)
+                except (BrokenPipeError, OSError):
+                    break
+        except (ConnectionResetError, OSError):
             pass
         finally:
             try:
@@ -192,8 +201,10 @@ def _relay_proxy1_https_via_docker_exec(client: socket.socket, container: str) -
 
     def proc_to_client():
         try:
+            fd = proc.stdout.fileno()
             while True:
-                data = proc.stdout.read(65536)
+                # Use os.read on the fileno to avoid blocking for a full buffer
+                data = os.read(fd, 65536)
                 if not data:
                     break
                 client.sendall(data)
@@ -227,7 +238,7 @@ def _ensure_web1_localhost_proxy():
         srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            srv.bind(("127.0.0.1", WEB1_HOST_PORT))
+            srv.bind(("0.0.0.0", WEB1_HOST_PORT)) # Listen on all interfaces to be safe
         except OSError as e:
             print(
                 f"[!] Không bind proxy tại 127.0.0.1:{WEB1_HOST_PORT} ({e}). "
@@ -593,7 +604,6 @@ def start_network():
         mem_limit="256m",
         cpu_quota=25000,
         volumes=[f"{PROJECT_ROOT}/services/my_web_app:/app"],
-        port_bindings={8000: 8000},
         dcmd="tail -f /dev/null",
     )
     proxy1 = net.addDocker(
@@ -939,7 +949,9 @@ def main():
     time.sleep(2)
     print("[HỆ THỐNG] Sẵn sàng! HTTPS proxy tại: https://10.0.0.10")
     _ensure_proxy1_https_localhost_proxy()
+    _ensure_web1_localhost_proxy() # Start Web1 tunnel for Dashboard
     print(f"[HỆ THỐNG] HTTPS local cho máy thật: https://127.0.0.1:{PROXY1_HOST_HTTPS_PORT}")
+    print(f"[HỆ THỐNG] Web1 local (tunnel) cho Dashboard: http://127.0.0.1:{WEB1_HOST_PORT}")
     print("[HỆ THỐNG] Dashboard host (out-of-band): http://127.0.0.1:8050")
     print("[HỆ THỐNG] Đã tắt auto-open Edge để tránh cửa sổ treo/không click được.")
     print("[HỆ THỐNG] Mở web từ host bất kỳ trong topo bằng lệnh:")

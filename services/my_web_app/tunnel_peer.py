@@ -3,21 +3,27 @@ Nối stdio với TCP tới 127.0.0.1:<port> (Django runserver) để host proxy
 import socket
 import sys
 import threading
+import os
 
 
 def main():
     port = int(sys.argv[1])
     remote = socket.create_connection(("127.0.0.1", port))
-    inp = sys.stdin.buffer
-    out = sys.stdout.buffer
+    
+    # Use os.read/write for unbuffered I/O
+    fd_in = sys.stdin.fileno()
+    fd_out = sys.stdout.fileno()
 
     def up():
         try:
             while True:
-                chunk = inp.read(8192)
+                # Use os.read to avoid blocking on buffered I/O
+                chunk = os.read(fd_in, 8192)
                 if not chunk:
                     break
                 remote.sendall(chunk)
+        except (BrokenPipeError, OSError):
+            pass
         finally:
             try:
                 remote.shutdown(socket.SHUT_WR)
@@ -31,8 +37,7 @@ def main():
             chunk = remote.recv(65536)
             if not chunk:
                 break
-            out.write(chunk)
-            out.flush()
+            os.write(fd_out, chunk)
     finally:
         th.join(timeout=1)
         remote.close()

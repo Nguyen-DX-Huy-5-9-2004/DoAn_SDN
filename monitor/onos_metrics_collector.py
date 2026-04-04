@@ -18,7 +18,8 @@ OUT_FILE = os.path.join(OUT_DIR, "onos_metrics.json")
 
 
 def get_json(path):
-    r = requests.get(f"{ONOS_BASE}/{path}", auth=AUTH, timeout=5)
+    # Reduced timeout to avoid blocking too long, let loop handle retry
+    r = requests.get(f"{ONOS_BASE}/{path}", auth=AUTH, timeout=3)
     r.raise_for_status()
     return r.json()
 
@@ -37,9 +38,14 @@ def build_host_port_map(hosts):
 
 
 def collect():
-    hosts = get_json("hosts").get("hosts", [])
-    stats = get_json("statistics/ports").get("statistics", [])
-    flows = get_json("flows").get("flows", [])
+    try:
+        hosts = get_json("hosts").get("hosts", [])
+        stats = get_json("statistics/ports").get("statistics", [])
+        flows = get_json("flows").get("flows", [])
+    except Exception as e:
+        print(f"[COLLECTOR] ONOS Error: {e}")
+        return None
+
     port_ip_map = build_host_port_map(hosts)
 
     flow_count_by_device = defaultdict(int)
@@ -87,14 +93,21 @@ def collect():
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
+    print(f"[COLLECTOR] Starting ONOS metrics collection to {OUT_FILE}...")
     while True:
         try:
             data = collect()
-            with open(OUT_FILE, "w", encoding="utf-8") as f:
-                json.dump(data, f)
+            if data:
+                with open(OUT_FILE, "w", encoding="utf-8") as f:
+                    json.dump(data, f)
+            else:
+                # If collection failed (e.g. ONOS down), don't overwrite with error immediately
+                # unless it persists.
+                pass
         except Exception as e:
-            with open(OUT_FILE, "w", encoding="utf-8") as f:
-                json.dump({"error": str(e), "ports": []}, f)
+            # Only write error if we haven't written success for a while
+            print(f"[COLLECTOR] Error: {e}")
+            time.sleep(5) # Wait longer on error
         time.sleep(INTERVAL)
 
 

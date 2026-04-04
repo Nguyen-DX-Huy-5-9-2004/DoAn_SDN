@@ -18,9 +18,9 @@ sleep 5
 sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
 
 cd ~/Documents/DoAn_SDN-main
-sudo ./start.sh
 ./start.sh
 
+sudo ./start.sh
 docker run -t -d --name onos \
   -m 4g \
   --cpus="5.0" \
@@ -322,23 +322,16 @@ h60 python3 tools/open_web_from_host.py
 h61 python3 tools/open_web_from_host.py --path /accounts/login/
 
 
-Bây giờ chúng ta sẽ điều chỉnh lại biểu đồ,trong Biểu đồ lưu lượng mạng Thêm một cột dữ liệu (hoặc biểu đồ đường đè lên) thể hiện Packet Rate. Biểu đồ trạng thái hệ thống (Bên phải) Bổ sung API backend lấy thêm số lượng connection hiện tại và hiển thị thành một đường đồ thị thứ 3 (có thể dùng trục Y phụ bên phải). Trục Y đang hiển thị dải giá trị âm (xuống tận -1.0). Vì CPU và RAM tính theo phần trăm (0 - 100%), bạn cần thiết lập cứng thuộc tính min: 0 và max: 100 trong cấu hình trục Y nhưng để mức 0 cao hơn trục y một chút cho dễ quan sát. Bảng Log HTTP Request (Bên dưới) Script scapy trên h82 cần bóc tách thêm phần Header để lấy Status Code (từ gói tin TX phản hồi về) và User-Agent (từ gói tin RX gửi đến) để điền vào bảng.
-“hardening production-like” cho dashboard (xoá dependency CDN, thêm retry/backoff ONOS, log rotation CSV/JSON, và API cache nhẹ để giảm I/O).
 
 1. Tấn công cạn kiệt CPU: "Thuật toán Băm Mật khẩu" (Hash Exhaustion)
 Kịch bản: Khi người dùng đăng nhập hoặc đăng ký, mật khẩu phải được băm (hash) bằng các thuật toán mạnh như bcrypt, PBKDF2 hoặc Argon2 để bảo mật. Quá trình này được thiết kế cố tình chạy rất chậm và ngốn CPU.
-
 Cách Hacker làm: Kẻ tấn công tạo ra hàng chục nghìn request gửi mật khẩu dài ngoằng (ví dụ 10.000 ký tự) vào endpoint /api/login.
-
 Hậu quả trên web1: Database chưa kịp làm gì thì CPU của web1 đã giật lên 100% để tính toán mã băm cho các mật khẩu giả mạo này. Toàn bộ web sẽ đơ cứng.
-
 Triển khai trong Django: Rất dễ. Chỉ cần tạo một API nhận một chuỗi text và chạy hàm make_password() của Django trên chuỗi đó.
 
 2. Tấn công cạn kiệt RAM & I/O: "Xử lý ảnh / Render PDF" (Resource Heavy Tasks)
 Kịch bản: Trang web có tính năng cho phép người dùng tải lên avatar để cắt xén (crop/resize), hoặc tính năng bấm vào nút "Tải xuống báo cáo PDF/Excel".
-
 Cách Hacker làm: Gửi liên tục các request yêu cầu server render một file PDF phức tạp, hoặc gửi một bức ảnh "bom pixel" (kích thước file rất nhỏ nhưng khi bung ra bộ nhớ để xử lý thì rộng hàng chục nghìn pixel).
-
 Hậu quả trên web1: Thư viện xử lý ảnh (Pillow) hoặc render PDF (ReportLab) sẽ ngốn sạch hàng trăm MB RAM cho mỗi request. Chỉ cần vài chục request song song, web1 sẽ bị báo lỗi "Out of Memory" (OOM) và tự sập.
 
 3. Tấn công cạn kiệt Worker: "Kẻ câu giờ" (External API Timeout / Sleep)

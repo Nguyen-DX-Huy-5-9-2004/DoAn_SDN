@@ -4,34 +4,97 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SDN DDoS Monitor Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/chart.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 16px; background: #f5f7fb; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .card { background: white; padding: 12px; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
-    th { background: #fafafa; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 16px; background: #f0f2f5; color: #333; }
+    h2 { color: #1a73e8; text-align: center; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .card { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h3 { margin-top: 0; font-size: 16px; color: #5f6368; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+    th, td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f8f9fa; font-weight: 600; color: #5f6368; }
+    tr:hover { background: #f1f3f4; }
+    .status-2xx { color: #28a745; font-weight: bold; }
+    .status-4xx, .status-5xx { color: #d93025; font-weight: bold; }
+    .status-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+    .online { background-color: #28a745; box-shadow: 0 0 5px #28a745; }
+    .offline { background-color: #d93025; box-shadow: 0 0 5px #d93025; }
+    .header-info { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; font-size: 14px; }
+    .header-info span { display: flex; align-items: center; background: white; padding: 4px 12px; border-radius: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
   </style>
 </head>
 <body>
-  <h2>SDN Out-of-band Monitoring Dashboard</h2>
-  <div class="grid">
-    <div class="card"><canvas id="trafficChart"></canvas></div>
-    <div class="card"><canvas id="systemChart"></canvas></div>
+  <h2>SDN Network & Security Monitor</h2>
+  <div class="header-info">
+    <span><div id="onos-status" class="status-indicator offline"></div> ONOS Controller</span>
+    <span><div id="web1-status" class="status-indicator offline"></div> Web1 Service</span>
+    <span><div id="db1-status" class="status-indicator online"></div> DB1 Storage</span>
   </div>
-  <div class="card" style="margin-top: 16px;">
-    <h3>HTTP Request Logs (Mirrored)</h3>
-    <table>
-      <thead><tr><th>Time</th><th>Source IP</th><th>Method</th><th>URL</th><th>Payload Len</th></tr></thead>
-      <tbody id="logBody"></tbody>
-    </table>
+  <div class="grid">
+    <div class="card">
+      <h3>Network Traffic Analysis</h3>
+      <canvas id="trafficChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>System Health & Resources</h3>
+      <canvas id="systemChart"></canvas>
+    </div>
+  </div>
+  <div class="card" style="margin-top: 20px;">
+    <h3>HTTP Traffic Inspector (Mirrored from Web1)</h3>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Source IP</th>
+            <th>Method</th>
+            <th>URL</th>
+            <th>Payload</th>
+            <th>Status</th>
+            <th>User-Agent</th>
+          </tr>
+        </thead>
+        <tbody id="logBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <script>
     const trafficChart = new Chart(document.getElementById("trafficChart"), {
       type: "bar",
-      data: { labels: [], datasets: [{ label: "Byte rate (B/s)", data: [] }] }
+      data: { 
+        labels: [], 
+        datasets: [
+          { 
+            label: "Byte Rate (KB/s)", 
+            data: [], 
+            backgroundColor: "rgba(54, 162, 235, 0.5)",
+            borderColor: "rgb(54, 162, 235)",
+            borderWidth: 1,
+            yAxisID: 'y'
+          },
+          {
+            label: "Packet Rate (pps)",
+            data: [],
+            type: 'line',
+            borderColor: "rgb(255, 159, 64)",
+            backgroundColor: "rgb(255, 159, 64)",
+            borderWidth: 2,
+            tension: 0.3,
+            fill: false,
+            yAxisID: 'y1'
+          }
+        ] 
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'KB/s' }, beginAtZero: true },
+          y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'pps' }, grid: { drawOnChartArea: false }, beginAtZero: true }
+        }
+      }
     });
 
     const systemChart = new Chart(document.getElementById("systemChart"), {
@@ -39,51 +102,118 @@
       data: {
         labels: [],
         datasets: [
-          { label: "CPU %", data: [], borderColor: "#ff6384" },
-          { label: "RAM %", data: [], borderColor: "#36a2eb" }
+          { label: "CPU %", data: [], borderColor: "#ff6384", backgroundColor: "#ff6384", tension: 0.3, yAxisID: 'y' },
+          { label: "RAM %", data: [], borderColor: "#36a2eb", backgroundColor: "#36a2eb", tension: 0.3, yAxisID: 'y' },
+          { label: "Conns", data: [], borderColor: "#4bc0c0", backgroundColor: "#4bc0c0", tension: 0.3, yAxisID: 'y1', borderDash: [5, 5] }
         ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { 
+            min: 0, 
+            max: 100, 
+            display: true, 
+            position: 'left',
+            title: { display: true, text: 'Usage %' },
+            ticks: { padding: 10 }
+          },
+          y1: { 
+            beginAtZero: true,
+            display: true, 
+            position: 'right',
+            title: { display: true, text: 'Connections' },
+            grid: { drawOnChartArea: false }
+          }
+        }
       }
     });
 
     async function refreshTraffic() {
-      const r = await fetch("/api/onos");
-      const data = await r.json();
-      const hostMap = {};
-      (data.ports || []).forEach((p) => {
-        const key = p.host_ip || `port-${p.port}`;
-        hostMap[key] = (hostMap[key] || 0) + (p.byte_rate || 0);
-      });
-      trafficChart.data.labels = Object.keys(hostMap);
-      trafficChart.data.datasets[0].data = Object.values(hostMap);
-      trafficChart.update();
+      try {
+        const r = await fetch("/api/onos");
+        const data = await r.json();
+        
+        const statusEl = document.getElementById("onos-status");
+        if (data.status === "online") {
+          statusEl.classList.remove("offline");
+          statusEl.classList.add("online");
+        } else {
+          statusEl.classList.remove("online");
+          statusEl.classList.add("offline");
+        }
+
+        const byteMap = {};
+        const pktMap = {};
+        (data.ports || []).forEach((p) => {
+          const key = p.host_ip || `port-${p.port}`;
+          if (key === "unknown") return;
+          byteMap[key] = (byteMap[key] || 0) + (p.byte_rate || 0);
+          pktMap[key] = (pktMap[key] || 0) + (p.packet_rate || 0);
+        });
+        
+        const labels = Object.keys(byteMap);
+        trafficChart.data.labels = labels;
+        trafficChart.data.datasets[0].data = labels.map(l => (byteMap[l] / 1024).toFixed(2));
+        trafficChart.data.datasets[1].data = labels.map(l => pktMap[l].toFixed(1));
+        trafficChart.update('none');
+      } catch (e) { console.error(e); }
     }
 
     async function refreshSystem() {
-      const r = await fetch("/api/system");
-      const data = await r.json();
-      const now = new Date().toLocaleTimeString();
-      const labels = systemChart.data.labels;
-      labels.push(now);
-      systemChart.data.datasets[0].data.push(data.cpu_percent || 0);
-      systemChart.data.datasets[1].data.push(data.ram_percent || 0);
-      if (labels.length > 20) {
-        labels.shift();
-        systemChart.data.datasets[0].data.shift();
-        systemChart.data.datasets[1].data.shift();
-      }
-      systemChart.update();
+      try {
+        const r = await fetch("/api/system");
+        const data = await r.json();
+        console.log("Web1 status data:", data); // Debug in browser console
+
+        const statusEl = document.getElementById("web1-status");
+        if (data.status === "online") {
+          statusEl.classList.remove("offline");
+          statusEl.classList.add("online");
+        } else {
+          statusEl.classList.remove("online");
+          statusEl.classList.add("offline");
+        }
+
+        const now = new Date().toLocaleTimeString();
+        const labels = systemChart.data.labels;
+        
+        labels.push(now);
+        systemChart.data.datasets[0].data.push(data.cpu_percent || 0);
+        systemChart.data.datasets[1].data.push(data.ram_percent || 0);
+        systemChart.data.datasets[2].data.push(data.connections || 0);
+        
+        if (labels.length > 30) {
+          labels.shift();
+          systemChart.data.datasets.forEach(ds => ds.data.shift());
+        }
+        systemChart.update('none');
+      } catch (e) { console.error(e); }
     }
 
     async function refreshLogs() {
-      const r = await fetch("/api/http_logs");
-      const data = await r.json();
-      const body = document.getElementById("logBody");
-      body.innerHTML = "";
-      (data.rows || []).slice(-25).reverse().forEach((row) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${row.timestamp || ""}</td><td>${row.src_ip || ""}</td><td>${row.method || ""}</td><td>${row.url || ""}</td><td>${row.payload_len || ""}</td>`;
-        body.appendChild(tr);
-      });
+      try {
+        const r = await fetch("/api/http_logs");
+        const data = await r.json();
+        const body = document.getElementById("logBody");
+        body.innerHTML = "";
+        (data.rows || []).slice(-15).reverse().forEach((row) => {
+          const tr = document.createElement("tr");
+          const statusClass = row.status_code?.startsWith('2') ? 'status-2xx' : (row.status_code?.startsWith('4') || row.status_code?.startsWith('5') ? 'status-4xx' : '');
+          const shortUA = row.user_agent?.length > 30 ? row.user_agent.substring(0, 30) + '...' : row.user_agent;
+          
+          tr.innerHTML = `
+            <td>${row.timestamp?.split('T')[1].split('.')[0] || ""}</td>
+            <td>${row.src_ip || ""}</td>
+            <td>${row.method || ""}</td>
+            <td title="${row.url}">${row.url?.substring(0, 20) || ""}</td>
+            <td>${row.payload_len || "0"} B</td>
+            <td class="${statusClass}">${row.status_code || "-"}</td>
+            <td title="${row.user_agent}">${shortUA || "unknown"}</td>
+          `;
+          body.appendChild(tr);
+        });
+      } catch (e) { console.error(e); }
     }
 
     async function tick() {
