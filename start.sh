@@ -33,13 +33,13 @@ docker run -t -d --name onos \
   onosproject/onos:latest
 sleep 5
 mkdir -p "$SCRIPT_DIR/monitor/runtime"
-
+#onos_metrics_collector.py: Thu thập metrics từ ONOS SDN controller
 sudo env \
   PYTHONPATH="${SCRIPT_DIR}/sdn_env/lib/python3.12/site-packages" \
   "${SCRIPT_DIR}/sdn_env/bin/python3" "${SCRIPT_DIR}/monitor/onos_metrics_collector.py" \
   > /tmp/onos_metrics_collector.log 2>&1 &
 ONOS_COLLECTOR_PID=$!
-
+#Chạy web dashboard để monitoring
 sudo env \
   PYTHONPATH="${SCRIPT_DIR}/sdn_env/lib/python3.12/site-packages" \
   "${SCRIPT_DIR}/sdn_env/bin/python3" "${SCRIPT_DIR}/dashboard/server.py" \

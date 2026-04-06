@@ -17,7 +17,7 @@ onosproject/onos:latest
 sleep 5
 sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
 
-cd ~/Documents/DoAn_SDN-main
+cd ~/Documents/DoAn_SDN
 ./start.sh
 
 sudo ./start.sh
@@ -243,7 +243,7 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
 Hi Nguyen-DX-Huy-5-9-2004! You've successfully authenticated, but GitHub does not provide shell access.
 tgf@tgf-Inspiron-5577:~$ git remote set-url origin git
-Bạn đã kết nối SSH với GitHub thành công rồi 🎉. Thông báo “Hi Nguyen-DX-Huy-5-9-2004! You've successfully authenticated, but GitHub does not provide shell access.” nghĩa là SSH key của bạn đã hoạt động, chỉ là GitHub không cho truy cập shell trực tiếp (điều này hoàn toàn bình thường).
+Bạn đã kết nối SSH với GitHub thành công rồi. Thông báo “Hi Nguyen-DX-Huy-5-9-2004! You've successfully authenticated, but GitHub does not provide shell access.” nghĩa là SSH key của bạn đã hoạt động, chỉ là GitHub không cho truy cập shell trực tiếp (điều này hoàn toàn bình thường).
 
 🔧 Tiếp theo bạn cần làm
 Hoàn tất việc đổi remote sang SSH
@@ -281,7 +281,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "Mở web"
+git commit -m "Hoàn thành dashbroad và normal"
 git branch -M main
 git push origin main
 
@@ -320,39 +320,56 @@ xhost +local:root
 dashbroad: http://127.0.0.1:8050
 h60 python3 tools/open_web_from_host.py
 h61 python3 tools/open_web_from_host.py --path /accounts/login/
+h60 python3 traffic/normal.py 10.0.0.10 &
 
+HỒI 0: Sự bình yên trước cơn bão (Baseline Traffic)
+Mục tiêu: Chứng minh hệ thống đang chạy tốt, người dùng thật vẫn truy cập bình thường.
 
+Lệnh kích hoạt (Client h60 đến h65):
+mininet> py [net.get(f'h{i}').cmd('python3 traffic/normal.py 10.0.0.10 &') for i in range(60, 66)]
+Dấu hiệu Dashboard: Biểu đồ mạng thấp, CPU/RAM web1 tĩnh lặng. Bảng HTTP Log trả về mã 200 OK.
 
-1. Tấn công cạn kiệt CPU: "Thuật toán Băm Mật khẩu" (Hash Exhaustion)
-Kịch bản: Khi người dùng đăng nhập hoặc đăng ký, mật khẩu phải được băm (hash) bằng các thuật toán mạnh như bcrypt, PBKDF2 hoặc Argon2 để bảo mật. Quá trình này được thiết kế cố tình chạy rất chậm và ngốn CPU.
-Cách Hacker làm: Kẻ tấn công tạo ra hàng chục nghìn request gửi mật khẩu dài ngoằng (ví dụ 10.000 ký tự) vào endpoint /api/login.
-Hậu quả trên web1: Database chưa kịp làm gì thì CPU của web1 đã giật lên 100% để tính toán mã băm cho các mật khẩu giả mạo này. Toàn bộ web sẽ đơ cứng.
-Triển khai trong Django: Rất dễ. Chỉ cần tạo một API nhận một chuỗi text và chạy hàm make_password() của Django trên chuỗi đó.
+HỒI 1: Kẻ cục súc (UDP Flood - L4)
+Mục tiêu: Nghẽn băng thông tầng mạng.
 
-2. Tấn công cạn kiệt RAM & I/O: "Xử lý ảnh / Render PDF" (Resource Heavy Tasks)
-Kịch bản: Trang web có tính năng cho phép người dùng tải lên avatar để cắt xén (crop/resize), hoặc tính năng bấm vào nút "Tải xuống báo cáo PDF/Excel".
-Cách Hacker làm: Gửi liên tục các request yêu cầu server render một file PDF phức tạp, hoặc gửi một bức ảnh "bom pixel" (kích thước file rất nhỏ nhưng khi bung ra bộ nhớ để xử lý thì rộng hàng chục nghìn pixel).
-Hậu quả trên web1: Thư viện xử lý ảnh (Pillow) hoặc render PDF (ReportLab) sẽ ngốn sạch hàng trăm MB RAM cho mỗi request. Chỉ cần vài chục request song song, web1 sẽ bị báo lỗi "Out of Memory" (OOM) và tự sập.
+Lệnh kích hoạt (Botnet h1 đến h5):
+mininet> py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 6)]
+Dấu hiệu Dashboard: Byte Rate / Packet Rate của h1-h5 dựng đứng như cột cờ. CPU web1 vẫn thấp do không xử lý ở L7. Mạng Client (h60-h65) bắt đầu giật lag.
 
-3. Tấn công cạn kiệt Worker: "Kẻ câu giờ" (External API Timeout / Sleep)
-Kịch bản: Web của bạn cần gọi sang một dịch vụ bên thứ 3 (ví dụ: gọi API ngân hàng để kiểm tra thanh toán, hoặc gọi API thời tiết).
+🔴 HỒI 2: Kẻ đánh lừa (TCP SYN Flood - L4)
+Mục tiêu: Vắt kiệt trạng thái mạng (State-Exhaustion) bằng IP giả mạo.
+py [net.get(f'h{i}').cmd('hping3 -S -p 443 --flood --rand-source 10.0.0.10 &') for i in range(6, 11)]
+Lệnh kích hoạt (Botnet h6 đến h10):
+mininet> py [net.get(f'h{i}').cmd('python3 attack/syn_flood.py 10.0.0.10 &') for i in range(6, 11)]
+Dấu hiệu Dashboard: Packet Rate tăng vọt nhưng Byte Rate thấp (gói SYN cực nhỏ). Có thể thấy nhiễu ở Controller do IP Spoofing. HTTP Log không có request mới (vì kết nối chưa hoàn thành).
 
-Cách Hacker làm: Bắn request vào API đó.
+🔴 HỒI 3: Cuộc tấn công trực diện (L7 Application Flood)
+Mục tiêu: Xuyên thủng mạng, đánh thẳng vào tài nguyên hệ thống của Django.
 
-Đánh lừa hệ thống: Thay vì đánh sập CPU hay RAM, bạn cấu hình cho API này cố tình bị sleep(5) hoặc kết nối đến một server không tồn tại với timeout dài. Gunicorn/Django thường chỉ có khoảng 4-8 "công nhân" (workers) để phục vụ khách. Khi 8 công nhân này đều đang đứng chờ cái lệnh sleep(5) kia, khách hàng thứ 9 truy cập web sẽ bị từ chối phục vụ ngay lập tức. CPU vẫn 0%, RAM vẫn trống, nhưng web lại chết! Đây là một dạng đánh lừa hệ thống giám sát cực kỳ kinh điển.
+Lệnh kích hoạt Đánh gục CPU (Hash Exhaustion - Dùng h11, h12):
+mininet> py [net.get(f'h{i}').cmd('python3 attack/http_flood.py 10.0.0.10 hash &') for i in range(11, 13)]
+Dấu hiệu: Biểu đồ CPU web1 bắn thẳng lên 100%.
 
-4. Tấn công giải mã dữ liệu: "Bơm JSON khổng lồ" (JSON Parsing Exhaustion)
-Kịch bản: Ứng dụng nhận dữ liệu từ client dưới dạng JSON (ví dụ lưu thông tin giỏ hàng).
+Lệnh kích hoạt Đánh tràn RAM (JSON Parsing - Dùng h13, h14):
+mininet> py [net.get(f'h{i}').cmd('python3 attack/http_flood.py 10.0.0.10 json &') for i in range(13, 15)]
+Dấu hiệu: Biểu đồ RAM web1 liên tục nhích lên đến khi cạn kiệt.
 
-Cách Hacker làm: Gửi một cục JSON được lồng ghép (nested) cực kỳ sâu, hoặc chứa một mảng (array) dài hàng triệu phần tử.
+🔴 HỒI 4: Sát thủ tàng hình (Slowloris - L7)
+Mục tiêu: Chiếm đoạt Worker (luồng xử lý) của Nginx/Django bằng cách ngâm kết nối.
 
-Hậu quả trên web1: Khi Django gọi json.loads(), nó phải đọc toàn bộ cục dữ liệu đó và chuyển đổi thành cấu trúc Dictionary của Python trên RAM. Quá trình này sẽ khóa chặt CPU và làm đầy RAM siêu nhanh.
+Lệnh kích hoạt (Botnet h16 đến h20):
+py [net.get(f'h{i}').cmd('python3 attack/slowloris.py 10.0.0.11 &') for i in range(16, 21)]
+Dấu hiệu Dashboard: Gần như "tàng hình". Băng thông cực thấp, CPU/RAM bình thường. Nhưng số lượng Connections (Kết nối) đạt max. Client thật bị Timeout (chờ tải trang vô tận).
 
-Sự thú vị khi đưa vào đồ án:
-Nếu bạn làm đủ các kịch bản này, Dashboard của bạn sẽ hiển thị các triệu chứng cực kỳ đẹp mắt và khác biệt:
+🛑 LỆNH DỌN DẸP / DỪNG TẤN CÔNG (CLEANUP)
+Khi bạn muốn dừng một đợt tấn công để chuyển sang đợt khác, hãy gõ các lệnh này vào Mininet. Chúng sử dụng pkill -f để tìm và diệt chính xác các script Python đang chạy ngầm.
 
-Đánh Hash -> CPU vọt lên nóc, RAM bình thường.
+1. Dừng TOÀN BỘ các loại tấn công (Tắt hết script trong thư mục attack từ h1 đến h20):
+py [net.get(f'h{i}').cmd('pkill -f attack/') for i in range(1, 21)]
+(Dùng lệnh này là an toàn và dứt điểm nhất sau mỗi Hồi tấn công)
 
-Đánh Image/PDF -> RAM đầy vọt, CPU tăng vừa.
+2. Dừng luồng Normal Traffic (Nếu cần thiết):
+mininet> py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]
 
-Đánh Timeout -> Số lượng Connection tăng vọt, CPU/RAM chả có hiện tượng gì.
+"Hồi sinh" tiến trình Django trên Web1
+containernet> web1 sh -c 'cd /app && python manage.py runserver 0.0.0.0:80 > /tmp/django.log 2>&1 &'

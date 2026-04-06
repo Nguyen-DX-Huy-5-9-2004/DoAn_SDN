@@ -3,10 +3,15 @@ import random
 import time
 import urllib3
 import sys
+import socket 
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)# Tắt cảnh báo SSL cho môi trường Lab
 target = sys.argv[1] if len(sys.argv) > 1 else "https://10.0.0.10"
+print(f"[NORMAL TRAFFIC] Host {socket.gethostname()} bắt đầu mô phỏng người dùng thật tới {target}...")
+
+
+
+
 
 # Danh sách User-Agents thực tế
 USER_AGENTS = [
@@ -26,10 +31,14 @@ PATHS = [
     "/favicon.ico"
 ]
 
-print(f"[NORMAL TRAFFIC] Bắt đầu mô phỏng người dùng thật tới {target}...")
+print(f"[NORMAL TRAFFIC] Host {socket.gethostname()} đang truy cập {target}...")
+
+
 
 while True:
     try:
+        # 80% là request tinh vi (File 4), 20% là request đơn giản (giống File 2)
+        is_simple = random.random() < 0.2
         # Chọn ngẫu nhiên User-Agent và Path
         ua = random.choice(USER_AGENTS)
         path = random.choice(PATHS)
@@ -48,8 +57,8 @@ while True:
         else:
             requests.get(url, headers=headers, verify=False, timeout=5)
             
-    except Exception:
+    except Exception: #bỏ qua nếu rớ gói tin
         pass
 
     # "Think time" - Thời gian người dùng đọc nội dung (3-8 giây)
-    time.sleep(random.uniform(3.0, 8.0))
+    time.sleep(random.uniform(2.0, 6.0))
