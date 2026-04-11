@@ -281,7 +281,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "Hoàn thành dashbroad và normal"
+git commit -m "Hoàn thành các kịch bản tấn công và đã test"
 git branch -M main
 git push origin main
 
@@ -373,3 +373,15 @@ mininet> py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(6
 
 "Hồi sinh" tiến trình Django trên Web1
 containernet> web1 sh -c 'cd /app && python manage.py runserver 0.0.0.0:80 > /tmp/django.log 2>&1 &'
+
+theo dõi: sudo /opt/zeek/bin/zeek -C -i s6-eth4 local
+
+source /home/tgf/Documents/DoAn_SDN/sdn_env/bin/activate
+sudo ./sdn_env/bin/python traffic/checkfiel.py
+
+h1 wget http://10.0.0.11
+
+h1 wget --no-check-certificate https://10.0.0.10
+h1 wget -qO- http://10.0.0.11 > /dev/null
+containernet> h1 wget http://<IP_CỦA_WEB1>
+containernet> h60 curl http://<IP_CỦA_WEB1>
