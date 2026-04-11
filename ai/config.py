@@ -15,7 +15,6 @@ LABEL_NAMES = {
     4: "SLOWLORIS"
 }
 
-# (BẠN HÃY SỬA LẠI TÊN 20 CỘT NÀY CHO ĐÚNG VỚI DATASET CỦA BẠN NHÉ)
 # XAI sẽ dùng danh sách này để in ra giải thích.
 FEATURE_NAMES = [
     "Duration", "Protocol", "Flow_Bytes", "Flow_Packets", "Packet_Rate",
@@ -25,9 +24,7 @@ FEATURE_NAMES = [
     "Active_Mean", "Idle_Mean"
 ]
 
-# =====================================================================
-# 🧠 KIẾN TRÚC 1: MẠNG AUTOENCODER (BẮT ZERO-DAY ANOMALY)
-# =====================================================================
+# KIẾN TRÚC 1: MẠNG AUTOENCODER (BẮT ZERO-DAY ANOMALY)
 class Anomaly_Autoencoder(nn.Module):
     def __init__(self):
         super(Anomaly_Autoencoder, self).__init__()
@@ -58,9 +55,7 @@ class Anomaly_Autoencoder(nn.Module):
         return reconstructed.view(batch_size, SEQ_LEN, NUM_FEATURES)
 
 
-# =====================================================================
-# 👁️ CƠ CHẾ ATTENTION (SỰ TẬP TRUNG)
-# =====================================================================
+# CƠ CHẾ ATTENTION
 class AttentionLayer(nn.Module):
     def __init__(self, hidden_size):
         super(AttentionLayer, self).__init__()
@@ -73,9 +68,7 @@ class AttentionLayer(nn.Module):
         return context, alphas
 
 
-# =====================================================================
-# 🛡️ KIẾN TRÚC 2: MẠNG LÕI CNN + GRU + ATTENTION (PHÂN LOẠI DDOS)
-# =====================================================================
+# KIẾN TRÚC 2: MẠNG LÕI CNN + GRU + ATTENTION (PHÂN LOẠI DDOS)
 class DDos_CNN_GRU_Attention(nn.Module):
     def __init__(self):
         super(DDos_CNN_GRU_Attention, self).__init__()

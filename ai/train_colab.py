@@ -32,15 +32,15 @@ def seed_everything(seed=42):
 
 seed_everything(42)
 
-# 1. THIẾT LẬP THÔNG SỐ
+#THIẾT LẬP THÔNG SỐ
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 BATCH_SIZE = 512
 EPOCHS_AE = 15      
 EPOCHS_CLS = 30     
 
-print(f"🚀 Đang train trên thiết bị: {DEVICE}")
+print(f"Đang train trên thiết bị: {DEVICE}")
 
-# 2. DATASET VÀ CỬA SỔ TRƯỢT AN TOÀN
+#DATASET VÀ CỬA SỔ TRƯỢT AN TOÀN
 class SDNFlowDataset(Dataset):
     def __init__(self, sequences, labels):
         self.sequences = torch.FloatTensor(sequences)
@@ -59,9 +59,9 @@ def create_safe_sequences(features, labels, seq_len):
             y.append(window_labels[-1])
     return np.array(X), np.array(y)
 
-# 3. MẠCH CHÍNH (TWO-PHASE TRAINING)
+#MẠCH CHÍNH (TWO-PHASE TRAINING)
 if __name__ == "__main__":
-    # ĐỌC DATA - Tự động bỏ qua các dòng lỗi (on_bad_lines='skip')
+    #ĐỌC DATA - Tự động bỏ qua các dòng lỗi (on_bad_lines='skip')
     DATASET_PATH = "/content/drive/MyDrive/SDN_Project/master_dataset_for_cnn_gru.csv"
     df = pd.read_csv(DATASET_PATH, on_bad_lines='skip')
     
@@ -75,11 +75,9 @@ if __name__ == "__main__":
 
     X_seq, y_seq = create_safe_sequences(X_scaled, y_raw, SEQ_LEN)
     
-    # ==========================================
     # GIAI ĐOẠN 1: HUẤN LUYỆN AUTOENCODER (BẮT ZERO-DAY)
-    # ==========================================
     print("="*60)
-    print(" 🛡️ GIAI ĐOẠN 1: HUẤN LUYỆN AUTOENCODER (DỮ LIỆU SẠCH)")
+    print(" GIAI ĐOẠN 1: HUẤN LUYỆN AUTOENCODER (DỮ LIỆU SẠCH)")
     print("="*60)
     
     benign_idx = (y_seq == 0)
@@ -114,13 +112,11 @@ if __name__ == "__main__":
     
     joblib.dump(anomaly_threshold, 'ae_threshold.pkl')
     torch.save(ae_model.state_dict(), 'sdn_autoencoder.pth')
-    print(f"✅ Đã lưu Autoencoder. Ngưỡng phát hiện Zero-Day (Threshold): {anomaly_threshold:.4f}\n")
+    print(f"Đã lưu Autoencoder. Ngưỡng phát hiện Zero-Day (Threshold): {anomaly_threshold:.4f}\n")
 
-    # ==========================================
     # GIAI ĐOẠN 2: HUẤN LUYỆN CLASSIFIER (CNN-GRU-ATTENTION)
-    # ==========================================
     print("="*60)
-    print(" 👁️ GIAI ĐOẠN 2: HUẤN LUYỆN CNN-GRU-ATTENTION")
+    print("GIAI ĐOẠN 2: HUẤN LUYỆN CNN-GRU-ATTENTION")
     print("="*60)
     
     X_train, X_test, y_train, y_test = train_test_split(X_seq, y_seq, test_size=0.2, random_state=42, stratify=y_seq)
@@ -129,7 +125,6 @@ if __name__ == "__main__":
 
     classes = np.unique(y_train)
     raw_weights = compute_class_weight(class_weight='balanced', classes=classes, y=y_train)
-    # Điểm neo vàng: a_max = 7.5
     clipped_weights = np.clip(raw_weights, a_min=None, a_max=7.5) 
     tensor_weights = torch.FloatTensor(clipped_weights).to(DEVICE)
 
@@ -198,7 +193,7 @@ if __name__ == "__main__":
             all_targets.extend(batch_y.numpy())
 
     print("\n" + "="*50)
-    print(" 📊 BÁO CÁO ĐỘ CHÍNH XÁC (CLASSIFICATION REPORT)")
+    print("BÁO CÁO ĐỘ CHÍNH XÁC (CLASSIFICATION REPORT)")
     print("="*50)
     target_names = [LABEL_NAMES[i] for i in range(NUM_CLASSES)]
     print(classification_report(all_targets, all_preds, target_names=target_names, zero_division=0))
@@ -210,4 +205,4 @@ if __name__ == "__main__":
     plt.xlabel('Dự đoán của AI (Predicted)')
     plt.title('Ma Trận Nhầm Lẫn - Đánh giá hiệu năng AI')
     plt.savefig('confusion_matrix.png')
-    print("✅ Đã lưu biểu đồ: confusion_matrix.png")
+    print("Đã lưu biểu đồ: confusion_matrix.png")
