@@ -281,7 +281,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "Đã xử lý hơn 46GB data để cô đọng còn hơn 120MB data phù hợp"
+git commit -m "Đã xây dựng xong mô hình AI, code thực thi,...V0, đã  nâng cấp liên tục và V3Final"
 git branch -M main
 git push origin main
 
