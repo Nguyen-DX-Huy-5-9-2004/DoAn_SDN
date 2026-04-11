@@ -281,7 +281,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "Hoàn thành các kịch bản tấn công và đã test"
+git commit -m "Đã xử lý hơn 46GB data để cô đọng còn hơn 120MB data phù hợp"
 git branch -M main
 git push origin main
 
@@ -385,3 +385,52 @@ h1 wget --no-check-certificate https://10.0.0.10
 h1 wget -qO- http://10.0.0.11 > /dev/null
 containernet> h1 wget http://<IP_CỦA_WEB1>
 containernet> h60 curl http://<IP_CỦA_WEB1>
+
+from google.colab import drive
+drive.mount('/content/drive')
+!python train_colab.py
+
+
+Tôi đã đọc và suy nghĩ về các đề xuất của bạn và tôi muốn thực hiện các đề xuất sau hãy xem thật kỹ 3 file còn lại để thực  hiện điều chỉnh, sau khi điều chỉnh xong thì nhìn kỹ lại 1 cách khách quan để kiểm tra và tiếp tục điều chỉnh đến lúc ổn thỏa: 1. Khai phá AI có thể giải thích (Explainable AI - XAI)
+
+Hiện tại, khi AI chặn một IP, nó chỉ báo ra độ tin cậy (ví dụ: 96%). Nhưng hội đồng có thể hỏi: "Tại sao AI của em lại nghĩ đây là Slowloris?".
+
+
+
+Giải pháp: Bạn đã có sẵn lớp AttentionLayer trong mô hình (trả về biến attn_weights). Biến này chứa 10 con số phần trăm tương ứng với mức độ "đáng ngờ" của 10 luồng mạng trong chuỗi.
+
+Hành động: Bạn có thể trích xuất biến attn_weights này trong file run_onos.py, sau đó dùng thư viện matplotlib vẽ một biểu đồ nhiệt (Heatmap). Nó sẽ highlight đỏ rực lên luồng mạng nào có duration dài bất thường. Bạn sẽ có một hệ thống không chỉ biết bắt cướp, mà còn biết "chỉ tận tay, day tận trán" thủ đoạn của kẻ cướp.
+
+⚙️ 2. Nâng cấp luồng dữ liệu Thực thời (Real-time Pipeline)
+
+Trong file run_onos.py hiện tại, chúng ta đang giả lập dữ liệu bằng np.zeros((10, 20)). Để chạy thật trên Mininet/ONOS, hệ thống cần một bộ thu thập tự động.
+
+
+
+Khuyến nghị: Tích hợp công cụ sFlow-RT hoặc Zeek IDS.
+
+Cách hoạt động: Các Switch trong Mininet sẽ gửi luồng sFlow về sFlow-RT. Bạn viết một đoạn script Python nhỏ liên tục gọi API của sFlow-RT mỗi 1 giây để lấy các thông số (byte_count, packet_count, duration...), ép nó vào khuôn 20 cột, rồi đẩy thẳng vào file run_onos.py. Luồng Data Science của bạn sẽ được nối kín thành một vòng tròn khép kín.
+
+🔄 3. Chống "Trôi dạt khái niệm" (Concept Drift) cho Lớp khiên 1
+
+Autoencoder của bạn đang dùng một ngưỡng cố định Threshold = 0.1827. Trong thực tế, mạng lưới ban ngày (nhiều nhân viên truy cập) sẽ có hành vi khác hẳn mạng lưới ban đêm. Nếu giữ một ngưỡng cứng, AI có thể báo động nhầm vào giờ cao điểm.
+
+
+
+Khuyến nghị: Áp dụng Dynamic Threshold (Ngưỡng thích nghi).
+
+Hành động: Thay vì dùng con số cố định, hệ thống sẽ tính trung bình sai số (MSE) của 1000 luồng mạng gần nhất trong 5 phút vừa qua, cộng thêm độ lệch chuẩn (Standard Deviation). Khi mạng đông đúc lên một cách tự nhiên, ngưỡng cảnh báo Zero-Day cũng tự động được nới lỏng ra một chút để tránh báo động giả (False Positive).
+
+🛡️ 4. Đa dạng hóa Chiến thuật Mitigation (Phòng thủ đa tầng)
+
+Hiện tại, ONOS đang dùng lệnh cực đoan nhất: DROP (Hủy mọi gói tin từ IP nghi ngờ). Đối với một hệ thống cấp doanh nghiệp, đôi khi việc này gây rủi ro nếu chặn nhầm IP của một đối tác quan trọng.
+
+
+
+Khuyến nghị: Nâng cấp hàm block_attacker_via_onos theo mức độ tự tin của AI.
+
+Nếu độ tin cậy > 95%: Bắn lệnh DROP ngay lập tức.
+
+Nếu độ tin cậy từ 80% đến 95%: Không DROP hẳn, mà bắn lệnh yêu cầu Switch giảm băng thông (Rate Limiting / Metering) của IP đó xuống mức tối thiểu (ví dụ: 10Kbps) để ép kẻ tấn công chậm lại nhưng không làm đứt hẳn kết nối.
+
+Nếu là Zero-Day (Autoencoder báo động): Ra lệnh cho Switch đổi hướng (Redirect) toàn bộ gói tin của IP đó chui vào một máy chủ giả lập (Honeypot) để ghi log và theo dõi thêm hành vi của hacker.

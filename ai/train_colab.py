@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, TensorDataset
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.utils.class_weight import compute_class_weight
@@ -13,13 +13,30 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib
 import time
+import os
+import random
 
-from config import DDos_CNN_GRU, NUM_FEATURES, SEQ_LEN, LABEL_NAMES, NUM_CLASSES # Import từ file cấu hình
+# IMPORT CÁC MÔ HÌNH MỚI TỪ CONFIG
+from config import Anomaly_Autoencoder, DDos_CNN_GRU_Attention, NUM_FEATURES, SEQ_LEN, LABEL_NAMES, NUM_CLASSES 
+
+# --- ĐÓNG BĂNG SỰ NGẪU NHIÊN ĐỂ KẾT QUẢ KHÔNG ĐỔI ---
+def seed_everything(seed=42):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True 
+    torch.backends.cudnn.benchmark = False
+
+seed_everything(42)
 
 # 1. THIẾT LẬP THÔNG SỐ
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 BATCH_SIZE = 512
-EPOCHS = 20
+EPOCHS_AE = 15      
+EPOCHS_CLS = 30     
 
 print(f"🚀 Đang train trên thiết bị: {DEVICE}")
 
@@ -32,69 +49,101 @@ class SDNFlowDataset(Dataset):
     def __getitem__(self, idx): return self.sequences[idx], self.labels[idx]
 
 def create_safe_sequences(features, labels, seq_len):
-    """Cửa sổ trượt CHỈ GỘP KHI ĐỒNG NHẤT NHÃN (Tránh nhiễu chéo)"""
     print(f"⏳ Đang tạo chuỗi Time-Series (Seq_len = {seq_len})...")
     X, y = [], []
-    stride = seq_len
-    
+    stride = seq_len 
     for i in range(0, len(features) - seq_len, stride):
         window_labels = labels[i : i + seq_len]
-        # Ký thuật cốt lõi: Chỉ gộp nếu toàn bộ 10 dòng có chung 1 nhãn
         if np.all(window_labels == window_labels[0]):
             X.append(features[i : i + seq_len])
             y.append(window_labels[-1])
-            
     return np.array(X), np.array(y)
 
-# 3. MẠCH CHÍNH
+# 3. MẠCH CHÍNH (TWO-PHASE TRAINING)
 if __name__ == "__main__":
-    # ĐỌC DATA
-    #DATASET_PATH = "/home/tgf/Documents/DoAn_SDN/dataset/master_dataset_for_cnn_gru.csv"
-    DATASET_PATH = "/content/master_dataset_for_cnn_gru.csv"
-    df = pd.read_csv(DATASET_PATH)
+    # ĐỌC DATA - Tự động bỏ qua các dòng lỗi (on_bad_lines='skip')
+    DATASET_PATH = "/content/drive/MyDrive/SDN_Project/master_dataset_for_cnn_gru.csv"
+    df = pd.read_csv(DATASET_PATH, on_bad_lines='skip')
     
-    # Loại bỏ các cột không phải đặc trưng (nếu có)
-    # Giả sử file CSV có cột 'target_label' là nhãn
-    if 'target_label' not in df.columns:
-        # Nếu tên cột nhãn khác, hãy đổi ở đây. Ví dụ: 'label'
-        label_col = 'label' if 'label' in df.columns else df.columns[-1]
-    else:
-        label_col = 'target_label'
-
+    label_col = 'target_label' if 'target_label' in df.columns else df.columns[-1]
     X_raw = df.drop(columns=[label_col]).values
     y_raw = df[label_col].values
 
-    # CHUẨN HÓA & LƯU SCALER (Cực kỳ quan trọng để run trên máy thật)
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X_raw)
     joblib.dump(scaler, 'sdn_scaler.pkl')
-    print("✅ Đã xuất file cấu hình chuẩn hóa: sdn_scaler.pkl")
 
-    # TẠO SEQUENCE & SPLIT DATA (80% Train, 20% Test)
     X_seq, y_seq = create_safe_sequences(X_scaled, y_raw, SEQ_LEN)
-    X_train, X_test, y_train, y_test = train_test_split(X_seq, y_seq, test_size=0.2, random_state=42, stratify=y_seq)
     
+    # ==========================================
+    # GIAI ĐOẠN 1: HUẤN LUYỆN AUTOENCODER (BẮT ZERO-DAY)
+    # ==========================================
+    print("="*60)
+    print(" 🛡️ GIAI ĐOẠN 1: HUẤN LUYỆN AUTOENCODER (DỮ LIỆU SẠCH)")
+    print("="*60)
+    
+    benign_idx = (y_seq == 0)
+    X_benign = X_seq[benign_idx]
+    
+    X_train_ae, X_test_ae = train_test_split(X_benign, test_size=0.2, random_state=42)
+    ae_loader = DataLoader(TensorDataset(torch.FloatTensor(X_train_ae)), batch_size=BATCH_SIZE, shuffle=True)
+    
+    ae_model = Anomaly_Autoencoder().to(DEVICE)
+    ae_criterion = nn.MSELoss() 
+    ae_optimizer = optim.Adam(ae_model.parameters(), lr=0.001)
+    
+    for epoch in range(EPOCHS_AE):
+        ae_model.train()
+        total_loss = 0
+        for batch_X in ae_loader:
+            batch_X = batch_X[0].to(DEVICE) 
+            ae_optimizer.zero_grad()
+            reconstructed = ae_model(batch_X)
+            loss = ae_criterion(reconstructed, batch_X)
+            loss.backward()
+            ae_optimizer.step()
+            total_loss += loss.item()
+        print(f"AE Epoch [{epoch+1}/{EPOCHS_AE}] | MSE Loss: {total_loss/len(ae_loader):.4f}")
+    
+    ae_model.eval()
+    with torch.no_grad():
+        X_ae_tensor = torch.FloatTensor(X_train_ae).to(DEVICE)
+        reconstructed_train = ae_model(X_ae_tensor)
+        mse_errors = torch.mean((X_ae_tensor - reconstructed_train)**2, dim=(1,2)).cpu().numpy()
+        anomaly_threshold = np.percentile(mse_errors, 95)
+    
+    joblib.dump(anomaly_threshold, 'ae_threshold.pkl')
+    torch.save(ae_model.state_dict(), 'sdn_autoencoder.pth')
+    print(f"✅ Đã lưu Autoencoder. Ngưỡng phát hiện Zero-Day (Threshold): {anomaly_threshold:.4f}\n")
+
+    # ==========================================
+    # GIAI ĐOẠN 2: HUẤN LUYỆN CLASSIFIER (CNN-GRU-ATTENTION)
+    # ==========================================
+    print("="*60)
+    print(" 👁️ GIAI ĐOẠN 2: HUẤN LUYỆN CNN-GRU-ATTENTION")
+    print("="*60)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_seq, y_seq, test_size=0.2, random_state=42, stratify=y_seq)
     train_loader = DataLoader(SDNFlowDataset(X_train, y_train), batch_size=BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(SDNFlowDataset(X_test, y_test), batch_size=BATCH_SIZE, shuffle=False)
 
-    # TÍNH TRỌNG SỐ LỚP (Bảo vệ tuyệt đối Slowloris)
     classes = np.unique(y_train)
-    class_weights = compute_class_weight(class_weight='balanced', classes=classes, y=y_train)
-    tensor_weights = torch.FloatTensor(class_weights).to(DEVICE)
-    print(f"⚖️ Trọng số phạt tự động: {class_weights}")
+    raw_weights = compute_class_weight(class_weight='balanced', classes=classes, y=y_train)
+    # Điểm neo vàng: a_max = 7.5
+    clipped_weights = np.clip(raw_weights, a_min=None, a_max=7.5) 
+    tensor_weights = torch.FloatTensor(clipped_weights).to(DEVICE)
 
-    # KHỞI TẠO MÔ HÌNH
-    model = DDos_CNN_GRU().to(DEVICE)
+    model = DDos_CNN_GRU_Attention().to(DEVICE)
+    # Ranh giới sắc nét: Không dùng label_smoothing
     criterion = nn.CrossEntropyLoss(weight=tensor_weights)
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5) 
+    scheduler = optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.005, steps_per_epoch=len(train_loader), epochs=EPOCHS_CLS)
 
-    # HUẤN LUYỆN
-    train_losses, test_accs = [], []
     best_acc = 0.0
-    patience = 10
+    patience = 12
     trigger_times = 0
 
-    for epoch in range(EPOCHS):
+    for epoch in range(EPOCHS_CLS):
         model.train()
         total_loss, correct, total = 0, 0, 0
         start_time = time.time()
@@ -102,10 +151,12 @@ if __name__ == "__main__":
         for batch_X, batch_y in train_loader:
             batch_X, batch_y = batch_X.to(DEVICE), batch_y.to(DEVICE)
             optimizer.zero_grad()
-            outputs = model(batch_X)
+            outputs, _ = model(batch_X) 
             loss = criterion(outputs, batch_y)
             loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             optimizer.step()
+            scheduler.step()
             
             total_loss += loss.item()
             _, predicted = outputs.max(1)
@@ -114,24 +165,21 @@ if __name__ == "__main__":
             
         train_acc = 100. * correct / total
         
-        # ĐÁNH GIÁ NHANH TRÊN TẬP TEST SAU MỖI EPOCH
         model.eval()
         test_correct, test_total = 0, 0
         with torch.no_grad():
             for batch_X, batch_y in test_loader:
-                outputs = model(batch_X.to(DEVICE))
+                outputs, _ = model(batch_X.to(DEVICE))
                 _, predicted = outputs.max(1)
                 test_total += batch_y.size(0)
                 test_correct += predicted.eq(batch_y.to(DEVICE)).sum().item()
         
         test_acc = 100. * test_correct / test_total
-        print(f"Epoch [{epoch+1}/{EPOCHS}] | Loss: {total_loss/len(train_loader):.4f} | Train Acc: {train_acc:.2f}% | Test Acc: {test_acc:.2f}% | Time: {time.time()-start_time:.1f}s")
-
-        # Early Stopping & Save Best Model
+        print(f"Epoch [{epoch+1}/{EPOCHS_CLS}] | Loss: {total_loss/len(train_loader):.4f} | Train Acc: {train_acc:.2f}% | Test Acc: {test_acc:.2f}% | Time: {time.time()-start_time:.1f}s")
+        
         if test_acc > best_acc:
             best_acc = test_acc
-            torch.save(model.state_dict(), 'sdn_model_cnn_gru.pth')
-            print(f"⭐ Đã lưu mô hình tốt nhất với Accuracy: {best_acc:.2f}%")
+            torch.save(model.state_dict(), 'sdn_model_cnn_gru_attn.pth')
             trigger_times = 0
         else:
             trigger_times += 1
@@ -144,7 +192,7 @@ if __name__ == "__main__":
     all_preds, all_targets = [], []
     with torch.no_grad():
         for batch_X, batch_y in test_loader:
-            outputs = model(batch_X.to(DEVICE))
+            outputs, _ = model(batch_X.to(DEVICE))
             _, preds = outputs.max(1)
             all_preds.extend(preds.cpu().numpy())
             all_targets.extend(batch_y.numpy())
@@ -153,9 +201,8 @@ if __name__ == "__main__":
     print(" 📊 BÁO CÁO ĐỘ CHÍNH XÁC (CLASSIFICATION REPORT)")
     print("="*50)
     target_names = [LABEL_NAMES[i] for i in range(NUM_CLASSES)]
-    print(classification_report(all_targets, all_preds, target_names=target_names))
+    print(classification_report(all_targets, all_preds, target_names=target_names, zero_division=0))
 
-    # VẼ MA TRẬN NHẦM LẪN (Confusion Matrix)
     cm = confusion_matrix(all_targets, all_preds)
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=target_names, yticklabels=target_names)
