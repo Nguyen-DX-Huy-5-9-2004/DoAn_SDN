@@ -66,8 +66,21 @@ def feature_builder_worker():
                 byte_rate = stats['orig_bytes'] / INTERVAL
                 
                 features = [
-                    stats['proto'], duration, stats['orig_bytes'], 0, stats['orig_pkts'], 
-                    0, 0, 0, 0, 0, pkt_rate, byte_rate, 0, 0, 0, 0, 0, 0, 0, 0
+                    0,                   # 0: id.orig_p (Bỏ qua, gán 0)
+                    0,                   # 1: id.resp_p (Bỏ qua, gán 0)
+                    stats['proto'],      # 2: proto (6 là TCP, 17 là UDP)
+                    duration,            # 3: duration
+                    stats['orig_bytes'], # 4: orig_bytes
+                    0,                   # 5: resp_bytes
+                    stats['orig_pkts'],  # 6: orig_pkts
+                    0,                   # 7: resp_pkts
+                    0,                   # 8: conn_state
+                    0,                   # 9: method
+                    0,                   # 10: request_body_len
+                    0,                   # 11: status_code
+                    pkt_rate,            # 12: pkt_rate (CỘT QUAN TRỌNG NHẤT)
+                    byte_rate,           # 13: byte_rate
+                    0, 0, 0, 0, 0, 0     # 14-19: Padding các cột phụ
                 ]
                 
                 json_data = json.dumps({"ip": src_ip, "features": features})
@@ -91,7 +104,9 @@ print(f"[*] Đang quét danh sách các card mạng khả dụng...")
 active_interfaces = []
 stats = psutil.net_if_stats()
 for iface_name, iface_stats in stats.items():
-    if iface_stats.isup:  # Chỉ lấy card đang bật
+    # Chỉ lấy card ĐANG BẬT và có TÊN LÀ CỔNG SWITCH (bắt đầu bằng s và có chữ eth)
+    # Ví dụ: s1-eth1, s4-eth2...
+    if iface_stats.isup and iface_name.startswith('s') and '-eth' in iface_name:
         active_interfaces.append(iface_name)
 
 print(f"[*] Đã tìm thấy {len(active_interfaces)} cổng SDN Mininet: {active_interfaces}")
