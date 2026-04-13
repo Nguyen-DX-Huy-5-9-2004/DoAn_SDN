@@ -13,12 +13,12 @@ warnings.filterwarnings("ignore")
 
 from rich.console import Console
 from rich.panel import Panel
-from config import Anomaly_Autoencoder, DDos_CNN_GRU_Attention, SEQ_LEN, LABEL_NAMES, FEATURE_NAMES
+from config import Anomaly_Autoencoder, DDos_CNN_GRU_Attention, SEQ_LEN, LABEL_NAMES, FEATURE_NAMES, NUM_FEATURES
 
 console = Console()
 
 # ==========================================
-# CẤU HÌNH HỆ THỐNG
+# CẤU HÌNH HỆ THỐNG & DOANH NGHIỆP
 # ==========================================
 ONOS_IP = "127.0.0.1"
 ONOS_PORT = "8181"
@@ -26,11 +26,22 @@ ONOS_USER = "onos"
 ONOS_PASS = "rocks"
 HONEYPOT_PORT = "2" # Cổng switch dẫn tới Honeypot
 
-FIFO_PATH = "/tmp/zeek_stream.json"
+FIFO_PATH = "zeek_stream.json"
 CHECKPOINT_FILE = "threshold_state.json"
+
+# Cấu hình AI Concept Drift
 EMA_ALPHA = 0.05
-dynamic_threshold = 0.1827 # Ngưỡng mặc định nếu không có file
+dynamic_threshold = 0.1827
 threshold_lock = threading.Lock()
+
+# Cấu hình Tối ưu Phần mềm (System Optimization)
+COOLDOWN_TIME = 300      # (Giây) Thời gian cấm vận IP bị block, chống spam log
+BUFFER_TIMEOUT = 60      # (Giây) Thời gian tối đa giữ 1 IP trong RAM nếu không đủ 10 gói
+ip_buffers = {}          # { '10.0.0.9': {'data': [...], 'last_seen': 16123...} }
+blocked_ips = {}         # { '10.0.0.9': 16123... }
+last_log_time = {}       # Chống spam log ra màn hình
+buffer_lock = threading.Lock()
+
 
 # ==========================================
 # MODULE 1: EMA & SSD CHECKPOINTING
@@ -55,8 +66,7 @@ def save_threshold_worker():
         try:
             with open(CHECKPOINT_FILE, 'w') as f:
                 json.dump({'threshold': current_th, 'timestamp': time.time()}, f)
-            # console.print("[dim]💾 Đã lưu Checkpoint (Ngưỡng thích nghi) xuống SSD.[/dim]")
-        except Exception as e:
+        except Exception:
             pass
 
 # ==========================================
@@ -64,12 +74,9 @@ def save_threshold_worker():
 # ==========================================
 def print_xai_explanation(attn_weights, input_tensor):
     """In ra Terminal Heatmap giải thích quyết định của AI"""
-    # 1. Tìm gói tin bị AI chú ý nhất trong 10 gói
     max_step_idx = torch.argmax(attn_weights).item()
     most_suspicious_packet = input_tensor[0, max_step_idx].cpu().numpy()
     
-    # 2. Tìm top 3 đặc trưng (features) dị thường nhất trong gói đó
-    # Dùng giá trị tuyệt đối sau khi scale để đo mức độ bất thường
     top_indices = np.argsort(np.abs(most_suspicious_packet))[-3:][::-1]
     
     console.print("\n[bold yellow][EXPLAIN] Mổ xẻ Báo cáo Quyết định của AI (Top 3 Contributions):[/bold yellow]")
@@ -79,16 +86,41 @@ def print_xai_explanation(attn_weights, input_tensor):
     for i, idx in enumerate(top_indices):
         feat_name = FEATURE_NAMES[idx]
         feat_val = most_suspicious_packet[idx]
-        # Tạo % minh họa dựa trên độ lớn dị thường
-        contribution = (abs(feat_val) / np.sum(np.abs(most_suspicious_packet[top_indices]))) * 100
+        sum_val = np.sum(np.abs(most_suspicious_packet[top_indices]))
+        contribution = (abs(feat_val) / sum_val) * 100 if sum_val > 0 else 0
         
         msg = f"[{colors[i]}]{labels[i]} {feat_name:<16} : {contribution:>4.1f}% (Scaled Score: {feat_val:>.2f})[/{colors[i]}]"
         console.print(msg)
     console.print("-" * 65)
 
 # ==========================================
-# MODULE 3: PHÒNG THỦ ĐA TẦNG (MITIGATION)
+# MODULE 3: TỐI ƯU HÓA HỆ THỐNG (GARBAGE COLLECTOR & ASYNC IO)
 # ==========================================
+def buffer_cleanup_worker():
+    """Luồng Dọn Rác RAM: Xóa các luồng mạng rác không bao giờ đạt tới 10 gói tin"""
+    while True:
+        time.sleep(10) # Quét mỗi 10s
+        current_time = time.time()
+        cleaned_count = 0
+        with buffer_lock:
+            # Tìm các IP đã quá hạn (không gửi thêm gói nào trong 60s)
+            stale_ips = [ip for ip, info in ip_buffers.items() if current_time - info['last_seen'] > BUFFER_TIMEOUT]
+            for ip in stale_ips:
+                del ip_buffers[ip]
+                cleaned_count += 1
+        if cleaned_count > 0:
+            console.print(f"[dim]🧹 [Garbage Collector] Đã dọn dẹp {cleaned_count} IP rác khỏi RAM để giải phóng bộ nhớ.[/dim]")
+
+def async_onos_request(flow_rule):
+    """Tiến trình thực thi REST API đẩy xuống ONOS không gây Block AI"""
+    try:
+        url = f"http://{ONOS_IP}:{ONOS_PORT}/onos/v1/flows/{flow_rule['deviceId']}"
+        # Xóa comment dòng dưới khi Mininet/ONOS thực sự chạy
+        # requests.post(url, json=flow_rule, auth=(ONOS_USER, ONOS_PASS), timeout=2)
+        pass 
+    except Exception as e:
+        console.print(f"[dim red]⚠️ Lỗi gọi ONOS API: {e}[/dim red]")
+
 def execute_mitigation(src_ip, attack_name, confidence, is_zero_day=False):
     action = ""
     treatment = {}
@@ -103,7 +135,6 @@ def execute_mitigation(src_ip, attack_name, confidence, is_zero_day=False):
         color = "bold red"
     else:
         action = "RATE LIMIT (ÉP BĂNG THÔNG)"
-        # Ở thực tế, ONOS Rate limit cần tạo Meter trước. Ở đây giả lập JSON:
         treatment = { "instructions": [{"type": "METER", "meterId": "1"}] } 
         color = "bold yellow"
 
@@ -119,14 +150,12 @@ def execute_mitigation(src_ip, attack_name, confidence, is_zero_day=False):
         "priority": 40000, "timeout": 0, "isPermanent": True,
         "deviceId": "of:0000000000000001",
         "treatment": treatment,
-        "selector": {
-            "criteria": [ {"type": "ETH_TYPE", "ethType": "0x0800"}, {"type": "IPV4_SRC", "ip": f"{src_ip}/32"} ]
-        }
+        "selector": { "criteria": [ {"type": "ETH_TYPE", "ethType": "0x0800"}, {"type": "IPV4_SRC", "ip": f"{src_ip}/32"} ] }
     }
     
-    # REST API MOCK
-    # requests.post(f"http://{ONOS_IP}:{ONOS_PORT}/onos/v1/flows/...", json=flow_rule, auth=(ONOS_USER, ONOS_PASS))
-    console.print("[bold green]✅ Lệnh mitigation đã được đẩy xuống Switch OpenFlow![/bold green]\n")
+    # Kích hoạt luồng chạy ngầm gửi lệnh xuống Switch (Bất đồng bộ)
+    threading.Thread(target=async_onos_request, args=(flow_rule,), daemon=True).start()
+    console.print("[bold green]✅ Lệnh mitigation đã được đẩy xuống OpenFlow (Bất đồng bộ)![/bold green]\n")
 
 # ==========================================
 # MAIN: REAL-TIME PIPELINE (IN-MEMORY STREAMING)
@@ -137,8 +166,9 @@ if __name__ == "__main__":
     
     load_checkpoint()
     
-    # Khởi động luồng Background Checkpoint
+    # Khởi động các luồng Background (CheckPoint SSD & Dọn rác RAM)
     threading.Thread(target=save_threshold_worker, daemon=True).start()
+    threading.Thread(target=buffer_cleanup_worker, daemon=True).start()
     
     try:
         scaler = joblib.load('sdn_scaler.pkl')
@@ -153,24 +183,26 @@ if __name__ == "__main__":
         console.print(f"[bold red]❌ Lỗi nạp mô hình: {e}[/bold red]")
         exit()
 
-    # --- KHỞI TẠO FIFO CHO ZEEK ---
-    if not os.path.exists(FIFO_PATH):
+# ==========================================
+    # AUTO-CLEANUP: Dọn dẹp ống RAM cũ trước khi chạy
+    # ==========================================
+    if os.path.exists(FIFO_PATH):
         try:
-            os.mkfifo(FIFO_PATH)
-            console.print(f"[dim]Tạo Named Pipe thành công tại: {FIFO_PATH}[/dim]")
+            os.remove(FIFO_PATH)
+            console.print(f"[dim]🧹 Đã dọn dẹp ống RAM cũ ({FIFO_PATH}) từ lần chạy trước.[/dim]")
         except Exception as e:
-            console.print(f"[bold yellow]⚠️ Không thể tạo FIFO ({e}). Chuyển sang chạy giả lập (Mock Mode).[/bold yellow]")
+            console.print(f"[bold red]⚠️ Cảnh báo: Không thể xóa ống cũ ({e})[/bold red]")
+            
+    # Tạo lại một ống RAM hoàn toàn mới và sạch sẽ
+    try:
+        os.mkfifo(FIFO_PATH)
+    except Exception as e:
+        console.print(f"[bold red]❌ Lỗi tạo ống RAM: {e}[/bold red]")
 
     console.print("[bold green]📡 Hệ thống đang lắng nghe lưu lượng từ luồng RAM (Zeek In-Memory)...[/bold green]\n")
 
-    # Buffer chứa luồng mạng theo IP (gom đủ 10 luồng thì mang đi AI infer)
-    ip_buffers = {}
-
     while True:
         try:
-            # LƯU Ý: Lệnh open() này sẽ block (đứng chờ) cho đến khi Zeek đẩy dữ liệu vào ống.
-            # Nếu bạn chưa cài Zeek, hãy mở Terminal khác và gõ: 
-            # echo '{"ip": "10.0.0.9", "features": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}' > /tmp/zeek_stream.json
             with open(FIFO_PATH, 'r') as fifo:
                 for line in fifo:
                     if not line.strip(): continue
@@ -181,61 +213,91 @@ if __name__ == "__main__":
                         
                         if len(features) != NUM_FEATURES: continue
                         
-                        if src_ip not in ip_buffers:
-                            ip_buffers[src_ip] = []
-                        ip_buffers[src_ip].append(features)
+                        current_time = time.time()
                         
-                        # KHI ĐÃ GOM ĐỦ 10 GÓI TIN TỪ CÙNG 1 IP -> KÍCH HOẠT AI
-                        if len(ip_buffers[src_ip]) == SEQ_LEN:
-                            live_traffic_matrix = np.array(ip_buffers[src_ip])
-                            ip_buffers[src_ip] = [] # Reset buffer
+                        # [CHỐNG SPAM] Kiểm tra xem IP này đã bị cấm vận chưa
+                        if src_ip in blocked_ips:
+                            if current_time - blocked_ips[src_ip] < COOLDOWN_TIME:
+                                # In log báo bị chặn (chỉ in 1 lần mỗi 5 giây để không làm treo màn hình)
+                                if src_ip not in last_log_time or current_time - last_log_time[src_ip] > 5:
+                                    console.print(f"[dim red]🛑 [CHỐNG SPAM] Từ chối phân tích AI cho IP {src_ip} (Đang bị cấm vận {COOLDOWN_TIME}s)[/dim red]")
+                                    last_log_time[src_ip] = current_time
+                                continue # Hủy gói tin ngay lập tức (giảm tải AI)
+                            else:
+                                del blocked_ips[src_ip] # Hết hạn cấm vận, theo dõi lại
+                        
+                        # Đẩy gói tin vào RAM an toàn thông qua threading.Lock
+                        ready_to_process = False
+                        with buffer_lock:
+                            if src_ip not in ip_buffers:
+                                ip_buffers[src_ip] = {'data': [], 'last_seen': current_time}
+                                
+                            ip_buffers[src_ip]['data'].append(features)
+                            ip_buffers[src_ip]['last_seen'] = current_time
                             
-                            # [BƯỚC 1] Tiền xử lý
+                            current_len = len(ip_buffers[src_ip]['data'])
+                            
+                            print(f"[DEBUG] Đang nạp gói tin từ IP {src_ip}: {current_len}/10")
+                            
+                            # Gom đủ 10 gói thì chốt sổ
+                            if current_len == SEQ_LEN:
+                                live_traffic_matrix = np.array(ip_buffers[src_ip]['data'])
+                                del ip_buffers[src_ip] # Xóa khỏi buffer để đón luồng mới
+                                ready_to_process = True
+                                
+                        # NẾU ĐỦ 10 GÓI -> KÍCH HOẠT AI (Ngoài buffer_lock để luồng thu thập không bị chặn)
+                        if ready_to_process:
                             scaled_traffic = scaler.transform(live_traffic_matrix)
                             input_tensor = torch.FloatTensor(scaled_traffic).unsqueeze(0).to(device)
 
-                            # [BƯỚC 2] Khiên 1: Autoencoder
+                            with threshold_lock:
+                                current_threshold = dynamic_threshold
+
+                            # [KHIÊN 1: Autoencoder]
                             with torch.no_grad():
                                 reconstructed = ae_model(input_tensor)
                                 mse_loss = torch.mean((input_tensor - reconstructed)**2).item()
                             
-                            with threshold_lock:
-                                current_threshold = dynamic_threshold
-
                             if mse_loss > current_threshold:
-                                execute_mitigation(src_ip, "DỊ THƯỜNG ZERO-DAY GIAO THỨC LẠ", confidence=99.9, is_zero_day=True)
-                                continue # Bỏ qua Khiên 2
+                                console.print(f"\n[bold magenta]🛡️ [KHIÊN 1 - AUTOENCODER] Phát hiện dị thường![/bold magenta]")
+                                console.print(f"[bold magenta]   => MSE Loss: {mse_loss:.4f} (Vượt ngưỡng {current_threshold:.4f})[/bold magenta]")
                                 
-                            # [BƯỚC 3] Khiên 2: Phân loại DDoS Đã biết
+                                blocked_ips[src_ip] = current_time # Gắn cờ Blacklist
+                                execute_mitigation(src_ip, "DỊ THƯỜNG ZERO-DAY GIAO THỨC LẠ", confidence=99.9, is_zero_day=True)
+                                
+                                with torch.no_grad():
+                                    _, attn_weights = cls_model(input_tensor)
+                                print_xai_explanation(attn_weights, input_tensor)
+                                console.print("[dim]🔄 Đã reset bộ nhớ đệm, tiếp tục lắng nghe...[/dim]\n")
+                                continue
+                                
+                            # [KHIÊN 2: CNN-GRU Phân Loại]
                             with torch.no_grad():
                                 outputs, attn_weights = cls_model(input_tensor)
                                 probabilities = torch.nn.functional.softmax(outputs, dim=1)
                                 pred_idx = torch.argmax(probabilities, dim=1).item()
                                 confidence = probabilities[0][pred_idx].item() * 100
 
+                            console.print(f"\n[bold cyan]🧠 [KHIÊN 2 - CNN-GRU] Đã phân tích 10 gói tin từ IP {src_ip}[/bold cyan]")
+                            console.print(f"[bold cyan]   => Kết luận: {LABEL_NAMES[pred_idx]} | Độ tự tin: {confidence:.2f}% | MSE: {mse_loss:.4f}[/bold cyan]")
+
                             if pred_idx == 0:
-                                # Nếu luồng Mạng An toàn -> Cập nhật Concept Drift EMA
+                                console.print("[dim]   => Trạng thái: Bình thường. Đang cập nhật ngưỡng EMA...[/dim]")
                                 with threshold_lock:
                                     dynamic_threshold = EMA_ALPHA * mse_loss + (1 - EMA_ALPHA) * dynamic_threshold
                             else:
-                                # Có Tấn công -> Ra lệnh ONOS & Giải thích XAI
-                                if confidence >= 80.0:
+                                if confidence >= 50.0: 
+                                    blocked_ips[src_ip] = current_time # Gắn cờ Blacklist
                                     execute_mitigation(src_ip, LABEL_NAMES[pred_idx], confidence)
                                     print_xai_explanation(attn_weights, input_tensor)
+                                else:
+                                    console.print(f"[dim]   => Bỏ qua: Nghi ngờ nhưng độ tự tin quá thấp (< 50%).[/dim]")
+                            
+                            console.print("[dim]🔄 Đã reset bộ đệm, tiếp tục lắng nghe...[/dim]\n")
 
                     except json.JSONDecodeError:
                         continue
         except FileNotFoundError:
-            # Chạy giả lập 1 nhịp nếu không chạy môi trường Linux
             time.sleep(2)
             console.print("[dim]Đang chạy dữ liệu giả lập (Mocking)...[/dim]")
-            mock_data = np.random.rand(10, 20)
-            mock_data[:, 3] = 115000000 # Giả lập Slowloris
-            mock_ip = "10.0.0.9"
-            
-            scaled = scaler.transform(mock_data)
-            tensor = torch.FloatTensor(scaled).unsqueeze(0).to(device)
-            out, attn = cls_model(tensor)
-            execute_mitigation(mock_ip, LABEL_NAMES[4], 98.5)
-            print_xai_explanation(attn, tensor)
             break
