@@ -1,0 +1,369 @@
+sudo systemctl stop docker
+sudo systemctl stop openvswitch-switch
+sudo ip -all netns delete
+docker rm -f web1 db1 2>/dev/null
+sudo fuser -k 6653/tcp 6633/tcp 8181/tcp
+sudo pkill -9 -f mininet
+sudo pkill -9 -f mnexec
+sudo mn -c
+docker rm -f onos 2>/dev/null
+docker rm -f onos
+sudo systemctl start openvswitch-switch
+sudo systemctl start docker
+docker run -t -d --name onos \
+-p 8181:8181 -p 6653:6653 -p 8101:8101 \
+-e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
+onosproject/onos:latest
+sleep 5
+sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
+
+cd ~/Documents/DoAn_SDN
+
+check lệnh drop: sh ovs-ofctl dump-flows s1 -O OpenFlow13
+h1 wget --no-check-certificate https://10.0.0.10
+h1 wget -qO- http://10.0.0.11 > /dev/null
+
+h60 curl -I -m 3 http://10.0.0.11:8000
+h60 curl -I -m 3 http://10.0.0.10:8000
+
+py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') for i in range(60, 65)]
+py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 65)]
+
+py [net.get(f'h{i}').cmd('pkill -f attack/ &') for i in range(1, 21)]
+
+ter1: ./start.sh
+
+py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 4)]
+py [net.get(f'h{i}').cmd('python3 attack/syn_flood.py 10.0.0.10 &') for i in range(5, 8)]
+# h11-h12 đánh vào xử lý Hash (CPU 100%)
+py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 hash &') for i in range(9, 12)]
+# h13-h14 đánh vào xử lý JSON (Tràn RAM)
+py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 json &') for i in range(13, 16)]
+# Botnet h16-h20 ngâm kết nối
+py [net.get(f'h{i}').cmd('python3 attack/slowloris.py http://10.0.0.11:8000 &') for i in range(16, 19)]
+ter2: cd ai
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python run_onos_v2.py
+ter3: cd ai
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python batPack_v2.py
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python auto_dataset_generator.py
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python data_collector.py
+sudo ./start.sh
+docker run -t -d --name onos \
+  -m 4g \
+  --cpus="5.0" \
+  -p 8181:8181 -p 6653:6653 -p 8101:8101 \
+  -e "JAVA_OPTS=-Xms1G -Xmx2G" \
+  -e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
+  onosproject/onos:latest
+
+sudo python3 ai/auto_dataset_generator.py
+
+-m 2g (Giới hạn RAM phần cứng): Lệnh này "trói" container ONOS lại, không cho phép nó chạm tới quá 2GB RAM vật lý của máy.
+--cpus="2.0" (Giới hạn CPU): Thay vì để ONOS dùng toàn bộ 8 luồng CPU (góp phần làm máy chạy lên 97% như bạn thấy trước đó), cờ này giới hạn ONOS chỉ được sử dụng tối đa sức mạnh tương đương 2 luồng CPU. Phần CPU còn lại sẽ được nhường cho Mininet, các container Web/DB và script Python của bạn.
+-e "JAVA_OPTS=-Xms1G -Xmx1.5G" (Chặn đứng sự tham lam của Java):
+Đây là "bùa chú" quan trọng nhất. Nếu bạn chỉ giới hạn -m 2g của Docker mà không có dòng này, Java vẫn sẽ nghĩ nó có rất nhiều RAM, nó sẽ cố gắng xin cấp phát vượt quá 2GB và kết quả là container sẽ bị hệ điều hành "giết" đột ngột (lỗi OOMKilled).
+-Xms1G: Yêu cầu Java khi khởi động chỉ dùng đúng 1GB RAM.
+-Xmx1.5G: Khống chế mức trần tối đa Java được phép phình ra là 1.5GB RAM.
+
+nvidia-smi pmon -c 1
+
+# ONOS UI & TOPOLOGY MAPPING
+[Sau khi system chạy thành công]
+1. Mở ONOS UI: http://localhost:8181/onos/ui
+2. Đăng nhập: onos / rocks
+3. Topology sẽ hiển thị với switches spread rộng ở trung tâm
+4. Links sẽ ổn định (màu xanh) sau ~1-2 phút khi network converge
+5. Vào Settings → Enable "Force Layout" để drag nodes
+6. Kéo CORE SWITCH hoặc các host để thấy hiệu ứng nổi
+
+mở onos:
+docker exec -it onos ./apache-karaf-4.2.14/bin/client
+kiểm tra:
+apps -a -s
+
+Lỗi 505
+# Tạo container mới và bật sẵn GUI cùng các app cần thiết qua biến môi trường
+docker rm -f onos
+docker run -t -d --name onos \
+-p 8181:8181 -p 6653:6653 -p 8101:8101 \
+-e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
+onosproject/onos:latest
+
+Lỗi 500:
+ssh -p 8101 karaf@localhost (pass karaf)
+apps -a -s | grep gui
+
+docker stop onos
+docker rm onos
+
+# Chạy lại (Nhớ map các cổng như cũ)
+docker run -d --name onos -p 8181:8181 -p 8101:8101 -p 6653:6653 onosproject/onos:latest
+
+
+đăng nhập ONOS CLI:
+1. Xóa "ký ức" cũ về SSH
+Copy và dán lệnh này vào terminal:
+
+ssh-keygen -f '/home/tgf/.ssh/known_hosts' -R '[localhost]:8101'
+2. Đăng nhập lại (Lệnh "lách" luật cho dân Dev)
+Để sau này không bị lỗi này làm phiền mỗi khi restart Docker, bạn nên dùng thêm 2 tham số để máy không kiểm tra key nữa:
+
+Bash
+ssh -p 8101 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null karaf@localhost
+(Password vẫn là: karaf)
+
+
+git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
+Kiểm tra lại:
+
+git remote -v
+→ phải thấy URL dạng git@github.com:... thay vì https://....
+
+git clone git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
+git init
+git remote add origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
+git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
+git remote -v
+
+git add .
+git commit -m "cải thiện bằng thu thập dữ liễu hệ thoongsm đã lựa chọn nfstream và tối ưu nhiều lần thu được v4"
+git branch -M main
+git push origin main
+
+git push -f origin main
+git commit -m "cải thiện bằng thu thập dữ liễu hệ thoongsm đã lựa chọn nfstream và tối ưu nhiều lần"
+test: h60 ping -c 4 10.0.0.10
+
+(terminal thường)xhost
+mininet> xterm h60
+microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 &
+
+xterm web1
+
+py web1.cmd('python /app/manage.py runserver 0.0.0.0:8000 > /dev/null 2>&1 &')
+py h60.cmd('microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 > /dev/null 2>&1 &')
+py h60.cmd('microsoft-edge-stable --no-sandbox http://10.0.0.10:8000 &')
+
+# Tắt toàn bộ các cửa sổ Edge đang bị kẹt
+sudo pkill -9 -f msedge
+sudo pkill -9 -f edge
+
+# Tắt các script python chạy ngầm từ hôm qua (như tạo traffic, ids, v.v.)
+sudo pkill -9 -f "python3 traffic/normal.py"
+sudo pkill -9 -f "python3 services/"
+sudo pkill -9 -f "python3 ids/gnn_ids.py"
+sudo pkill -9 -f "python manage.py runserver"
+
+# Dọn dẹp lại Mininet một lần nữa cho chắc chắn
+sudo mn -c
+
+docker build -t doan_sdn_web1:py39 -f docker/web1/Dockerfile .
+xhost +local:root
+
+dashbroad: http://127.0.0.1:8050
+h60 python3 tools/open_web_from_host.py
+h61 python3 tools/open_web_from_host.py --path /accounts/login/
+h60 python3 traffic/normal.py 10.0.0.10 &
+
+HỒI 0: Sự bình yên trước cơn bão (Baseline Traffic)
+Mục tiêu: Chứng minh hệ thống đang chạy tốt, người dùng thật vẫn truy cập bình thường.
+
+Lệnh kích hoạt (Client h60 đến h65):
+mininet> py [net.get(f'h{i}').cmd('python3 traffic/normal.py 10.0.0.10 &') for i in range(60, 65)]
+py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') for i in range(60, 65)]
+py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 65)]
+Dấu hiệu Dashboard: Biểu đồ mạng thấp, CPU/RAM web1 tĩnh lặng. Bảng HTTP Log trả về mã 200 OK.
+
+HỒI 1: Kẻ cục súc (UDP Flood - L4)
+Mục tiêu: Nghẽn băng thông tầng mạng.
+
+Lệnh kích hoạt (Botnet h1 đến h5):
+mininet> py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 10)]
+py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 5)]
+Dấu hiệu Dashboard: Byte Rate / Packet Rate của h1-h5 dựng đứng như cột cờ. CPU web1 vẫn thấp do không xử lý ở L7. Mạng Client (h60-h65) bắt đầu giật lag.
+
+🔴 HỒI 2: Kẻ đánh lừa (TCP SYN Flood - L4)
+Mục tiêu: Vắt kiệt trạng thái mạng (State-Exhaustion) bằng IP giả mạo.
+py [net.get(f'h{i}').cmd('hping3 -S -p 443 --flood --rand-source 10.0.0.10 &') for i in range(6, 11)]
+Lệnh kích hoạt (Botnet h6 đến h10):
+mininet> py [net.get(f'h{i}').cmd('python3 attack/syn_flood.py 10.0.0.10 &') for i in range(6, 11)]
+Dấu hiệu Dashboard: Packet Rate tăng vọt nhưng Byte Rate thấp (gói SYN cực nhỏ). Có thể thấy nhiễu ở Controller do IP Spoofing. HTTP Log không có request mới (vì kết nối chưa hoàn thành).
+
+🔴 HỒI 3: Cuộc tấn công trực diện (L7 Application Flood)
+Mục tiêu: Xuyên thủng mạng, đánh thẳng vào tài nguyên hệ thống của Django.
+
+Lệnh kích hoạt Đánh gục CPU (Hash Exhaustion - Dùng h11, h12):
+mininet> py [net.get(f'h{i}').cmd('python3 attack/http_flood.py 10.0.0.10 hash &') for i in range(11, 13)]
+Dấu hiệu: Biểu đồ CPU web1 bắn thẳng lên 100%.
+
+Lệnh kích hoạt Đánh tràn RAM (JSON Parsing - Dùng h13, h14):
+mininet> py [net.get(f'h{i}').cmd('python3 attack/http_flood.py 10.0.0.10 json &') for i in range(13, 15)]
+Dấu hiệu: Biểu đồ RAM web1 liên tục nhích lên đến khi cạn kiệt.
+
+🔴 HỒI 4: Sát thủ tàng hình (Slowloris - L7)
+Mục tiêu: Chiếm đoạt Worker (luồng xử lý) của Nginx/Django bằng cách ngâm kết nối.
+
+Lệnh kích hoạt (Botnet h16 đến h20):
+py [net.get(f'h{i}').cmd('python3 attack/slowloris.py 10.0.0.11 &') for i in range(16, 21)]
+Dấu hiệu Dashboard: Gần như "tàng hình". Băng thông cực thấp, CPU/RAM bình thường. Nhưng số lượng Connections (Kết nối) đạt max. Client thật bị Timeout (chờ tải trang vô tận).
+
+🛑 LỆNH DỌN DẸP / DỪNG TẤN CÔNG (CLEANUP)
+Khi bạn muốn dừng một đợt tấn công để chuyển sang đợt khác, hãy gõ các lệnh này vào Mininet. Chúng sử dụng pkill -f để tìm và diệt chính xác các script Python đang chạy ngầm.
+
+1. Dừng TOÀN BỘ các loại tấn công (Tắt hết script trong thư mục attack từ h1 đến h20):
+py [net.get(f'h{i}').cmd('pkill -f attack/ &') for i in range(1, 21)]
+
+2. Dừng luồng Normal Traffic (Nếu cần thiết):
+py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]
+
+"Hồi sinh" tiến trình Django trên Web1
+web1 sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &'
+
+Mỗi lớp có distinctive signatures:
+Normal:     packet_rate=20-50, byte_rate=5KB, duration<5s
+UDP Flood:  packet_rate=1000+, byte_rate=50KB+, low asymmetry
+SYN Flood:  packet_rate=500+, byte_rate=100B, high asymmetry
+HTTP Flood: packet_rate=100+, byte_rate=10KB, L7_proto=HTTP
+Slowloris:  packet_rate=1-5, byte_rate=100B, duration=30-120s
+
+→ Clear decision boundaries
+
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python batPack123.py
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python auto_dataset_generator.py
+theo dõi: sudo /opt/zeek/bin/zeek -C -i s6-eth4 local
+source /home/tgf/Documents/DoAn_SDN/sdn_env/bin/activate
+sudo ./sdn_env/bin/python traffic/checkfiel.py
+
+h1 wget http://10.0.0.11
+
+containernet> h1 wget http://<IP_CỦA_WEB1>
+containernet> h60 curl http://<IP_CỦA_WEB1>
+
+from google.colab import drive
+drive.mount('/content/drive')
+!python train_colab.py
+
+# TOPOLOGY INFO
+netcfg.json: 6 Switches + 62 Hosts (với 3 loại subnet)
+- Switch s1 (of:1): CORE SWITCH
+- Switch s2 (of:2): BOTNET DISTRIBUTION
+- Switch s3 (of:3): CLIENT DISTRIBUTION
+- Switch s4 (of:4): BOTNET ACCESS
+- Switch s5 (of:5): DATACENTER FABRIC
+- Switch s6 (of:6): WEB SERVER SWITCH
+
+Hosts:
+- h1-h50: Botnet (10.0.1.x, gắn vào s4)
+- h60-h65: Clients (10.0.2.x, gắn vào s3)
+- h70: WEB SERVER (10.0.0.100, gắn vào s6)
+- h71: DNS (10.0.0.101, gắn vào s5)
+- h72: API (10.0.0.102, gắn vào s5)
+- h80: IDS (10.0.0.200, gắn vào s5)
+- h81: HONEYPOT (10.0.0.201, gắn vào s5)
+- h82: MONITOR (10.0.0.202, gắn vào s5)
+- web1 (Docker): Django (10.0.0.10, gắn vào s6)
+- db1 (Docker): PostgreSQL (10.0.0.20, gắn vào s5)
+
+# WEB SERVER
+Web server Django chạy trên container web1:
+- URL: http://10.0.0.10
+- Login: admin / admin123
+- Database: PostgreSQL trên db1 (10.0.0.20)
+- Truy cập từ client host (h60-h65): curl http://10.0.0.10
+
+
+Sửa lỗi "REMOTE HOST IDENTIFICATION HAS CHANGED"
+Bạn chỉ cần chạy lệnh sau để xóa "ký ức" cũ về ONOS trong máy:
+
+Bash
+ssh-keygen -f '/home/tgf/.ssh/known_hosts' -R '[localhost]:8101'
+Sau khi chạy lệnh này, bạn hãy thử SSH lại:
+
+Bash
+ssh -p 8101 onos@localhost
+Nó sẽ hỏi Are you sure you want to continue connecting (yes/no/[fingerprint])?: Gõ yes.
+
+Mật khẩu: rocks.
+
+Các thành phần icon:
+1. Nhóm thiết bị đầu cuối (Hosts/Endstations)
+Đây là những icon phù hợp nhất để thay thế cho h61, h62, web1, db1:
+m_home: Hình ngôi nhà (bạn đã biết).
+m_office: Hình tòa nhà văn phòng.
+m_endstation: Hình máy tính trạm (mặc định cho host).
+m_endstation1 / m_endstation2: Các biến thể khác của máy trạm.
+m_terminal: Hình màn hình dòng lệnh (rất hợp cho các máy Attacker).
+m_cellPhone: Hình điện thoại di động.
+m_slrCamera: Hình máy ảnh.
+m_videoCamera: Hình camera giám sát (hợp nếu giả lập Botnet từ thiết bị IoT).
+m_laptop: Hình máy tính xách tay.
+
+2. Nhóm bảo mật & Giám sát (Dành riêng cho đồ án DDoS)
+Vì bạn đang làm về phát hiện tấn công, hãy thử các icon này cho các node quản lý hoặc node "nạn nhân":
+m_firewall: Hình bức tường lửa (Cực kỳ hợp cho node chạy AI Detection).
+m_ips: Icon hệ thống ngăn chặn xâm nhập.
+m_ids: Icon hệ thống phát hiện xâm nhập.
+m_balancer: Hình bộ cân bằng tải (Load Balancer).
+lock: Hình ổ khóa.
+
+3. Nhóm hạ tầng mạng (Infrastructure)
+Dùng cho các Switch (s1-s6) hoặc các node trung tâm:
+m_switch: Hình switch (mặc định).
+m_router: Hình router tròn.
+m_controller: Hình bộ điều khiển (Dùng cho node ONOS).
+m_virtual: Hình thiết bị ảo.
+m_cloud: Hình đám mây.
+m_tower: Hình tháp truyền thông.
+
+4. Nhóm đặc biệt & "Vui vẻ"
+bird: Hình chú chim ONOS.
+m_thatsNoMoon: Một "trứng phục sinh" (Easter Egg) hình Death Star trong Star Wars.
+crown: Hình vương miện.
+garbage: Hình thùng rác (Có thể dùng cho các gói tin rác DDoS?).
+
+
+
+
+Tôi đã đọc và suy nghĩ về các đề xuất của bạn và tôi muốn thực hiện các đề xuất sau hãy xem thật kỹ 3 file còn lại để thực  hiện điều chỉnh, sau khi điều chỉnh xong thì nhìn kỹ lại 1 cách khách quan để kiểm tra và tiếp tục điều chỉnh đến lúc ổn thỏa: 1. Khai phá AI có thể giải thích (Explainable AI - XAI)
+
+Hiện tại, khi AI chặn một IP, nó chỉ báo ra độ tin cậy (ví dụ: 96%). Nhưng hội đồng có thể hỏi: "Tại sao AI của em lại nghĩ đây là Slowloris?".
+
+
+
+Giải pháp: Bạn đã có sẵn lớp AttentionLayer trong mô hình (trả về biến attn_weights). Biến này chứa 10 con số phần trăm tương ứng với mức độ "đáng ngờ" của 10 luồng mạng trong chuỗi.
+
+Hành động: Bạn có thể trích xuất biến attn_weights này trong file run_onos.py, sau đó dùng thư viện matplotlib vẽ một biểu đồ nhiệt (Heatmap). Nó sẽ highlight đỏ rực lên luồng mạng nào có duration dài bất thường. Bạn sẽ có một hệ thống không chỉ biết bắt cướp, mà còn biết "chỉ tận tay, day tận trán" thủ đoạn của kẻ cướp.
+
+⚙️ 2. Nâng cấp luồng dữ liệu Thực thời (Real-time Pipeline)
+
+Trong file run_onos.py hiện tại, chúng ta đang giả lập dữ liệu bằng np.zeros((10, 20)). Để chạy thật trên Mininet/ONOS, hệ thống cần một bộ thu thập tự động.
+
+
+
+Khuyến nghị: Tích hợp công cụ sFlow-RT hoặc Zeek IDS.
+
+Cách hoạt động: Các Switch trong Mininet sẽ gửi luồng sFlow về sFlow-RT. Bạn viết một đoạn script Python nhỏ liên tục gọi API của sFlow-RT mỗi 1 giây để lấy các thông số (byte_count, packet_count, duration...), ép nó vào khuôn 20 cột, rồi đẩy thẳng vào file run_onos.py. Luồng Data Science của bạn sẽ được nối kín thành một vòng tròn khép kín.
+
+🔄 3. Chống "Trôi dạt khái niệm" (Concept Drift) cho Lớp khiên 1
+
+Autoencoder của bạn đang dùng một ngưỡng cố định Threshold = 0.1827. Trong thực tế, mạng lưới ban ngày (nhiều nhân viên truy cập) sẽ có hành vi khác hẳn mạng lưới ban đêm. Nếu giữ một ngưỡng cứng, AI có thể báo động nhầm vào giờ cao điểm.
+
+
+
+Khuyến nghị: Áp dụng Dynamic Threshold (Ngưỡng thích nghi).
+
+Hành động: Thay vì dùng con số cố định, hệ thống sẽ tính trung bình sai số (MSE) của 1000 luồng mạng gần nhất trong 5 phút vừa qua, cộng thêm độ lệch chuẩn (Standard Deviation). Khi mạng đông đúc lên một cách tự nhiên, ngưỡng cảnh báo Zero-Day cũng tự động được nới lỏng ra một chút để tránh báo động giả (False Positive).
+
+🛡️ 4. Đa dạng hóa Chiến thuật Mitigation (Phòng thủ đa tầng)
+
+Hiện tại, ONOS đang dùng lệnh cực đoan nhất: DROP (Hủy mọi gói tin từ IP nghi ngờ). Đối với một hệ thống cấp doanh nghiệp, đôi khi việc này gây rủi ro nếu chặn nhầm IP của một đối tác quan trọng.
+
+Khuyến nghị: Nâng cấp hàm block_attacker_via_onos theo mức độ tự tin của AI.
+
+Nếu độ tin cậy > 95%: Bắn lệnh DROP ngay lập tức.
+
+Nếu độ tin cậy từ 80% đến 95%: Không DROP hẳn, mà bắn lệnh yêu cầu Switch giảm băng thông (Rate Limiting / Metering) của IP đó xuống mức tối thiểu (ví dụ: 10Kbps) để ép kẻ tấn công chậm lại nhưng không làm đứt hẳn kết nối.
+
+Nếu là Zero-Day (Autoencoder báo động): Ra lệnh cho Switch đổi hướng (Redirect) toàn bộ gói tin của IP đó chui vào một máy chủ giả lập (Honeypot) để ghi log và theo dõi thêm hành vi của hacker.
+
+

@@ -1,0 +1,47 @@
+# Môi trường ảo (Đã có sẵn)
+sdn_env/
+venv/
+.venv/
+
+# Dữ liệu lớn (KHÔNG NÊN PUSH - Cực kỳ quan trọng để nhanh Git)
+*.csv
+*.pcap
+*.json
+zeek_stream.json
+dataset/master_*.csv
+
+# File tạm và Cache của Python
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# Logs hệ thống
+/tmp/*.log
+monitor/runtime/*.json
+monitor/runtime/*.csv
+
+# IDE metadata
+.vscode/
+.idea/
+.project
+.settings/
+
+# Hình ảnh kết quả (Vẽ biểu đồ huấn luyện)
+*.png
+*.jpg
+
+master_dataset_v3.csv
+master_dataset_v4.csv
+
+# Dữ liệu lớn
+*.csv
+dataset/*.csv
+dataset/*.pcap
+thuThapData/*.csv
+
+# Temporary Runtime Data
+monitor/runtime/
+dashboard/__pycache__/
+zeek_stream.json
+threshold_state.json

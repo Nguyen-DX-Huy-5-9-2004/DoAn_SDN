@@ -1,0 +1,6 @@
+mininet
+
+django
+psycopg2-binary
+psutil
+scapy

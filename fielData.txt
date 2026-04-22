@@ -1,0 +1,26 @@
+Tên File,Ý nghĩa chính,Tầm quan trọng đối với AI
+conn.log,Trái tim của dữ liệu. Ghi lại mọi kết nối TCP/UDP/ICMP.,"Rất cao: Dùng để huấn luyện mô hình phát hiện DoS, Scan port, Anomalies."
+http.log,"Chi tiết các request/response HTTP (URL, User-agent, Status code).","Cao: Dùng để phát hiện tấn công web (SQLi, XSS) hoặc botnet."
+files.log,"Thông tin về các file được truyền qua mạng (MIME type, mã băm MD5/SHA).",Trung bình: Dùng để phát hiện mã độc (Malware) truyền qua file.
+dns.log,Các truy vấn tên miền.,Cao: Phát hiện DNS Tunneling hoặc kết nối đến domain độc hại.
+notice.log,Các cảnh báo bảo mật mà Zeek tự động phát hiện được.,"Trung bình: Dùng làm ""nhãn"" (label) gợi ý cho AI."
+capture_loss.log,Tỷ lệ mất gói tin trong quá trình bắt lưu lượng.,Thấp: Dùng để đánh giá chất lượng bộ dữ liệu.
+reporter.log,Các thông báo lỗi/trạng thái vận hành của chính phần mềm Zeek.,Thấp: Chủ yếu để debug hệ thống.
+
+conn.log
+STT,Tên trường,Ý nghĩa kỹ thuật
+1,ts,Timestamp: Thời điểm bắt đầu kết nối.
+2,uid,Unique ID: Mã định danh duy nhất cho kết nối này.
+3-6,"id.orig_h/p, id.resp_h/p",IP và Port của bên gửi (Origin) và bên nhận (Responder).
+7,proto,"Giao thức truyền tải (tcp, udp, icmp)."
+8,service,"Dịch vụ được nhận diện (http, dns, ssl, v.v.)."
+9,duration,Tổng thời gian của kết nối.
+10-11,"orig_bytes, resp_bytes",Số byte dữ liệu tải lên và tải xuống.
+12,conn_state,"Trạng thái kết nối (SF, S0, REJ, RSTO, v.v.)."
+13-14,"local_orig, local_resp",Kết nối là nội bộ (T) hay ra ngoài (F).
+15,missed_bytes,Số lượng byte bị mất trong luồng dữ liệu.
+16,history,Lịch sử các cờ (flags) trong quá trình bắt tay (ví dụ: ShADadFf).
+17-18,"orig_pkts, orig_ip_bytes",Số gói tin và số byte IP mà bên gửi đã truyền.
+19-20,"resp_pkts, resp_ip_bytes",Số gói tin và số byte IP mà bên nhận đã trả về.
+21,tunnel_parents,ID của tunnel nếu kết nối nằm trong tunnel.
+

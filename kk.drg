@@ -1,0 +1,39 @@
+graph TD
+    A["Start"] --> B["Terminal 1: batPack123.py"]
+    B --> B1["🎧 Listening for marker files"]
+    B1 --> B2{".marker_normal or<br/>.marker_slowloris<br/>exists?"}
+    B2 -->|Yes| B3["detect_capture_mode()"]
+    B2 -->|No| B1
+    B3 -->|SLOWLORIS| B4["capture_slowloris()"]
+    B3 -->|NORMAL| B5["capture_normal()"]
+    
+    C["Terminal 2: auto_dataset_generator.py"] --> C1["Phase 1: UDP Flood"]
+    C1 --> C2["Create .marker_normal"]
+    C2 --> C3["Wait for FIFO creation"]
+    C3 --> C4["Open zeek_stream.json"]
+    C4 --> C5["Collect 80K samples"]
+    C5 --> C6["Remove .marker_normal"]
+    C6 --> C7["Wait 3s cleanup"]
+    C7 --> C8["Phase 2: SYN Flood"]
+    C8 --> C2
+    
+    D["Phase 4: Slowloris"] --> D1["Create .marker_slowloris"]
+    D1 --> D2["Wait for FIFO creation"]
+    D2 --> D3["Open zeek_stream_slowloris.json"]
+    D3 --> D4["Collect 80K samples"]
+    D4 --> D5["Remove .marker_slowloris"]
+    
+    B1 -.->|Detects marker| C2
+    B4 -->|Streaming flows| C4
+    B5 -->|Streaming flows| C4
+    B4 -->|Streaming flows| D3
+    
+    C5 --> E["CSV: 400K samples"]
+    D4 --> E
+    E --> F["✅ Ready for Model Training"]
+    
+    style B fill:#90EE90
+    style B1 fill:#87CEEB
+    style C fill:#FFB6C1
+    style E fill:#FFD700
+    style F fill:#98FB98

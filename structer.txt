@@ -1,0 +1,492 @@
+I. CẤU TRÚC THƯ MỤC & FILE CHÍNH
+
+📁 ROOT (/home/tgf/Documents/DoAn_SDN/)
+├── 🚀 start.sh                    - Script khởi động hệ thống chính
+├── 🎯 system.py                    - File chính điều khiển Mininet network
+├── 📊 structer.txt                 - File này (documentation)
+├── 📝 note.txt                     - Ghi chú project & kịch bản tấn công
+│
+├── 📁 ai/                          - Module AI/ML
+│   ├── feature_extractor.py       - Trích xuất đặc trưng traffic
+│   └── sliding_window.py          - Cửa sổ trượt cho phân tích
+│
+├── 📁 attack/                      - Module tấn công mạng (ĐÃ CẬP NHẬT)
+│   ├── attack_orchestrator.py     - Điều phối các cuộc tấn công
+│   ├── stealth_scan.py            - Tấn công stealth scan
+│   ├── burst_attack.py            - Tấn công burst
+│   ├── wave_attack.py              - Tấn công theo wave
+│   ├── udp_flood.py               - L4 UDP Flood Attack (MỚI)
+│   ├── syn_flood.py               - L4 TCP SYN Flood với IP Spoofing (MỚI)
+│   ├── http_flood.py              - L7 HTTP Flood (Hash/JSON) (MỚI)
+│   └── slowloris.py               - L7 Slowloris Attack (MỚI)
+│
+├── 📁 dashboard/                   - Web dashboard monitoring
+│   └── server.py                  - HTTP server cho dashboard (port 8050)
+│
+├── 📁 dataset/                     - Quản lý dữ liệu
+│   ├── init_db.py                  - Khởi tạo PostgreSQL schema
+│   ├── dataset_logger.py           - Logging dữ liệu
+│   ├── labels.csv                  - Labels cho training
+│   └── traffic_*.pcap              - Packet capture files
+│
+├── 📁 docker/                      - Docker configurations
+│   ├── web1/Dockerfile             - Container web server
+│   └── proxy/Dockerfile            - Container proxy server
+│
+├── 📁 ids/                         - Intrusion Detection System
+│   └── gnn_ids.py                  - GNN-based IDS
+│
+├── 📁 monitor/                     - Monitoring & metrics
+│   ├── onos_metrics_collector.py   - Thu thập metrics ONOS
+│   ├── capture.py                  - Packet capture
+│   └── http_mirror_capture.py      - HTTP traffic capture
+│
+├── 📁 onos/                        - ONOS SDN Controller
+│   ├── set_icons.py                - Set icons ONOS GUI
+│   ├── bot_alert.py                - Alert bot
+│   └── highlight_bot.py            - Highlight attacks
+│
+├── 📁 services/                    - Network services
+│   ├── api.py                      - API server (h72:5000)
+│   ├── dns.py                      - DNS server
+│   ├── webserver.py                - Web server
+│   ├── honeypot.py                 - Honeypot service
+│   └── my_web_app/                 - Django web application (CẬP NHẬT)
+│       ├── manage.py               - Django management
+│       ├── setup_db.py             - Database setup
+│       └── my_web_app/
+│           ├── settings.py         - Django settings
+│           ├── urls.py             - URL routing + Attack endpoints (MỚI)
+│           └── wsgi.py             - WSGI config
+│
+├── 📁 topology/                    - Network topology
+│   └── research_topo.py            - 3-layer topology definition
+│
+├── 📁 traffic/                     - Traffic generation (CẬP NHẬT)
+│   ├── normal.py                   - Normal traffic simulation (CẢI TIẾN)
+│   ├── __init__.py
+│
+├── 📁 tools/                       - Utility tools
+│   └── open_web_from_host.py       - Open web browser tool
+│
+└── 📁 sdn_env/                     - Python virtual environment
+
+II. TOPOLOGY MẠNG (3-LAYER ARCHITECTURE)
+
+CORE LAYER
+└── s1 (Core Switch)
+
+DISTRIBUTION LAYER  
+├── s2 (Botnet Distribution Switch)
+├── s3 (Client Distribution Switch)
+└── s6 (Web Distribution Switch)
+
+ACCESS LAYER
+├── s4 (Botnet Access Switch) → h1-h50 (Botnet hosts)
+├── s5 (Datacenter Switch) → h60-h69 (Client hosts)
+└── s6 (Web Server Switch) → h70-h79 (Servers)
+
+🖥️ SERVERS & SERVICES
+├── h70 (web1) - Django Web App (10.0.0.100)
+├── h71 (dns) - DNS Server (10.0.0.101)  
+├── h72 (api) - API Server (10.0.0.102)
+├── h73 (db1) - PostgreSQL Database (10.0.0.20)
+├── h74 (proxy1) - HTTPS Proxy (10.0.0.10)
+└── h75 (honeypot) - Honeypot Service
+
+III. LUỒNG HOẠT ĐỘNG KHI CHẠY start.sh
+
+🔥 PHASE 1: CLEANUP & PREPARATION
+1. Stop docker services (docker, openvswitch)
+2. Clean network namespaces
+3. Remove existing containers
+4. Kill processes on ports: 6653, 6633, 8181, 8000, 8050
+5. Clean Mininet
+
+🔥 PHASE 2: DOCKER BUILD
+1. Build web1 container (Python 3.9 + Django)
+2. Build proxy1 container
+3. Generate SSL certificates for proxy
+
+🔥 PHASE 3: INFRASTRUCTURE STARTUP
+1. Start OpenVSwitch service
+2. Start Docker service
+3. Start ONOS SDN Controller container
+   - Memory: 3GB
+   - Ports: 8181 (GUI), 6653 (OpenFlow), 8101 (CLI)
+   - Apps: drivers, openflow, fwd, proxyarp, gui
+
+🔥 PHASE 4: MONITORING SERVICES
+1. Start ONOS Metrics Collector (background)
+   - Collects metrics every 2 seconds
+   - Saves to monitor/runtime/onos_metrics.json
+2. Start Dashboard Server (background)  
+   - HTTP server on port 8050
+   - Provides web interface for monitoring
+
+🔥 PHASE 5: MAIN SYSTEM (system.py)
+1. Initialize Containernet (Mininet + Docker)
+2. Build 3-layer topology (ResearchTopo)
+3. Start network devices:
+   - Switches: s1-s6
+   - Hosts: h1-h79
+   - Docker containers: web1, db1, proxy1
+4. Configure network interfaces
+5. Start services:
+   - DNS server (h71)
+   - API server (h72) 
+   - Database (h73)
+   - Web app (h70) với attack endpoints
+   - Proxy (h74)
+   - Honeypot (h75)
+
+🔥 PHASE 6: DATABASE INITIALIZATION
+1. Local: dataset/init_db.py
+   - Creates monitoring tables (alerts, network_stats, host_activity, traffic_analysis)
+   - Test logging functionality
+2. Container: services/my_web_app/setup_db.py
+   - Django migrations
+   - Creates superuser (admin/admin)
+   - Seeds test users (uneti_user_1-5)
+
+🔥 PHASE 7: TRAFFIC GENERATION
+1. Start normal traffic simulation
+2. Open browser for ONOS GUI
+3. Start CLI interface
+
+IV. KỊCH BẢN TẤN CÔNG (5 HỘI) (MỚI)
+
+🎯 HỘI 0: BASELINE TRAFFIC (Normal)
+- Diễn viên: h60-h65 (Client hosts)
+- Lệnh: `h60 python3 traffic/normal.py 10.0.0.10 &`
+- Mục tiêu: Tạo baseline traffic cho AI học
+- Đặc điểm: Random User-Agents, Think time 3-8 giây, hostname logging
+
+🎯 HỘI 1: UDP FLOOD (L4 Volumetric)
+- Diễn viên: h1-h5 (Botnet)
+- Lệnh: `py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 6)]`
+- Mục tiêu: Nghẽn băng thông tầng mạng
+- Đặc điểm: 1024-byte packets, port ngẫu nhiên
+
+🎯 HỘI 2: TCP SYN FLOOD (L4 State Exhaustion)
+- Diễn viên: h6-h10 (Botnet)
+- Lệnh: `py [net.get(f'h{i}').cmd('python3 attack/syn_flood.py 10.0.0.10 &') for i in range(6, 11)]`
+- Mục tiêu: Cạn kiệt trạng thái TCP, đánh lử ONOS
+- Đặc điểm: IP Spoofing với Scapy, gói SYN only
+
+🎯 HỘI 3: HTTP FLOOD (L7 Application)
+- Diễn viên: h11-h14 (Botnet)
+- Hash Attack: `h11,h12 python3 attack/http_flood.py 10.0.0.10 hash &`
+- JSON Attack: `h13,h14 python3 attack/http_flood.py 10.0.0.10 json &`
+- Mục tiêu: Đánh gục CPU/RAM của web server
+- Đặc điểm: Hash exhaustion (100K chars), JSON parsing exhaustion
+
+🎯 HỘI 4: SLOWLORIS (L7 Stealth)
+- Diễn viên: h16-h20 (Botnet tinh nhuệ)
+- Lệnh: `py [net.get(f'h{i}').cmd('python3 attack/slowloris.py 10.0.0.10 &') for i in range(16, 21)]`
+- Mục tiêu: Chiếm worker connections, tàng hình
+- Đặc điểm: 150 connections/bot, header mỗi 10 giây
+
+V. CÁC QUÁ TRÌNH CHẠY ĐỒNG THỜI
+1. ONOS Metrics Collector
+   - Thu thập metrics từ ONOS API
+   - Lưu vào file JSON
+   - Chạy mỗi 2 giây
+
+2. Dashboard Server  
+   - HTTP server monitoring (port 8050)
+   - Cung cấp web interface
+   - Cache data 1.5 giây
+
+3. PostgreSQL Database
+   - Lưu trữ logs và metrics
+   - Connection từ web app và monitoring
+
+4. Django Web Application
+   - Xử lý HTTP requests
+   - Kết nối database
+   - API endpoints + Attack endpoints
+
+5. ONOS SDN Controller
+   - Quản lý network topology
+   - Flow rules
+   - Network monitoring
+
+V. DATABASE SCHEMA
+
+📊 MONITORING DATABASE (PostgreSQL):
+├── alerts - Cảnh báo bảo mật
+├── network_stats - Thống kê mạng  
+├── host_activity - Hoạt động host
+└── traffic_analysis - Phân tích traffic
+
+📊 DJANGO DATABASE:
+├── auth_user - Users authentication
+├── django_migrations - Migration tracking
+└── [Custom tables] - Tables tùy chỉnh nếu có
+
+VI. PORTS & ENDPOINTS
+
+🌐 NETWORK PORTS:
+- 8181: ONOS GUI (http://localhost:8181/onos/ui)
+- 6653: OpenFlow Controller
+- 8101: ONOS CLI
+- 8050: Dashboard Server
+- 8443: HTTPS Proxy
+- 5000: API Server (h72)
+- 5432: PostgreSQL (h73)
+
+🌐 DJANGO ATTACK ENDPOINTS (MỚI):
+- /api/hash_login - Hash Exhaustion endpoint
+- /api/process_json - JSON Parsing Exhaustion endpoint
+🌐 IP ADDRESSING:
+- 10.0.0.0/24: Management network
+- 10.0.0.10: Proxy1
+- 10.0.0.20: Database (h73)
+- 10.0.0.100: Web1
+- 10.0.0.101: DNS
+- 10.0.0.102: API Server
+
+VII. FILE QUAN TRỌNG CẦN BIẾT
+
+CONFIGURATION:
+- start.sh: Main startup script
+- system.py: Network orchestration
+- topology/research_topo.py: Network topology
+- services/my_web_app/my_web_app/settings.py: Django settings
+- dataset/init_db.py: Database schema
+
+🎯 MONITORING:
+- monitor/onos_metrics_collector.py: Metrics collection
+- dashboard/server.py: Web dashboard (port 8050)
+- monitor/runtime/onos_metrics.json: Real-time metrics
+
+🎯 ATTACK SIMULATION (CẬP NHẬT):
+- attack/udp_flood.py: L4 UDP Flood (MỚI)
+- attack/syn_flood.py: L4 SYN Flood với IP Spoofing (MỚI)
+- attack/http_flood.py: L7 HTTP Flood (Hash/JSON) (MỚI)
+- attack/slowloris.py: L7 Slowloris Attack (MỚI)
+- traffic/normal.py: Normal traffic (cải tiến)
+- ids/gnn_ids.py: Intrusion detection
+
+VIII. DEBUGGING & LOGS
+
+LOG FILES:
+- /tmp/onos_metrics_collector.log: ONOS collector logs
+- /tmp/sdn_dashboard.log: Dashboard logs  
+- /tmp/init_db.log: Database initialization
+- /tmp/db_setup.log: Django database setup
+- monitor/runtime/onos_metrics.json: Real-time metrics
+
+🔧 COMMANDS:
+- sudo python3 system.py: Run main system
+- python3 dataset/init_db.py: Re-init database
+- docker ps: Check containers
+- sudo mn -c: Clean Mininet
+
+🔧 ATTACK COMMANDS (MỚI):
+- python3 attack/udp_flood.py 10.0.0.10: UDP Flood
+- python3 attack/syn_flood.py 10.0.0.10: SYN Flood
+- python3 attack/http_flood.py 10.0.0.10 hash: Hash Exhaustion
+- python3 attack/http_flood.py 10.0.0.10 json: JSON Exhaustion
+- python3 attack/slowloris.py 10.0.0.10: Slowloris Attack
+
+IX. ĐẶC ĐIỂM MỚI CẬP NHẬT
+
+🆕 ATTACK MODULES:
+- Full L4/L7 attack simulation
+- IP Spoofing với Scapy
+- Hash/JSON exhaustion attacks
+- Slowloris stealth attack
+
+🆕 WEB APPLICATION:
+- Django endpoints cho attack testing
+- CSRF disabled cho attack scripts
+- Hash exhaustion endpoint
+- JSON parsing exhaustion endpoint
+
+🆕 TRAFFIC SIMULATION:
+- Cải tiến normal.py với hostname logging
+- Realistic User-Agent strings
+- Proper error handling
+
+🆕 MONITORING:
+- Dashboard port changed to 8050
+- Enhanced metrics collection
+- Better visualization support
+
+
+
+
+
+
+
+🟢 HỒI 0: SỰ BÌNH YÊN TRƯỚC CƠN BÃO – ĐỊNH CHUẨN LƯU LƯỢNG MẠNG (BASELINE TRAFFIC)
+
+Kính thưa Hội đồng,
+Trước khi nói về các kỹ thuật tấn công tinh vi, chúng ta phải giải quyết một bài toán nền tảng trong học máy (Machine Learning): Làm sao để AI nhận diện được sự bất thường, nếu nó chưa từng biết thế nào là bình thường? Hồi 0 chính là giai đoạn định chuẩn (Baseline) - tạo ra tập dữ liệu "Sạch" mang đậm hành vi của con người.
+
+1. Mục tiêu & Ý tưởng kiến thức lõi
+
+Mục tiêu: Chứng minh hệ thống SDN và Web Server đang hoạt động trơn tru. Quan trọng hơn, đây là bước "mớm" dữ liệu cho mô hình Deep Learning học được phân phối thống kê (statistical distribution) của lưu lượng hợp lệ, để AI có mốc so sánh.
+
+Bản chất hành vi người dùng: Lưu lượng mạng do con người tạo ra có tính ngẫu nhiên (Stochastic) và bất quy tắc cao. Con người lướt web lúc nhanh lúc chậm, click vào nhiều link, dùng nhiều trình duyệt (Điện thoại, PC, Mac). Nếu mô phỏng sai hành vi này, AI sẽ bị "ảo giác" (False Positive) và chặn nhầm người dùng thật trong môi trường thực tế.
+
+2. Kịch bản triển khai & Biện luận kỹ thuật
+
+Diễn viên: Các máy người dùng thật (h60 đến h65).
+
+Hành động: Chạy file traffic/normal.py. Gửi định kỳ request HTTPS vào 10.0.0.10.
+
+Lệnh Mininet: mininet> py [net.get(f'h{i}').cmd('python3 traffic/normal.py 10.0.0.10 &') for i in range(60, 66)]
+
+Tại sao lại code như vậy? "Thưa thầy cô, thay vì dùng công cụ auto-ping máy móc (tạo ra chu kỳ cố định, dễ làm AI học vẹt), em đã dùng thư viện requests kết hợp hàm time.sleep(random.uniform(1.0, 4.0)) để giả lập 'Think Time' (thời gian suy nghĩ) của con người. Script cũng tự động tráo đổi User-Agent để mô phỏng sự đa dạng thiết bị. Điều này tạo ra một Dataset cực kỳ sát với thực tế doanh nghiệp."
+
+3. Hiện tượng lâm sàng trên Dashboard
+
+Mạng lưới: Lưu lượng (Byte Rate và Packet Rate) là những đường lượn sóng nhấp nhô ở biên độ thấp.
+
+Hệ thống (web1): CPU và RAM duy trì tĩnh lặng ở mức ~1-5%, chứng tỏ các Worker đang nhàn rỗi.
+
+Ứng dụng: Bảng HTTP Log tràn ngập các trạng thái 200 OK bình thường.
+
+🔴 HỒI 1: KẺ CỤC SÚC L4 – UDP FLOOD VÀ NGHỆ THUẬT VẮT KIỆT BĂNG THÔNG
+
+Nếu Hồi 0 là sự tinh tế của hành vi người dùng, thì Hồi 1 là sự tàn bạo của sức mạnh cơ bắp. Đây là cuộc tấn công Volumetric DDoS (Cạn kiệt băng thông) bằng giao thức UDP. Nó không thèm nhắm vào Logic của ứng dụng, mà nhắm thẳng vào các "đường ống dẫn nước" của hệ thống mạng.
+
+1. Mục tiêu & Triết lý tấn công
+
+Mục tiêu: Bơm một lượng khổng lồ rác dữ liệu làm tắc nghẽn hoàn toàn đường truyền vật lý (hoặc các hàng đợi - Queue trên Switch) trước khi dữ liệu kịp chạm đến Web Server.
+
+Kiến thức lõi: UDP (User Datagram Protocol) là giao thức Không trạng thái (Connectionless). Khác với TCP phải rườm rà bắt tay 3 bước và chờ phản hồi (ACK), UDP hoạt động theo cơ chế "Bắn và Quên" (Fire and Forget). Kẻ tấn công dồn toàn lực CPU của Botnet để đẩy gói tin ra card mạng với tốc độ cao nhất có thể.
+
+2. Kịch bản triển khai & Biện luận kỹ thuật
+
+Diễn viên: Huy động 1/4 đội Botnet (h1 đến h5).
+
+Hành động: Chạy file attack/udp_flood.py. Bắn hàng vạn gói tin UDP rác vào các port ngẫu nhiên.
+
+Lệnh Mininet: mininet> py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 6)]
+
+Tại sao code chỉ dùng vòng lặp while True với socket.sendto()? Để tạo ra cuộc tấn công hiệu quả nhất, mã nguồn cần nhẹ nhất. Bất kỳ khối try-catch hay chờ phản hồi nào cũng làm giảm số lượng Gói tin trên giây (PPS). Mỗi máy Mininet biến thành một họng súng liên thanh thực sự.
+
+3. Hiện tượng lâm sàng trên Dashboard
+
+Mạng lưới (Dấu hiệu sinh tử): Cột Byte Rate và Packet Rate của các IP h1-h5 dựng đứng lên như cột cờ. Luồng mạng từ Switch Botnet sang Web Server Switch bị nghẽn đỏ. Client thật (h60-h65) bắt đầu giật lag, rớt mạng do hàng đợi (buffer) trên Switch đầy.
+
+Hệ thống (web1) - Sự trái ngược: Trái với suy nghĩ "bị DDoS thì Server sẽ sập CPU", CPU của web1 không hề hấn gì. Lý do là HĐH Linux hoặc tường lửa vòng ngoài đã tự động vứt bỏ các gói UDP vô nghĩa này ngay tại lớp mạng.
+
+4. Lời kết: Giá trị cốt lõi của Mô hình Deep Learning kết hợp SDN
+"Thưa Hội đồng, một cuộc tấn công cục súc như UDP Flood làm Firewall cứng dễ bị quá tải. Tuy nhiên, mô hình 1D-CNN của em sẽ đóng vai trò radar siêu tốc, nhận diện ngay mẫu hình: 'Lượng gói UDP tăng vọt, kích thước đồng đều, không có luồng phản hồi'. Ngay khi CNN phát tín hiệu, Bộ điều khiển SDN (ONOS) sẽ đẩy luật OpenFlow xuống tận Edge Switch (Nơi gắn botnet), chặn đứng rác UDP ngay tại cửa ngõ, cứu sống toàn bộ băng thông ở Core Switch!"
+
+🔴 HỒI 2: KẺ ĐÁNH LỪA L4 – TCP SYN FLOOD VÀ SỰ CẠN KIỆT TRẠNG THÁI (STATE-EXHAUSTION)
+
+Tiếp nối Hồi 1, Hồi 2 là một kẻ lừa đảo tinh vi, nhắm vào sự Cạn kiệt trạng thái (State-Exhaustion), khai thác trực tiếp lỗ hổng thiết kế nền tảng của mạng Internet: Quá trình bắt tay 3 bước (3-Way Handshake) của TCP.
+
+1. Mục tiêu & Ý tưởng kiến thức lõi
+
+Mục tiêu: Vắt kiệt bộ nhớ RAM và Bảng trạng thái kết nối (Connection Table) của Web Server/Proxy, và tạo nhiễu bộ điều khiển ONOS.
+
+Bản chất giao thức: Bình thường: Client gửi SYN -> Server trả SYN-ACK và mở trước một phần RAM -> Client gửi ACK để xác nhận. Trong SYN Flood, kẻ tấn công gửi bão cờ SYN nhưng cố tình không bao giờ gửi ACK. Máy chủ sẽ ôm khối RAM đó đứng chờ (trạng thái Half-open) cho đến khi cạn kiệt bộ nhớ và từ chối người dùng thật.
+
+2. Kịch bản triển khai & Biện luận kỹ thuật
+
+Diễn viên: Nhóm Botnet tiếp theo (h6 đến h10).
+
+Hành động: Chạy file attack/syn_flood.py. Gửi bão cờ SYN đến cổng 443 kèm mẹo nâng cao: Giả mạo ngẫu nhiên IP nguồn (IP Spoofing) liên tục.
+
+Lệnh Mininet: mininet> py [net.get(f'h{i}').cmd('python3 attack/syn_flood.py 10.0.0.10 &') for i in range(6, 11)]
+
+Tại sao lại code bằng scapy mà không dùng requests?
+"Em buộc phải sử dụng thư viện scapy can thiệp vào tầng Raw Sockets vì nếu dùng requests, Hệ điều hành sẽ tự động quản lý quá trình bắt tay và gửi cờ RST làm hỏng cuộc tấn công. Quan trọng nhất, scapy cho phép em giả mạo địa chỉ IP nguồn (Spoofing) ngẫu nhiên. Khi Server gửi SYN-ACK về một IP giả, sẽ không có gói RST nào gửi ngược lại, Server mới thực sự mắc bẫy. Điều này khiến các Firewall truyền thống khóa IP bị vô hiệu hóa hoàn toàn!"
+
+3. Hiện tượng lâm sàng trên Dashboard
+
+Mạng lưới: Packet Rate tăng vọt nhưng Byte Rate lại rất thấp (vì gói SYN cực nhỏ, ~60 bytes).
+
+Hệ thống (proxy1 & ONOS): Số lượng kết nối "Half-open" trên proxy1 tăng vọt. Đặc biệt, CPU ONOS Controller bị tăng cao do Switch liên tục gửi Packet-In hỏi đường cho hàng vạn IP giả mạo chưa từng tồn tại.
+
+Ứng dụng: Bảng Log HTTP không có thêm dòng nào (vì chưa từng hoàn thành bắt tay 3 bước).
+
+4. Lời kết: Giá trị cốt lõi của AI
+"Khi Firewall truyền thống bất lực trước IP giả mạo, khối 1D-CNN của em sẽ tỏa sáng. Nó phớt lờ IP, mà quét cấu trúc gói tin để phát hiện sự mất cân bằng thống kê nghiêm trọng: 'Tỷ lệ cờ SYN chiếm tới 99% mạng lưới, cờ ACK bằng 0'. AI phân loại đây là SYN Flood và ra lệnh Rate-Limiting để giải cứu hệ thống."
+
+🔴 HỒI 3: CUỘC TẤN CÔNG BẤT ĐỐI XỨNG L7 – HTTP FLOOD (HASH/JSON EXHAUSTION)
+
+Nếu Hồi 1 và Hồi 2 đã bị hệ thống chặn lại ở lớp mạng, kẻ tấn công tinh vi sẽ tiến hóa lên Hồi 3. Đây là cuộc tấn công trực diện ở Tầng Ứng Dụng (L7), mang bản chất Tấn công Bất đối xứng (Asymmetric Attack). Nghĩa là: Kẻ tấn công tốn 1 phần sức lực, nhưng ép Server phải tốn 1000 phần sức lực để xử lý.
+
+1. Mục tiêu & Ý tưởng kiến thức lõi
+
+Mục tiêu: Xuyên thủng mọi lớp mạng L3/L4, đánh thẳng vào CPU và RAM của máy chủ Django.
+
+Lỗ hổng Logic: Gói tin ở Hồi 3 hoàn hảo về mọi mặt: Bắt tay TCP đầy đủ, mã hóa TLS/SSL chuẩn xác. Hacker lợi dụng những chức năng nặng nề nhất của ứng dụng: Chức năng băm mật khẩu (Bcrypt/PBKDF2) được thiết kế chạy chậm để chống dò pass, hoặc chức năng phân tích cú pháp dữ liệu (JSON Parsing) đòi hỏi không gian bộ nhớ lớn.
+
+2. Kịch bản triển khai & Biện luận kỹ thuật
+
+Diễn viên: Nhóm Botnet h11 đến h15.
+
+Hành động: Mở kết nối HTTPS đàng hoàng, sau đó gửi điên cuồng các request vào URL nặng.
+
+Lệnh đánh CPU (Hash): mininet> py [net.get(f'h{i}').cmd('python3 attack/http_flood.py 10.0.0.10 hash &') for i in range(11, 13)]
+
+Lệnh đánh RAM (JSON): mininet> py [net.get(f'h{i}').cmd('python3 attack/http_flood.py 10.0.0.10 json &') for i in range(13, 15)]
+
+Tại sao code lại trở về dùng requests?
+"Trái với SYN Flood, tấn công L7 yêu cầu kết nối TCP/TLS phải hoàn hảo. Thư viện requests giải quyết trọn vẹn việc này. Script của em gửi payload Hash cực dài hoặc các chuỗi JSON lồng nhau khổng lồ. Quá trình json.loads() của Django sẽ biến thành một hố đen nuốt chửng RAM."
+
+3. Hiện tượng lâm sàng trên Dashboard
+
+Mạng lưới: Lưu lượng hoàn toàn bình thường, không hề có dấu hiệu bão traffic.
+
+Ứng dụng: Bảng Log HTTP nhảy dữ liệu điên cuồng, áp đảo bởi IP của Botnet.
+
+Hệ thống (Điểm tử huyệt): * Đánh Hash -> Biểu đồ CPU của web1 bắn thẳng lên 90-100%.
+
+Đánh JSON -> Biểu đồ RAM liên tục leo dốc dẫn đến rò rỉ bộ nhớ.
+
+Hậu quả Client (h60-h65): Bắt đầu nhận về lỗi 502 Bad Gateway hoặc 503 Service Unavailable.
+
+4. Lời kết: Sự giao thoa dữ liệu đa chiều
+"Một IDS truyền thống chỉ thu thập gói tin (PCAP) sẽ bị mù trước Hồi 3 vì gói tin đã mã hóa SSL. AI của em ưu việt ở chỗ kết hợp theo dõi Lưu lượng mạng và System Metrics (CPU/RAM). AI sẽ xâu chuỗi: 'Tại sao lưu lượng mạng rất nhỏ, Payload lớn bất thường và CPU lại 100%?'. Từ đó phát hiện ra sự bất đồng bộ này!"
+
+🔴 HỒI 4: SÁT THỦ TÀNG HÌNH L7 – SLOWLORIS VÀ NGHỆ THUẬT "NGÂM" KẾT NỐI
+
+Kính thưa Hội đồng,
+Đây là nghệ thuật của sự tàn phá trong tĩnh lặng, "Sát thủ tàng hình", bài toán hóc búa nhất đối với các hệ thống Tường lửa hay IDS/IPS dựa trên ngưỡng băng thông.
+
+1. Mục tiêu & Ý tưởng kiến thức lõi
+
+Mục tiêu: Đánh gục Web Server mà không gây ra bất kỳ tiếng động nào trên tầng mạng.
+
+Bản chất giao thức: Theo chuẩn RFC HTTP, Web Server (như Nginx) chỉ xử lý request khi nhận được ký hiệu kết thúc Header là \r\n\r\n (Hai dấu xuống dòng liên tiếp). Kẻ tấn công mở hàng trăm kết nối, nhưng cứ 15 giây mới gửi 1 ký tự Header (ví dụ: X-a: 1\r\n). Máy chủ không thể ngắt vì tưởng mạng khách hàng bị chậm. Hậu quả là toàn bộ Worker (Luồng phục vụ) của Web Server bị giam lỏng (Worker Starvation).
+
+2. Kịch bản triển khai & Biện luận kỹ thuật
+
+Diễn viên: Nhóm Botnet tinh nhuệ cuối cùng (h16 đến h20).
+
+Hành động: Chạy file attack/slowloris.py. Mở hàng trăm kết nối HTTPS, gửi byte nhỏ giọt.
+
+Lệnh Mininet: mininet> py [net.get(f'h{i}').cmd('python3 attack/slowloris.py 10.0.0.10 &') for i in range(16, 21)]
+
+Tại sao lại code bằng thuần socket và ssl?
+"Để mô phỏng Slowloris, em không thể dùng thư viện Web bậc cao như requests. Vì thư viện này quá 'chu đáo', gọi lệnh là nó đóng gói toàn bộ Header, nối thêm \r\n\r\n và bắn đi trong 1 mili-giây. Em phải lùi về sử dụng thuần thư viện socket và tự tay mã hóa kênh truyền bằng ssl.wrap_socket(). Script cố tình KHÔNG BAO GIỜ gửi ký tự \r\n\r\n cuối cùng, bơm header vô nghĩa mỗi 10 giây để giữ kết nối sống lay lắt."
+
+3. Hiện tượng lâm sàng trên Dashboard
+Sự nguy hiểm của Slowloris thể hiện qua sự bất lực của thông số giám sát:
+
+Mạng lưới: MỌI THỨ ĐỀU BÌNH THƯỜNG! Băng thông thấp, Packet rate cực thấp.
+
+Hệ thống (web1): CPU tĩnh lặng ở mức ~5%, RAM không biến động.
+
+Ứng dụng: Bảng HTTP Log trống trơn (vì request chưa gửi xong nên không ghi log).
+
+Dấu hiệu bất thường DUY NHẤT: Chỉ số Active Connections chạm trần (Max Workers).
+
+Hậu quả Client (h60-h65): Trang web quay tròn liên tục trên trình duyệt, báo Timeout.
+
+4. Lời kết: Giá trị tuyệt đối của thuật toán GRU
+(Lời thoại đắt giá kết thúc phần thuyết trình)
+"Thưa Hội đồng, nếu không có mô hình Deep Learning phân tích thời gian, Slowloris sẽ dễ dàng qua mặt các hệ thống giám sát băng thông bình thường! Mạng CNN cũng sẽ bị đánh lừa vì gói tin hoàn toàn hợp lệ.
+
+Nhưng đây là lúc Mạng nơ-ron Hồi quy có cổng (GRU) của em phát huy sức mạnh. Bằng việc phân tích Chuỗi thời gian, GRU nhận ra điểm dị thường chí mạng: Đặc trưng Flow_Duration (Thời gian sống). Nó sẽ tự hỏi: 'Tại sao có hàng trăm luồng tồn tại hơn 120 giây, nhưng Payload chỉ đạt vài chục Byte?'. Sự mất cân bằng giữa 'Thời gian' và 'Dữ liệu' chính là chữ ký của Slowloris. Sự kết hợp giữa năng lực không gian của CNN và trí nhớ thời gian của GRU chính là mảnh ghép hoàn hảo bảo vệ hệ thống SDN trước mọi hình thái tấn công!"
+

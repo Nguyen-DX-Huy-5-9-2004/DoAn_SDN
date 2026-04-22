@@ -1,0 +1,331 @@
+2026-04-22 09:58:47,009 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 09:58:47,009 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 09:58:47,009 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 09:58:47,009 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 09:58:47,009 - [INFO] - IDS_V2 - [CONFIG] Model Path: ai/
+2026-04-22 09:58:47,009 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 09:58:47,009 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 09:58:47,009 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 09:58:47,019 - [CRITICAL] - IDS_V2 - [IDS] Failed to load AI pipeline!
+2026-04-22 09:58:47,019 - [CRITICAL] - IDS_V2 - [FATAL] Pipeline load failed
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 449, in main
+    engine = IDSEngineV2()
+             ^^^^^^^^^^^^^
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 196, in __init__
+    raise RuntimeError("Pipeline load failed")
+RuntimeError: Pipeline load failed
+2026-04-22 10:00:02,045 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:00:02,045 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 10:00:02,045 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:00:02,046 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 10:00:02,046 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 10:00:02,046 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 10:00:02,046 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 10:00:02,046 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 10:00:03,681 - [CRITICAL] - IDS_V2 - [IDS] Failed to load AI pipeline!
+2026-04-22 10:00:03,681 - [CRITICAL] - IDS_V2 - [FATAL] Pipeline load failed
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 449, in main
+    engine = IDSEngineV2()
+             ^^^^^^^^^^^^^
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 196, in __init__
+    raise RuntimeError("Pipeline load failed")
+RuntimeError: Pipeline load failed
+2026-04-22 10:01:12,634 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:01:12,634 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 10:01:12,634 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:01:12,634 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 10:01:12,634 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 10:01:12,634 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 10:01:12,634 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 10:01:12,634 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 10:01:13,984 - [CRITICAL] - IDS_V2 - [IDS] Failed to load AI pipeline!
+2026-04-22 10:01:13,984 - [CRITICAL] - IDS_V2 - [FATAL] Pipeline load failed
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 449, in main
+    engine = IDSEngineV2()
+             ^^^^^^^^^^^^^
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 196, in __init__
+    raise RuntimeError("Pipeline load failed")
+RuntimeError: Pipeline load failed
+2026-04-22 10:02:47,694 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:02:47,694 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 10:02:47,694 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:02:47,694 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 10:02:47,694 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 10:02:47,694 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 10:02:47,694 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 10:02:47,695 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 10:02:49,006 - [CRITICAL] - IDS_V2 - [IDS] Failed to load AI pipeline!
+2026-04-22 10:02:49,006 - [CRITICAL] - IDS_V2 - [FATAL] Pipeline load failed
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 449, in main
+    engine = IDSEngineV2()
+             ^^^^^^^^^^^^^
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 196, in __init__
+    raise RuntimeError("Pipeline load failed")
+RuntimeError: Pipeline load failed
+2026-04-22 10:04:07,545 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:04:07,545 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 10:04:07,545 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:04:07,546 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 10:04:07,546 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 10:04:07,546 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 10:04:07,546 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 10:04:07,546 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 10:04:08,889 - [CRITICAL] - IDS_V2 - [IDS] Failed to load AI pipeline!
+2026-04-22 10:04:08,889 - [CRITICAL] - IDS_V2 - [FATAL] Pipeline load failed
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 449, in main
+    engine = IDSEngineV2()
+             ^^^^^^^^^^^^^
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 196, in __init__
+    raise RuntimeError("Pipeline load failed")
+RuntimeError: Pipeline load failed
+2026-04-22 10:24:33,092 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:24:33,092 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 10:24:33,092 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:24:33,093 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 10:24:33,093 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 10:24:33,093 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 10:24:33,093 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 10:24:33,093 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 10:24:35,170 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 10:24:35,170 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 10:24:44,428 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-22 10:29:59,012 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:29:59,012 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 10:29:59,012 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:29:59,012 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 10:29:59,012 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 10:29:59,012 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 10:29:59,013 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 10:29:59,013 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 10:30:00,516 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 10:30:00,516 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 10:33:09,212 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-22 10:44:32,869 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:44:32,869 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 10:44:32,869 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 10:44:32,869 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 10:44:32,869 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 10:44:32,869 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 10:44:32,869 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 10:44:32,869 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 10:44:34,402 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 10:44:34,403 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 10:44:47,921 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.63: DROP
+2026-04-22 10:44:47,925 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.61: DROP
+2026-04-22 10:44:48,854 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.64: DROP
+2026-04-22 10:44:49,884 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.60: DROP
+2026-04-22 10:44:49,884 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.62: DROP
+2026-04-22 10:44:50,902 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.65: DROP
+2026-04-22 10:46:29,783 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.4: DROP
+2026-04-22 10:46:29,918 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.4: DROP
+2026-04-22 10:46:30,064 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.4: DROP
+2026-04-22 10:46:30,085 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.4: DROP
+2026-04-22 10:46:30,449 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 10:46:30,590 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 10:46:30,752 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 10:46:30,764 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 10:46:31,683 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 10:46:31,755 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 10:46:31,784 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 10:46:31,813 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 10:46:34,725 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 10:46:36,245 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 10:46:37,295 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 10:46:37,312 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 10:46:40,166 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 10:46:44,928 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 10:46:44,951 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 10:46:46,046 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 10:46:46,110 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 10:46:46,233 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 10:46:46,347 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 10:46:46,398 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 10:46:46,402 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 10:46:46,425 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 10:46:51,056 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.5: DROP
+2026-04-22 10:46:51,319 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.5: DROP
+2026-04-22 10:47:25,245 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-22 11:14:09,821 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 11:14:09,821 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 11:14:09,821 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 11:14:09,821 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 11:14:09,821 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 11:14:09,821 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 11:14:09,822 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 11:14:09,822 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 11:14:11,364 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 11:14:11,364 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 11:14:52,516 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.63 (Rate thấp: 17.4 p/s)
+2026-04-22 11:14:52,516 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.62 (Rate thấp: 17.7 p/s)
+2026-04-22 11:14:52,516 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.60 (Rate thấp: 21.1 p/s)
+2026-04-22 11:14:54,487 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.61 (Rate thấp: 19.3 p/s)
+2026-04-22 11:14:56,534 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.64 (Rate thấp: 16.4 p/s)
+2026-04-22 11:14:57,558 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.65 (Rate thấp: 17.7 p/s)
+2026-04-22 11:15:06,779 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.62 (Rate thấp: 18.3 p/s)
+2026-04-22 11:15:06,779 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.60 (Rate thấp: 16.8 p/s)
+2026-04-22 11:15:07,802 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.63 (Rate thấp: 18.2 p/s)
+2026-04-22 11:15:07,802 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.64 (Rate thấp: 21.7 p/s)
+2026-04-22 11:15:08,821 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.61 (Rate thấp: 19.9 p/s)
+2026-04-22 11:15:12,918 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.65 (Rate thấp: 18.7 p/s)
+2026-04-22 11:15:20,091 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.60 (Rate thấp: 18.5 p/s)
+2026-04-22 11:15:20,091 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.63 (Rate thấp: 22.7 p/s)
+2026-04-22 11:15:21,110 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.62 (Rate thấp: 20.6 p/s)
+2026-04-22 11:15:22,133 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.64 (Rate thấp: 17.0 p/s)
+2026-04-22 11:15:24,182 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.61 (Rate thấp: 17.0 p/s)
+2026-04-22 11:15:28,278 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.65 (Rate thấp: 19.8 p/s)
+2026-04-22 11:15:31,350 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.63 (Rate thấp: 18.4 p/s)
+2026-04-22 11:15:33,397 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.64 (Rate thấp: 19.6 p/s)
+2026-04-22 11:15:34,423 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.60 (Rate thấp: 18.8 p/s)
+2026-04-22 11:15:35,445 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.62 (Rate thấp: 16.2 p/s)
+2026-04-22 11:15:36,469 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.61 (Rate thấp: 17.9 p/s)
+2026-04-22 11:15:42,613 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.65 (Rate thấp: 22.2 p/s)
+2026-04-22 11:15:44,662 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.63 (Rate thấp: 18.7 p/s)
+2026-04-22 11:15:45,686 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.60 (Rate thấp: 15.1 p/s)
+2026-04-22 11:15:46,710 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.64 (Rate thấp: 17.7 p/s)
+2026-04-22 11:15:49,783 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.62 (Rate thấp: 16.7 p/s)
+2026-04-22 11:15:51,830 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.61 (Rate thấp: 20.7 p/s)
+2026-04-22 11:15:58,998 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.65 (Rate thấp: 17.5 p/s)
+2026-04-22 11:16:00,023 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.63 (Rate thấp: 20.7 p/s)
+2026-04-22 11:16:01,046 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.60 (Rate thấp: 19.1 p/s)
+2026-04-22 11:16:02,070 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.64 (Rate thấp: 21.3 p/s)
+2026-04-22 11:16:03,098 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.62 (Rate thấp: 22.1 p/s)
+2026-04-22 11:16:03,098 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.61 (Rate thấp: 17.3 p/s)
+2026-04-22 11:16:13,343 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.60 (Rate thấp: 21.6 p/s)
+2026-04-22 11:16:13,346 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.65 (Rate thấp: 20.5 p/s)
+2026-04-22 11:16:13,347 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.63 (Rate thấp: 19.4 p/s)
+2026-04-22 11:16:16,406 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.62 (Rate thấp: 16.2 p/s)
+2026-04-22 11:16:18,453 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.64 (Rate thấp: 16.6 p/s)
+2026-04-22 11:16:20,523 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.4: DROP
+2026-04-22 11:16:20,628 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.61 (Rate thấp: 21.7 p/s)
+2026-04-22 11:16:20,822 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 11:16:20,843 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 11:16:25,630 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 11:16:25,630 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 11:16:29,772 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 11:16:35,226 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 11:16:38,189 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 11:16:38,211 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 11:16:38,213 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 11:16:42,700 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.62 (Rate thấp: 18.6 p/s)
+2026-04-22 11:16:42,963 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.60: DROP
+2026-04-22 11:16:43,327 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.5: DROP
+2026-04-22 11:16:43,364 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.5: DROP
+2026-04-22 11:16:43,912 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.5: DROP
+2026-04-22 11:16:44,100 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 11:16:44,871 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 11:16:44,903 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.65 (Rate thấp: 18.0 p/s)
+2026-04-22 11:16:47,108 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 11:16:47,657 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 11:16:48,795 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 11:16:49,152 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 11:16:52,156 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.61: DROP
+2026-04-22 11:16:53,219 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.63: DROP
+2026-04-22 11:16:57,367 - [INFO] - IDS_V2 - [HEURISTIC] Hạ cấp cảnh báo TCP SYN FLOOD cho 10.0.2.64 (Rate thấp: 12.8 p/s)
+2026-04-22 11:17:01,462 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.64: DROP
+2026-04-22 11:17:02,487 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.65: DROP
+2026-04-22 11:17:04,534 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.62: DROP
+2026-04-22 11:19:05,386 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.10: DROP
+2026-04-22 11:19:05,444 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.10: DROP
+2026-04-22 11:39:34,131 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-22 11:44:15,478 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 11:44:15,478 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 11:44:15,478 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 11:44:15,478 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 11:44:15,478 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 11:44:15,479 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 11:44:15,479 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 11:44:15,479 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 11:44:16,965 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 11:44:16,965 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 11:46:58,988 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.62: HONEYPOT
+2026-04-22 11:47:05,047 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.60: HONEYPOT
+2026-04-22 11:47:07,095 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.63: HONEYPOT
+2026-04-22 11:47:08,124 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.61: HONEYPOT
+2026-04-22 11:47:08,125 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.64: HONEYPOT
+2026-04-22 11:48:51,638 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.4: DROP
+2026-04-22 11:48:51,674 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.4: DROP
+2026-04-22 11:48:51,698 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.4: DROP
+2026-04-22 11:48:57,554 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 11:48:57,582 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 11:48:57,671 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 11:49:01,168 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 11:49:01,194 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 11:49:05,597 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 11:49:05,620 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 11:49:06,068 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 11:49:06,235 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.5: DROP
+2026-04-22 11:49:06,641 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 11:49:07,150 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 11:49:07,183 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 11:53:33,102 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.10: DROP
+2026-04-22 11:53:33,127 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.10: DROP
+2026-04-22 11:53:57,824 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 11:53:57,833 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 11:53:57,845 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.7: DROP
+2026-04-22 11:54:06,335 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 11:54:06,344 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 11:54:06,389 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.9: DROP
+2026-04-22 11:54:06,915 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 11:54:06,939 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 11:54:06,972 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 11:54:06,981 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.6: DROP
+2026-04-22 11:54:07,363 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.8: DROP
+2026-04-22 11:55:44,034 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.14: DROP
+2026-04-22 11:55:44,041 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.11: DROP
+2026-04-22 11:55:44,051 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.12: DROP
+2026-04-22 11:55:44,055 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.11: DROP
+2026-04-22 11:55:44,061 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.13: DROP
+2026-04-22 11:59:24,731 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-22 15:05:14,735 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 15:05:14,736 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 15:05:14,736 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 15:05:14,736 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 15:05:14,736 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 15:05:14,737 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 15:05:14,737 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 15:05:14,737 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 15:05:16,305 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 15:05:16,306 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 15:06:38,394 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.64: HONEYPOT
+2026-04-22 15:06:40,358 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.63: HONEYPOT
+2026-04-22 15:06:42,409 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.60: HONEYPOT
+2026-04-22 15:06:48,551 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.61: HONEYPOT
+2026-04-22 15:07:11,079 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.2.62: HONEYPOT
+2026-04-22 15:21:10,619 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:21:10,629 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:21:10,646 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:21:12,750 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:21:12,799 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:21:12,947 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:21:12,968 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:21:13,023 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:21:14,153 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 15:33:26,431 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:33:26,433 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 15:33:26,434 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,436 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 15:33:26,450 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:33:26,483 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,521 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,539 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 15:33:26,556 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:33:26,563 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,565 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:33:26,569 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,570 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:33:26,578 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 15:33:26,579 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 15:33:26,588 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 15:33:26,601 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,605 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 15:33:26,609 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,614 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,621 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:33:26,627 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
+2026-04-22 15:33:26,629 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
+2026-04-22 15:33:26,636 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP

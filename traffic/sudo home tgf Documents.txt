@@ -1,0 +1,22 @@
+source /home/tgf/Documents/DoAn_SDN/sdn_env/bin/activate
+cd thuThapData
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python batPack123.py
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python auto_dataset_generator.py
+
+py [net.get(f'h{i}').cmd('pkill -f attack/ &') for i in range(1, 21)]
+py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]
+py [net.get(f'h{i}').cmd('pgrep -f attack/') for i in range(1, 21)]
+"Hồi sinh" tiến trình Django trên Web1
+web1 pkill -f manage.py
+web1 sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &'
+proxy1 pkill -f nginx
+proxy1 nginx -g 'daemon off;' > /tmp/nginx_proxy.log 2>&1 &
+
+h60 curl -I -m 3 http://10.0.0.11:8000
+h60 curl -I -m 3 http://10.0.0.10:8000
+
+sudo pkill -f batPack123.py
+sudo pkill -f auto_dataset_generator.py
+
+rm -f /home/tgf/Documents/DoAn_SDN/thuThapData/zeek_stream*
+rm -f /home/tgf/Documents/DoAn_SDN/thuThapData/.marker*
