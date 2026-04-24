@@ -24,13 +24,17 @@ try:
         # 2. BẮT BUỘC: Ép hệ điều hành cấp một Port Nguồn ngẫu nhiên mới tinh
         sock.bind(('', 0)) 
         
-        # 3. Gửi một "chùm" 20 gói tin trên cùng 1 Port này
-        # (Nếu chỉ gửi 1 gói rồi đổi port, NFStream sẽ không tính được pkt_rate. 
-        # Gửi 20 gói giúp NFStream nhận diện đây là một "Luồng" và đo được tốc độ)
-        for _ in range(20):
-            sock.sendto(random_bytes, (target_ip, target_port))
+        # Thêm ngẫu nhiên cho burst size và sleep
+        burst_size = random.randint(10, 50)
+        packet_size = random.randint(64, 1460)
+        data = random.randbytes(packet_size)
+        
+        for _ in range(burst_size):
+            sock.sendto(data, (target_ip, target_port))
             packet_count += 1
-            
+        
+        time.sleep(random.uniform(0.01, 0.1)) # Ngẫu nhiên hóa nhịp độ gửi
+        
         # 4. Đóng Socket ngay lập tức để giải phóng Port và RAM (Chống lỗi Too many open files)
         sock.close()
         

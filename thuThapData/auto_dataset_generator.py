@@ -3,9 +3,11 @@ import requests
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # --- CẤU HÌNH TỐI ƯU ---
-TARGET_SAMPLES_PER_CLASS = 80000 # 50k mẫu/lớp là con số "vàng" cho CNN-GRU
-FIFO_PATH = os.path.join(BASE_DIR, "zeek_stream.json")
-OUTPUT_CSV = "master_dataset_v6.csv"
+# Cấu hình số lượng mẫu
+TARGET_SAMPLES_PER_CLASS = 100000  # 100k cho mỗi loại tấn công
+NORMAL_SAMPLES_TARGET = 200000     # 200k cho lưu lượng bình thường
+FIFO_PATH = os.path.join(BASE_DIR, "..", "ai", "zeek_stream.json")
+OUTPUT_CSV = "master_dataset_v7.csv"
 WEB_RESTART_CMD = os.environ.get("WEB_RESTART_CMD", "").strip()
 SLOWLORIS_HEALTH_URL = os.environ.get("SLOWLORIS_TARGET_URL", "http://127.0.0.1:8000")
 
@@ -39,6 +41,58 @@ LABELS = {
     3: "HTTP Flood",
     4: "Slowloris"
 }
+
+# ====================================================================
+# MARKER MANAGEMENT FOR PHASE-SPECIFIC TUNING
+# ====================================================================
+def create_phase_marker(label_id):
+    """Create phase-specific marker to signal batPack_v2 for timeout tuning"""
+    markers_base = os.path.join(BASE_DIR, "..", "ai")
+    
+    marker_map = {
+        0: os.path.join(markers_base, ".marker_normal"),
+        1: os.path.join(markers_base, ".marker_udp"),
+        2: os.path.join(markers_base, ".marker_syn"),
+        3: os.path.join(markers_base, ".marker_http"),
+        4: os.path.join(markers_base, ".marker_slowloris"),
+    }
+    
+    # Remove all old markers
+    for m in marker_map.values():
+        try:
+            if os.path.exists(m):
+                os.remove(m)
+        except Exception:
+            pass
+    
+    # Create new marker for this phase
+    marker_path = marker_map.get(label_id)
+    if marker_path:
+        try:
+            with open(marker_path, 'w') as f:
+                f.write("1")
+            label_name = LABELS.get(label_id, "Unknown")
+            print(f"[MARKER] Created .marker_{label_name.lower().split()[0]} for phase {label_id}")
+        except Exception as e:
+            print(f"[ERROR] Failed to create marker: {e}")
+
+def cleanup_all_markers():
+    """Remove all phase markers"""
+    markers_base = os.path.join(BASE_DIR, "..", "ai")
+    markers = [
+        os.path.join(markers_base, ".marker_normal"),
+        os.path.join(markers_base, ".marker_udp"),
+        os.path.join(markers_base, ".marker_syn"),
+        os.path.join(markers_base, ".marker_http"),
+        os.path.join(markers_base, ".marker_slowloris"),
+    ]
+    
+    for m in markers:
+        try:
+            if os.path.exists(m):
+                os.remove(m)
+        except Exception:
+            pass
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -121,33 +175,42 @@ def _wait_for_target_alive(target_url, max_retry=3, interval=2):
 
 
 def collect_data(label_id, target_samples=TARGET_SAMPLES_PER_CLASS, description="", fifo_path=None, health_check_url=None):
-    # Xác định đúng FIFO path dựa trên label
+    # Xác định đúng FIFO path dựa trên label (Luôn tìm trong thư mục ../ai/)
     if fifo_path is None:
-        fifo_path = os.path.join(BASE_DIR, "zeek_stream_slowloris.json") if label_id == 4 else os.path.join(BASE_DIR, "zeek_stream.json")
+        base_ai_dir = os.path.join(BASE_DIR, "..", "ai")
+        fifo_path = os.path.join(base_ai_dir, "zeek_stream_slowloris.json") if label_id == 4 else os.path.join(base_ai_dir, "zeek_stream.json")
 
-    # Signal batPack123 which mode to use
-    marker_slowloris = os.path.join(BASE_DIR, ".marker_slowloris")
-    marker_normal = os.path.join(BASE_DIR, ".marker_normal")
+    # Signal ai/batPack_v2.py which mode to use
+    marker_slowloris = os.path.join(BASE_DIR, "..", "ai", ".marker_slowloris")
+    marker_normal = os.path.join(BASE_DIR, "..", "ai", ".marker_normal")
 
-    # Clean up old markers
-    for m in [marker_slowloris, marker_normal]:
-        try:
-            os.remove(m)
-        except Exception:
-            pass
-
-    # Create appropriate marker for batPack123 to detect
+    # [FIX] Chỉ tạo marker nếu chưa đúng loại - tránh batPack restart liên tục
+    os.makedirs(os.path.dirname(marker_slowloris), exist_ok=True)
+    
     if label_id == 4:
-        open(marker_slowloris, "w").close()
+        # Slowloris phase: cần marker_slowloris
+        if not os.path.exists(marker_slowloris):
+            # Xóa marker cũ nếu có
+            if os.path.exists(marker_normal):
+                os.remove(marker_normal)
+            open(marker_slowloris, "w").close()
+            print(f"[GENERATOR] Tạo marker SLOWLORIS: {marker_slowloris}")
+            time.sleep(0.5)  # Chỉ sleep khi thực sự tạo marker mới
+        else:
+            print(f"[GENERATOR] Giữ nguyên marker SLOWLORIS (đã tồn tại)")
         marker_created = marker_slowloris
     else:
-        open(marker_normal, "w").close()
+        # Normal/Attack phases (0-3): cần marker_normal
+        if not os.path.exists(marker_normal):
+            # Xóa marker cũ nếu có
+            if os.path.exists(marker_slowloris):
+                os.remove(marker_slowloris)
+            open(marker_normal, "w").close()
+            print(f"[GENERATOR] Tạo marker NORMAL: {marker_normal}")
+            time.sleep(0.5)  # Chỉ sleep khi thực sự tạo marker mới
+        else:
+            print(f"[GENERATOR] Giữ nguyên marker NORMAL (đã tồn tại)")
         marker_created = marker_normal
-
-    print(f"[GENERATOR] Tạo marker: {marker_created} (cwd={os.getcwd()})")
-
-    # Give batPack123 time to detect marker
-    time.sleep(0.5)
 
     display_label = LABELS[label_id] if not description else f"{LABELS[label_id]} ({description})"
     print(f"\n[GENERATOR] Đang thu thập dữ liệu cho: {display_label}")
@@ -171,11 +234,11 @@ def collect_data(label_id, target_samples=TARGET_SAMPLES_PER_CLASS, description=
         "pass_web_filter": 0,
         "features_len_13": 0
     }
-    DEBUG_MODE = os.environ.get("DEBUG_FILTER", "0") == "1"
+    DEBUG_MODE = False  # Đã fix xong, tắt debug để chạy nhanh
 
     # Đợi cho đến khi batPack tạo ra FIFO
     while not os.path.exists(fifo_path):
-        print(f"[GENERATOR] Đang đợi batPack123.py tạo Named Pipe: {fifo_path}...", end="\r")
+        print(f"[GENERATOR] Đang đợi ai/batPack_v2.py tạo Named Pipe: {fifo_path}...", end="\r")
         time.sleep(1)
 
     if label_id == 4 and health_check_url:
@@ -219,9 +282,11 @@ def collect_data(label_id, target_samples=TARGET_SAMPLES_PER_CLASS, description=
                         data = json.loads(line)
                         src_ip = data.get("src_ip", data.get("id.orig_h", data.get("ip", "")))
                         dst_ip = data.get("dst_ip", data.get("id.resp_h", ""))
+                        dst_port = data.get("dst_port", 0)  # [FIX] Lấy từ JSON, không phải features[1]
                         features = data.get("features", [])
-                        dst_port = features[1] if len(features) > 1 else 0
-                        src_port = features[0] if len(features) > 0 else 0
+                        # [NÂNG CẤP] features[0] và features[1] giờ là Entropy, không phải port numbers
+                        src_port_entropy = features[0] if len(features) > 0 else 0
+                        dst_port_entropy = features[1] if len(features) > 1 else 0
 
                         if DEBUG_MODE and raw_lines < 3:
                             print(f"[DEBUG STRUCTURE] Raw JSON keys: {list(data.keys())}")
@@ -272,8 +337,26 @@ def collect_data(label_id, target_samples=TARGET_SAMPLES_PER_CLASS, description=
                             debug_stats["pass_web_filter"] += 1
 
                         if len(features) == 13:
-                            debug_stats["features_len_13"] += 1
-                            row = features + [label_id]
+                            debug_stats["features_len_13"] = debug_stats.get("features_len_13", 0) + 1
+                            
+                            # LOGIC DÁN NHÃN THÔNG MINH (CHỐNG NHIỄM ĐỘC DATA)
+                            actual_label = label_id
+                            
+                            # CỰC KỲ QUAN TRỌNG: Chỉ chấp nhận nhãn Normal (0) từ dải Client (10.0.2.x)
+                            # để AI học đúng hành vi của người dùng thật.
+                            if label_id == 0:
+                                if not src_ip.startswith("10.0.2."):
+                                    dropped_by_subnet += 1
+                                    continue # Bỏ qua traffic từ các nguồn khác (system, db, botnet cũ)
+                            
+                            # Nếu đang trong pha tấn công (1,2,3,4) nhưng Src_IP không thuộc Botnet (10.0.1.x)
+                            # thì đó là traffic Normal phát sinh ngẫu nhiên -> Dán nhãn 0
+                            elif label_id != 0:
+                                is_botnet_src = src_ip.startswith("10.0.1.")
+                                if not is_botnet_src:
+                                    actual_label = 0 
+                            
+                            row = features + [actual_label]
                             batch_data.append(row)
                             collected += 1
 
@@ -293,11 +376,16 @@ def collect_data(label_id, target_samples=TARGET_SAMPLES_PER_CLASS, description=
                     writer.writerows(batch_data)
 
     finally:
-        for m in [".marker_slowloris", ".marker_normal"]:
+        # CỰC KỲ QUAN TRỌNG: Xóa markers để batPack_v2 quay về chế độ mặc định
+        marker_slowloris = os.path.join(BASE_DIR, "..", "ai", ".marker_slowloris")
+        marker_normal = os.path.join(BASE_DIR, "..", "ai", ".marker_normal")
+        for m in [marker_slowloris, marker_normal]:
             try:
-                os.remove(m)
-            except Exception:
-                pass
+                if os.path.exists(m):
+                    os.remove(m)
+                    print(f"[CLEANUP] Đã xóa marker: {os.path.basename(m)}")
+            except Exception as e:
+                print(f"[CLEANUP] Lỗi khi xóa marker {m}: {e}")
 
     if DEBUG_MODE:
         print("\n[DEBUG STATS]:")
@@ -323,16 +411,10 @@ def main():
         return
 
     # Clean up any leftover markers from previous runs
-    marker_slowloris = os.path.join(BASE_DIR, ".marker_slowloris")
-    marker_normal = os.path.join(BASE_DIR, ".marker_normal")
-    for m in [marker_slowloris, marker_normal]:
-        try:
-            os.remove(m)
-            print(f"[GENERATOR] Cleaned leftover marker: {m}")
-        except Exception:
-            pass
+    cleanup_all_markers()
+    print("[GENERATOR] Cleaned all leftover markers")
 
-    headers = ["Src_Port", "Dst_Port", "Protocol", "Duration_Sec", 
+    headers = ["Src_Port_Entropy", "Dst_Port_Entropy", "Protocol", "Duration_Sec", 
                "Src_Bytes", "Dst_Bytes", "Src_Packets", "Dst_Packets", 
                "Conn_State", "L7_App_Protocol", "Packet_Rate", "Byte_Rate", 
                "Anomaly_Score", "target_label"]
@@ -345,64 +427,96 @@ def main():
     print("="*70)
     print("🚀 QUY TRÌNH THU THẬP DATASET PHÂN LOẠI CHI TIẾT (5 NHÃN)")
     print("="*70)
-    print("[📋] Thứ tự tối ưu: ATTACK PHASES (1-4) → NORMAL PHASE (0)")
-    print("[⚡] Lý do: Thu attack trước để có dữ liệu sạch, normal cuối cùng")
+    print("[📋] Thứ tự TỐI ƯU: NORMAL PHASE (0) → ATTACK PHASES (1-4)")
+    print("[⚡] Lý do: Normal không cần attack, sau đó mới tới attack phases")
     print("="*70)
 
-    # 📌 ATTACK PHASES FIRST (1-4)
+    # 📌 NORMAL PHASE FIRST (0) - Không cần attack nào chạy
+    print("\n[PHASE 0️⃣ ] NORMAL TRAFFIC - 50 min (FIRST)")
+    print("[💡] Chỉ bắt traffic từ clients (10.0.2.x) → web servers")
+    print("[*] Không cần khởi chạy tấn công, chỉ web server bình thường")
+    
+    # Create marker for Normal phase
+    create_phase_marker(0)
+    
+    prompt_user(f"KHỞI ĐỘNG: Normal Traffic từ Clients", 
+                "py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') for i in range(60, 66)]")
+    collect_data(0, target_samples=NORMAL_SAMPLES_TARGET)
+    
+    cleanup_all_markers()
+    print("[*] Đang dọn dẹp bộ đệm (chờ 3s)...")
+    time.sleep(3)
+
+    # 📌 ATTACK PHASES (1-4) - Sau khi đã thu Normal
     cmd_attack_stop = "py [net.get(f'h{i}').cmd('pkill -f attack/') for i in range(1, 21)]"
 
     # PHASE 1: UDP Flood -> Đích: Proxy (10.0.0.10)
     print("\n[PHASE 1️⃣ ] UDP FLOOD ATTACK - 10 min")
-    prompt_user(f"BẬT TẤN CÔNG: UDP Flood", "py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 5)]")
+    print("[💡] UDP: Unidirectional, chỉ gửi không chờ nhận")
+    print("[*] Tuning: Shorter timeouts (ACTIVE=3s, IDLE=1s)")
+    
+    create_phase_marker(1)
+    
+    prompt_user(f"BẬT TẤN CÔNG: UDP Flood", "py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 4)]")
     collect_data(1, target_samples=TARGET_SAMPLES_PER_CLASS)
     prompt_user(f"DỪNG TẤN CÔNG: UDP Flood", cmd_attack_stop)
+    cleanup_all_markers()
     print("[*] Đang dọn dẹp bộ đệm (chờ 3s)...")
     time.sleep(3)
 
     # PHASE 2: SYN Flood -> Đích: Proxy (10.0.0.10)
     print("\n[PHASE 2️⃣ ] SYN FLOOD ATTACK - 10 min")
-    prompt_user(f"BẬT TẤN CÔNG: SYN Flood", "py [net.get(f'h{i}').cmd('python3 attack/syn_flood.py 10.0.0.10 &') for i in range(6, 11)]")
+    print("[💡] SYN: Half-open connections, bắt incomplete 3-way handshake")
+    print("[*] Tuning: Medium timeouts (ACTIVE=5s, IDLE=2s)")
+    
+    create_phase_marker(2)
+    
+    prompt_user(f"BẬT TẤN CÔNG: SYN Flood", "py [net.get(f'h{i}').cmd('python3 attack/syn_flood.py 10.0.0.10 &') for i in range(5, 8)]")
     collect_data(2, target_samples=TARGET_SAMPLES_PER_CLASS)
     prompt_user(f"DỪNG TẤN CÔNG: SYN Flood", cmd_attack_stop)
+    cleanup_all_markers()
     print("[*] Đang dọn dẹp bộ đệm (chờ 3s)...")
     time.sleep(3)
 
     # PHASE 3: HTTP Flood -> Đích: Proxy (10.0.0.10)
     print("\n[PHASE 3️⃣ ] HTTP FLOOD ATTACK - 10 min")
-    prompt_user(f"BẬT TẤN CÔNG: HTTP Flood (Hash)", "py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 hash &') for i in range(11, 15)]")
+    print("[💡] HTTP: Layer 7, bắt request HTTP floods")
+    print("[*] Tuning: Standard HTTP timeouts (ACTIVE=8s, IDLE=3s)")
+    
+    create_phase_marker(3)
+    
+    prompt_user(f"BẬT TẤN CÔNG: HTTP Flood (Hash)", "py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 hash &') for i in range(9, 12)]")
     collect_data(3, target_samples=TARGET_SAMPLES_PER_CLASS // 2, description="Hash")
     prompt_user(f"DỪNG TẤN CÔNG: HTTP Flood (Hash)", cmd_attack_stop)
     print("[*] Đang dọn dẹp bộ đệm (chờ 3s)...")
     time.sleep(3)
     
-    prompt_user(f"BẬT TẤN CÔNG: HTTP Flood (JSON)", "py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 json &') for i in range(11, 15)]")
+    prompt_user(f"BẬT TẤN CÔNG: HTTP Flood (JSON)", "py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 json &') for i in range(12, 15)]")
     collect_data(3, target_samples=TARGET_SAMPLES_PER_CLASS // 2, description="JSON")
     prompt_user(f"DỪNG TẤN CÔNG: HTTP Flood (JSON)", cmd_attack_stop)
+    cleanup_all_markers()
     print("[*] Đang dọn dẹp bộ đệm (chờ 3s)...")
     time.sleep(3)
 
     # PHASE 4: Slowloris -> Đích: Web1 (10.0.0.11) 
     print("\n[PHASE 4️⃣ ] SLOWLORIS ATTACK - 10 min")
+    print("[💡] Slowloris: Slow header transmission, bắt long-lived connections")
+    print("[*] Tuning: Long timeouts (ACTIVE=30s, IDLE=15s)")
+    
+    # Tạo marker SLOWLORIS để batPack_v2 tăng IDLE_TIMEOUT lên 30s
+    create_phase_marker(4)
+    
     prompt_user(f"BẬT TẤN CÔNG: Slowloris", "py [net.get(f'h{i}').cmd('python3 attack/slowloris.py http://10.0.0.11:8000 &') for i in range(16, 21)]")
-    #collect_data(4, target_samples=TARGET_SAMPLES_PER_CLASS, health_check_url=SLOWLORIS_HEALTH_URL)
-    collect_data(4, target_samples=TARGET_SAMPLES_PER_CLASS, health_check_url=None)
+    collect_data(4, target_samples=TARGET_SAMPLES_PER_CLASS, health_check_url=None, description="Slowloris")
     prompt_user(f"DỪNG TẤN CÔNG: Slowloris", cmd_attack_stop)
+    
+    cleanup_all_markers()
     print("[*] Đang dọn dẹp bộ đệm (chờ 3s)...")
     time.sleep(3)
 
-    # 📌 NORMAL PHASE LAST (0)
-    print("\n[PHASE 0️⃣ ] NORMAL TRAFFIC - 50 min (FINAL)")
-    cmd_normal_start = "py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') for i in range(60, 66)]"
-    cmd_normal_stop = "py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]"
-    
-    prompt_user("BẬT TRAFFIC BÌNH THƯỜNG", cmd_normal_start)
-    collect_data(0, target_samples=(TARGET_SAMPLES_PER_CLASS+120000))
-    prompt_user("DỪNG TRAFFIC BÌNH THƯỜNG", cmd_normal_stop)
-
     print("\n" + "="*70)
     print(f"🎉 THÀNH CÔNG! Dataset 5 lớp đã sẵn sàng tại {OUTPUT_CSV}")
-    print(f"[*] Tổng số mẫu dự kiến: {TARGET_SAMPLES_PER_CLASS * 5:,}")
+    print(f"[*] Tổng số mẫu dự kiến: {TARGET_SAMPLES_PER_CLASS * 4 + NORMAL_SAMPLES_TARGET:,}")
     print("="*70)
 
 if __name__ == "__main__":

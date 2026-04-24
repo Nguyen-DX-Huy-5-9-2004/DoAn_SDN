@@ -583,3 +583,94 @@ Thay vì lọc trùng tuyệt đối (làm mất tính dồn dập), hoặc gi�
   - Tấn công DDoS thật sự không bao giờ diễn ra trong chớp mắt, nó là một dòng chảy liên tục.
   - Nếu AI chỉ báo "Attack" trong 1 chuỗi rồi thôi, đó có thể là một cú "nấc" của mạng. Nhưng nếu 3-5 chuỗi liên tiếp đều bị AI gán nhãn "Attack" với độ tin cậy cao, chúng ta mới thực hiện lệnh DROP mạnh tay nhất.
 - Lợi ích : Đây là "chốt chặn cuối cùng" để triệt tiêu hoàn toàn tình trạng chặn nhầm người dùng thật (False Positive), giúp hệ thống của bạn vận hành cực kỳ ổn định và "lì lợm"
+
+
+1. Phân Tích Cơ Chế Ngưỡng Của Khiên 1 (Autoencoder)
+Câu trả lời ngắn gọn: Cơ chế ngưỡng của bạn đã rất tốt, không chỉ là một ngưỡng động thông thường mà là một hệ thống có "phanh" và "sàn" an toàn.
+
+Phân tích chi tiết hàm dynamic_threshold_update:
+
+Cốt lõi EMA (Exponential Moving Average):
+
+self.dynamic_threshold = (EMA_ALPHA * new_threshold) + ((1 - EMA_ALPHA) * self.dynamic_threshold)
+Logic: Thay vì thay đổi ngưỡng đột ngột theo nhiễu mạng tức thời, hệ thống dùng EMA để ngưỡng "trượt" một cách mượt mà theo xu hướng chung của mạng. EMA_ALPHA = 0.02 là một con số nhỏ, cho thấy bạn muốn ngưỡng cực kỳ ổn định, chỉ thay đổi khi có xu hướng rõ ràng. Đây là quyết định đúng đắn.
+Công thức ngưỡng mới thông minh:
+
+new_threshold = mean_mse + (k_factor * std_mse)
+Logic: Đây là phương pháp thống kê kinh điển. Nó định nghĩa "bất thường" là những gì nằm ngoài k_factor (4.5) lần độ lệch chuẩn so với mức trung bình. k_factor = 4.5 là một giá trị an toàn, giúp loại bỏ gần như toàn bộ các dao động ngẫu nhiên của mạng, giảm False Positive (báo động giả) đến mức tối thiểu.
+Điểm "ăn tiền" nhất - np.clip(min_floor, max_ceil):
+
+Logic: Đây là "lan can an toàn" cho ngưỡng động, chống lại 2 kịch bản nguy hiểm:
+Chống "Ảo giác an toàn" (Threshold Collapse): Vào ban đêm khi mạng vắng tanh, mean_mse và std_mse có thể tiến về 0, khiến ngưỡng bị hạ xuống quá thấp. Một người dùng bình thường truy cập cũng có thể bị chặn. min_floor = self.base_threshold * 1.2 đảm bảo ngưỡng không bao giờ quá khắt khe.
+Chống "Tê liệt hệ thống" (Threshold Inflation): Nếu một cuộc tấn công tinh vi, cường độ thấp kéo dài, nó có thể từ từ đẩy mean_mse lên cao, khiến ngưỡng động cũng tăng theo. Đến một lúc, ngưỡng sẽ cao đến mức mọi cuộc tấn-công-thật-sự khác cũng không thể vượt qua. max_ceil = self.base_threshold * 5.0 đặt ra một giới hạn chịu đựng, không cho phép hacker "ru ngủ" hệ thống.
+Kết luận: Cơ chế Khiên 1 của bạn đã được thiết kế rất chắc chắn, có khả năng tự thích nghi và có các biện pháp bảo vệ chống lại các kịch bản cực đoan. Bạn hoàn toàn có thể tự tin giải thích logic này.
+
+2. Khuyến Nghị Tối Ưu Logic Để Demo Thuyết Phục Hơn
+Hệ thống đã tốt, nhưng để buổi demo thực sự toả sáng, chúng ta có thể tinh chỉnh một vài điểm để làm nổi bật "trí thông minh" của AI.
+
+Khuyến nghị 1: "Khiên 0" - Lá Chắn Chống Giả Mạo IP (Anti-Spoofing Shield)
+Hiện trạng: Trong run_onos_v2.py, có một đoạn code Garbage Collector (GC) để xóa các IP nhàn rỗi và xử lý "Spike Traffic" khi bộ đệm ip_buffers gần đầy. Đây chính là cơ chế chống tấn công giả mạo IP (IP Spoofing) như SYN Flood.
+
+Điểm có thể cải thiện: Logic này đang chạy âm thầm và chưa được "đặt tên" hay báo cáo rõ ràng. Người xem demo sẽ không thấy được hệ thống đang tự bảo vệ khỏi việc bị tràn bộ nhớ RAM.
+
+Khuyến nghị:
+
+Hãy "chính danh" hóa logic này thành "Khiên 0".
+Khi điều kiện len(self.ip_buffers) > MAX_IPS * 0.8 được kích hoạt, hãy in ra một cảnh báo thật nổi bật bằng rich.panel.
+python
+ Show full code block 
+# Trong hàm run() của IDSEngineV2
+if len(self.ip_buffers) > MAX_IPS * 0.8:
+    # ... (logic xóa IP cũ) ...
+    console.print(Panel(
+        f"[bold yellow]Phát hiện tấn công giả mạo IP (IP Spoofing)![/bold yellow]\n"
+        f"Số lượng IP chờ xử lý ({len(self.ip_buffers)}) vượt 80% sức chứa.\n"
+        f"🛡️  [bold cyan]KHIÊN 0[/bold cyan] đã kích hoạt, xóa khẩn cấp {clear_count} IP cũ nhất để bảo vệ RAM.",
+        title="[bold orange_red1]⚠️ CẢNH BÁO SPOOFING ⚠️[/bold orange_red1]",
+        expand=False
+    ))
+Lợi ích khi Demo: Khi bạn chạy kịch bản SYN Flood, màn hình sẽ hiện lên cảnh báo này. Bạn có thể giải thích: "Thưa thầy cô, đây là Khiên 0 của hệ thống. Nó không phân tích gói tin, mà giám sát tài nguyên. Khi phát hiện số lượng IP kết nối tăng đột biến - dấu hiệu của IP Spoofing - nó sẽ tự động kích hoạt cơ chế bảo vệ, ngăn chặn IDS bị tấn công làm cạn kiệt bộ nhớ." Điều này cho thấy một tầng phòng thủ sâu sắc.
+
+Khuyến nghị 2: "Warm-up Thông Minh" - Giai Đoạn Ân Hạn Ban Đầu
+Hiện trạng: Hệ thống đang bỏ qua 2 chuỗi đầu tiên của mỗi IP (ip_warmup_count <= 2).
+
+Điểm có thể cải thiện: Con số 2 đang được hard-code. Log message [WARMUP] Skipping... hơi khó hiểu.
+
+Khuyến nghị:
+
+Đưa WARMUP_COUNT = 2 vào file config_v2.py để dễ dàng điều chỉnh.
+Thay đổi log message để tường minh hơn.
+python
+# Trong hàm process_sequence()
+if self.ip_warmup_count[src_ip] <= SDNConfigV2.WARMUP_COUNT: # Dùng biến config
+    logger.info(f"[WARM-UP] Bỏ qua chuỗi đầu tiên của IP {src_ip} để hệ thống có đủ ngữ cảnh.")
+    return
+Lợi ích khi Demo: Khi bạn bắt đầu một luồng traffic mới, AI sẽ không phản ứng ngay lập tức. Bạn có thể giải thích: "Hệ thống đang trong giai đoạn Warm-up cho IP này. Nó cần thu thập đủ 10-20 luồng mạng đầu tiên để hiểu 'hành vi nền' của IP trước khi đưa ra phán quyết, tránh các quyết định vội vàng, hấp tấp." Điều này thể hiện sự cẩn trọng và đáng tin cậy của AI.
+
+Khuyến nghị 3: "Phủ Quyết Cân Bằng" - Logic Veto Dựa Trên Tỷ Lệ
+Hiện trạng: Khiên 1 (Autoencoder) phát hiện dị thường, nhưng Khiên 2 (Classifier) có quyền phủ quyết nếu normal_prob > 5.0.
+
+Điểm có thể cải thiện: Logic này hơi tuyệt đối. Giả sử normal_prob = 6% nhưng slowloris_prob = 94%, hệ thống vẫn sẽ bỏ qua.
+
+Khuyến nghị: Thay vì chỉ nhìn vào xác suất của lớp "Normal", hãy so sánh nó với xác suất của lớp tấn công có khả năng cao nhất.
+
+python
+ Show full code block 
+# Trong hàm process_sequence(), phần logic quyết định
+if is_anomaly:
+    # Lấy xác suất của lớp Normal
+    normal_prob = probs[0][0].item() * 100
+
+    # Lấy xác suất cao nhất của các lớp tấn công (từ index 1 đến hết)
+    attack_probs = probs[0][1:]
+    top_attack_prob = torch.max(attack_probs).item() * 100
+
+    # Logic phủ quyết mới: Chỉ phủ quyết nếu xác suất Normal LỚN HƠN GẤP ĐÔI so với tấn công
+    # Ví dụ: Normal 6%, Attack 94% -> 6/94 < 0.1 -> KHÔNG phủ quyết
+    # Ví dụ: Normal 30%, Attack 60% -> 30/60 > 0.1 -> PHỦ QUYẾT
+    VETO_RATIO = 0.1 # Có thể đưa vào config
+    if normal_prob > 5.0 and (top_attack_prob == 0 or normal_prob / top_attack_prob > VETO_RATIO):
+         logger.info(f"[VETO] AI Phủ quyết: Normal Prob ({normal_prob:.1f}%) đủ cao so với Attack Prob ({top_attack_prob:.1f}%)")
+         is_attack = False
+    # ... (phần logic còn lại)
+Lợi ích khi Demo: Logic này thể hiện một sự "suy nghĩ" sâu hơn của AI. Nó không chỉ hỏi "Có phải Normal không?" mà còn hỏi "Mức độ nghi ngờ là tấn công có đáng kể so với mức độ tin là Normal không?". Điều này làm cho quyết định của AI trở nên tinh vi và khó bị đánh lừa hơn.

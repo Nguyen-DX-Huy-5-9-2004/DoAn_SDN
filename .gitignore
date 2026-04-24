@@ -39,6 +39,8 @@ master_dataset_v4.csv
 dataset/*.csv
 dataset/*.pcap
 thuThapData/*.csv
+ai/*.csv
+aiv4SC/*.csv
 
 # Temporary Runtime Data
 monitor/runtime/

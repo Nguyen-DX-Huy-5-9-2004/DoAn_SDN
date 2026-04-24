@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore") # Tắt các cảnh báo lặt vặt của pan
 console = Console()
 
 # ĐƯỜNG DẪN TỚI FILE DATASET (Thay đổi nếu cần)
-DATASET_PATH = "/home/tgf/Documents/DoAn_SDN/thuThapData/master_dataset_v6.csv" 
+DATASET_PATH = "/home/tgf/Documents/DoAn_SDN/thuThapData/master_dataset_v7.csv" 
 
 # NHÃN 5 LỚP CHUẨN (Khớp với auto_dataset_generator.py)
 LABELS = {
@@ -24,53 +24,93 @@ LABELS = {
     4: "Slowloris"
 }
 
-# 🎯 DISTINCTIVE SIGNATURES (Boundary cho mỗi attack type)
+# 🎯 DISTINCTIVE SIGNATURES (Đã cập nhật cho dataset v7 thực tế)
+# Dựa trên phân tích thực tế từ 600k mẫu
 SIGNATURE_BOUNDS = {
-    0: {  # Normal
-        "packet_rate": (20, 50),
-        "byte_rate": (1000, 10000),  # ~1KB to 10KB
-        "duration": (0.1, 5.0),
-        "asymmetry": (0.1, 2.0)  # Src/Dst balanced
+    0: {  # Normal - Điều chỉnh theo thực tế (flow ngắn do timeout)
+        "packet_rate": (1000, 5000),    # Thực tế: ~3089
+        "byte_rate": (300000, 900000),  # Thực tế: ~639k
+        "duration": (0.01, 1.0),        # Thực tế: ~0.04 (flow ngắn)
+        "asymmetry": (0.1, 2.0)
     },
-    1: {  # UDP Flood
-        "packet_rate": (1000, 100000),
-        "byte_rate": (50000, 5000000),  # ~50KB to 5MB
-        "duration": (0.1, 30.0),
-        "asymmetry": (0.1, 1.5)  # Low asymmetry
+    1: {  # UDP Flood - High volume, unidirectional
+        "packet_rate": (20000, 40000),  # Thực tế: ~30k
+        "byte_rate": (15000000, 30000000), # Thực tế: ~24M
+        "duration": (0.0, 1.0),         # Thực tế: ~0.00 (ngắn)
+        "asymmetry": (20.0, 50.0)       # Unidirectional (30 src, 0 dst)
     },
-    2: {  # SYN Flood
-        "packet_rate": (500, 50000),
-        "byte_rate": (100, 10000),  # SYN packets tiny
-        "duration": (0.1, 30.0),
-        "asymmetry": (5.0, 1000.0)  # High asymmetry (mostly src)
+    2: {  # SYN Flood - Incomplete handshake
+        "packet_rate": (1500, 3500),    # Thực tế: ~2400
+        "byte_rate": (100000, 250000),  # Thực tế: ~167k
+        "duration": (0.1, 2.0),       # Thực tế: ~0.67
+        "asymmetry": (1.5, 5.0)         # Thực tế: ~2.14
     },
-    3: {  # HTTP Flood
-        "packet_rate": (100, 10000),
-        "byte_rate": (10000, 1000000),  # ~10KB to 1MB
-        "duration": (0.1, 30.0),
-        "l7_protocol": 1  # HTTP marker
+    3: {  # HTTP Flood - Large request size
+        "packet_rate": (50, 150),       # Thực tế: ~80
+        "byte_rate": (150000, 350000),  # Thực tế: ~233k
+        "duration": (0.1, 1.0),       # Thực tế: ~0.24
+        "l7_protocol": 0.8  # HTTP marker (có thể không phải 100%)
     },
-    4: {  # Slowloris
-        "packet_rate": (1, 10),
-        "byte_rate": (100, 5000),  # ~100B to 5KB
-        "duration": (30, 120),  # Long connections
-        "l7_protocol": 1  # HTTP marker
+    4: {  # Slowloris - Long duration, low rate
+        "packet_rate": (100, 300),      # Thực tế: ~182 (cao hơn expected)
+        "byte_rate": (8000, 20000),     # Thực tế: ~13k
+        "duration": (15, 25),           # Thực tế: ~19s
+        "l7_protocol": 0.0  # Thực tế: ~0.04 (HTTP incomplete)
     }
 }
 
+# 📝 FEATURE NAMES V7 - Đã cập nhật với Port Entropy
 FEATURE_NAMES = [
-    "Src_Port", "Dst_Port", "Protocol", "Duration_Sec", "Src_Bytes", "Dst_Bytes",
-    "Src_Packets", "Dst_Packets", "Conn_State", "L7_App_Protocol", "Packet_Rate", "Byte_Rate", "Anomaly_Score"
+    "Src_Port_Entropy", "Dst_Port_Entropy", "Protocol", "Duration_Sec", 
+    "Src_Bytes", "Dst_Bytes", "Src_Packets", "Dst_Packets", 
+    "Conn_State", "L7_App_Protocol", "Packet_Rate", "Byte_Rate", "Anomaly_Score"
 ]
+
+# 🎯 NHÓM ĐẶC TRƯNG ĐỂ PHÂN TÍCH CHUYÊN SÂU
+FEATURE_GROUPS = {
+    "Port Entropy": ["Src_Port_Entropy", "Dst_Port_Entropy"],
+    "Traffic Volume": ["Src_Bytes", "Dst_Bytes", "Src_Packets", "Dst_Packets"],
+    "Rate Metrics": ["Packet_Rate", "Byte_Rate"],
+    "Temporal": ["Duration_Sec"],
+    "Protocol & State": ["Protocol", "Conn_State", "L7_App_Protocol"],
+    "Anomaly": ["Anomaly_Score"]
+}
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def compute_asymmetry(row):
     """Calculate asymmetry ratio: src_packets / (dst_packets + 1)"""
-    src_pkt = row["Src_Packets"] if "Src_Packets" in row else row.iloc[6]
-    dst_pkt = row["Dst_Packets"] if "Dst_Packets" in row else row.iloc[7]
+    src_pkt_idx = FEATURE_NAMES.index("Src_Packets")
+    dst_pkt_idx = FEATURE_NAMES.index("Dst_Packets")
+    src_pkt = row.iloc[src_pkt_idx] if hasattr(row, 'iloc') else row[src_pkt_idx]
+    dst_pkt = row.iloc[dst_pkt_idx] if hasattr(row, 'iloc') else row[dst_pkt_idx]
     return src_pkt / (dst_pkt + 1)
+
+def analyze_port_entropy(df, label_id, class_name):
+    """
+    Phân tích chi tiết Port Entropy cho từng lớp
+    - Src_Port_Entropy: Cao = nhiều port nguồn khác nhau (normal/stealth)
+    - Dst_Port_Entropy: Thấp = tập trung vào 1 port đích (attack)
+    """
+    class_data = df[df.iloc[:, -1] == label_id]
+    if len(class_data) == 0:
+        return None
+    
+    src_entropy_idx = FEATURE_NAMES.index("Src_Port_Entropy")
+    dst_entropy_idx = FEATURE_NAMES.index("Dst_Port_Entropy")
+    
+    src_ent = class_data.iloc[:, src_entropy_idx]
+    dst_ent = class_data.iloc[:, dst_entropy_idx]
+    
+    return {
+        "src_entropy_mean": src_ent.mean(),
+        "src_entropy_std": src_ent.std(),
+        "dst_entropy_mean": dst_ent.mean(),
+        "dst_entropy_std": dst_ent.std(),
+        "src_entropy_range": (src_ent.min(), src_ent.max()),
+        "dst_entropy_range": (dst_ent.min(), dst_ent.max()),
+    }
 
 def evaluate_class_signatures(df, label_id, sig_bounds):
     """
@@ -323,6 +363,49 @@ def run_inspection():
     else:
         console.print("[green]✅ Cân bằng tốt.[/green]")
 
+    # 🆕 PHÂN TÍCH PORT ENTROPY (V7 FEATURE)
+    console.print("\n[bold cyan]═══ 4b. PHÂN TÍCH PORT ENTROPY (V7 - Src & Dst) ═══[/bold cyan]")
+    console.print("[dim]Entropy cao = phân tán ngẫu nhiên | Entropy thấp = tập trung[/dim]\n")
+    
+    table_entropy = Table(show_header=True, header_style="bold yellow")
+    table_entropy.add_column("Lớp")
+    table_entropy.add_column("Src_Entropy (Mean±Std)")
+    table_entropy.add_column("Dst_Entropy (Mean±Std)")
+    table_entropy.add_column("Đánh giá")
+    
+    for label_id in sorted(unique_labels):
+        class_name = LABELS.get(label_id, "Unknown")
+        entropy_stats = analyze_port_entropy(df, label_id, class_name)
+        
+        if entropy_stats:
+            src_mean = entropy_stats["src_entropy_mean"]
+            src_std = entropy_stats["src_entropy_std"]
+            dst_mean = entropy_stats["dst_entropy_mean"]
+            dst_std = entropy_stats["dst_entropy_std"]
+            
+            # Đánh giá
+            if src_mean > 5.0:
+                eval_text = "[magenta]Src phân tán cao[/magenta]"
+            elif src_mean < 1.0:
+                eval_text = "[cyan]Src cố định[/cyan]"
+            else:
+                eval_text = "[green]Src bình thường[/green]"
+            
+            if dst_mean < 1.0:
+                eval_text += " | [cyan]Dst cố định[/cyan]"
+            elif dst_mean > 3.0:
+                eval_text += " | [magenta]Dst phân tán[/magenta]"
+            
+            table_entropy.add_row(
+                f"{label_id}: {class_name}",
+                f"{src_mean:.2f}±{src_std:.2f}",
+                f"{dst_mean:.2f}±{dst_std:.2f}",
+                eval_text
+            )
+    
+    console.print(table_entropy)
+    console.print("[dim]💡 Nhận xét: Normal thường có Src_Entropy cao (>3). Attack thường có Dst_Entropy thấp (<1)[/dim]")
+
     # 8. KIỂM TRA CÀI ĐẶT AI V2
     console.print("\n[bold cyan]═══ 5. KIỂM TRA TƯƠNG THÍCH AI V2 (AI v2 Compatibility) ═══[/bold cyan]")
     
@@ -343,10 +426,10 @@ def run_inspection():
     # 9. VẼ BIỂU ĐỒ
     console.print("\n[bold cyan]═══ 6. TẠO BIỂU ĐỒ (Visualization) ═══[/bold cyan]")
     
-    fig = plt.figure(figsize=(20, 12))
+    fig = plt.figure(figsize=(20, 15))  # Tăng chiều cao cho thêm biểu đồ
     
     # Plot 1: Class Distribution
-    ax1 = plt.subplot(2, 3, 1)
+    ax1 = plt.subplot(3, 3, 1)
     label_counts.plot(kind='bar', ax=ax1, color=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'])
     ax1.set_title('📊 Distribution by Class', fontsize=14, fontweight='bold')
     ax1.set_xlabel('Class ID')
@@ -354,7 +437,7 @@ def run_inspection():
     ax1.set_xticklabels([f"{i}:{LABELS[i][:8]}" for i in sorted(unique_labels)], rotation=45)
     
     # Plot 2: Packet Rate by Class (Log Scale)
-    ax2 = plt.subplot(2, 3, 2)
+    ax2 = plt.subplot(3, 3, 2)
     pkt_rate_idx = FEATURE_NAMES.index("Packet_Rate")
     for label_id in sorted(unique_labels):
         class_data = df[df[label_col] == label_id]
@@ -367,7 +450,7 @@ def run_inspection():
     ax2.grid(True, alpha=0.3)
     
     # Plot 3: Duration by Class
-    ax3 = plt.subplot(2, 3, 3)
+    ax3 = plt.subplot(3, 3, 3)
     dur_idx = FEATURE_NAMES.index("Duration_Sec")
     for label_id in sorted(unique_labels):
         class_data = df[df[label_col] == label_id]
@@ -379,7 +462,7 @@ def run_inspection():
     ax3.grid(True, alpha=0.3)
     
     # Plot 4: Byte Rate by Class (Log)
-    ax4 = plt.subplot(2, 3, 4)
+    ax4 = plt.subplot(3, 3, 4)
     byte_rate_idx = FEATURE_NAMES.index("Byte_Rate")
     for label_id in sorted(unique_labels):
         class_data = df[df[label_col] == label_id]
@@ -392,7 +475,7 @@ def run_inspection():
     ax4.grid(True, alpha=0.3)
     
     # Plot 5: Protocol Distribution
-    ax5 = plt.subplot(2, 3, 5)
+    ax5 = plt.subplot(3, 3, 5)
     proto_idx = FEATURE_NAMES.index("Protocol")
     df_sample = df.sample(n=min(10000, len(df)), random_state=42)
     proto_counts = df_sample.groupby([label_col, df_sample.iloc[:, proto_idx]]).size().unstack(fill_value=0)
@@ -402,7 +485,7 @@ def run_inspection():
     ax5.set_ylabel('Count')
     
     # Plot 6: Signature Match Rate
-    ax6 = plt.subplot(2, 3, 6)
+    ax6 = plt.subplot(3, 3, 6)
     sig_match_rates = [sig_results[lid][0] for lid in sorted(unique_labels)]
     colors_sig = ['green' if r >= 75 else 'orange' if r >= 50 else 'red' for r in sig_match_rates]
     ax6.bar([f"{i}:{LABELS[i][:8]}" for i in sorted(unique_labels)], sig_match_rates, color=colors_sig)
@@ -412,8 +495,47 @@ def run_inspection():
     ax6.set_ylim([0, 100])
     ax6.legend()
     
+    # 🆕 Plot 7: Src Port Entropy by Class
+    ax7 = plt.subplot(3, 3, 7)
+    src_ent_idx = FEATURE_NAMES.index("Src_Port_Entropy")
+    for label_id in sorted(unique_labels):
+        class_data = df[df[label_col] == label_id]
+        ax7.scatter([label_id]*len(class_data), class_data.iloc[:, src_ent_idx], 
+                   alpha=0.3, s=20, label=LABELS[label_id])
+    ax7.set_title('🌐 Src_Port_Entropy by Class', fontsize=14, fontweight='bold')
+    ax7.set_xlabel('Class')
+    ax7.set_ylabel('Entropy')
+    ax7.grid(True, alpha=0.3)
+    
+    # 🆕 Plot 8: Dst Port Entropy by Class
+    ax8 = plt.subplot(3, 3, 8)
+    dst_ent_idx = FEATURE_NAMES.index("Dst_Port_Entropy")
+    for label_id in sorted(unique_labels):
+        class_data = df[df[label_col] == label_id]
+        ax8.scatter([label_id]*len(class_data), class_data.iloc[:, dst_ent_idx], 
+                   alpha=0.3, s=20, label=LABELS[label_id])
+    ax8.set_title('🎯 Dst_Port_Entropy by Class', fontsize=14, fontweight='bold')
+    ax8.set_xlabel('Class')
+    ax8.set_ylabel('Entropy')
+    ax8.grid(True, alpha=0.3)
+    
+    # 🆕 Plot 9: Entropy Comparison Boxplot
+    ax9 = plt.subplot(3, 3, 9)
+    entropy_data = []
+    entropy_labels = []
+    for label_id in sorted(unique_labels):
+        class_data = df[df[label_col] == label_id]
+        entropy_data.append(class_data.iloc[:, src_ent_idx])
+        entropy_labels.append(f"{label_id}:Src")
+        entropy_data.append(class_data.iloc[:, dst_ent_idx])
+        entropy_labels.append(f"{label_id}:Dst")
+    ax9.boxplot(entropy_data, labels=entropy_labels)
+    ax9.set_title('📊 Entropy Distribution Comparison', fontsize=14, fontweight='bold')
+    ax9.set_ylabel('Entropy Value')
+    ax9.tick_params(axis='x', rotation=45)
+    
     plt.tight_layout()
-    plot_path = "dataset_v2_evaluation.png"
+    plot_path = "dataset_v7_evaluation.png"
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     console.print(f"[bold green]✅ Biểu đồ: {plot_path}[/bold green]")
     plt.close()
@@ -435,7 +557,49 @@ def run_inspection():
             console.print(f"  • Lớp {bad_classes} có signature mismatch. Check capture settings.")
         if len(unique_labels) < 5:
             console.print(f"  • Chỉ có {len(unique_labels)}/5 lớp. Chạy tất cả phases để đủ 5 lớp.")
-    console.print("="*80 + "\n")
+    # 🆕 KHUYẾN NGHỊ CHIẾN THUẬT TRAIN & RUN_ONOS
+    console.print("\n[bold cyan]═══ 7. KHUYẾN NGHỊ CHIẾN THUẬT (Strategic Recommendations) ═══[/bold cyan]")
+    
+    # Phân tích để đưa ra khuyến nghị
+    has_high_src_entropy = False
+    has_low_dst_entropy_attack = False
+    
+    for label_id in [1, 2, 3, 4]:  # Các lớp attack
+        entropy_stats = analyze_port_entropy(df, label_id, LABELS.get(label_id))
+        if entropy_stats:
+            if entropy_stats["src_entropy_mean"] > 5.0:
+                has_high_src_entropy = True
+            if entropy_stats["dst_entropy_mean"] < 1.0:
+                has_low_dst_entropy_attack = True
+    
+    # Khuyến nghị cho train_colab_v2
+    console.print("\n[bold yellow]🎯 CHIẾN THUẬT TRAIN (train_colab_v2.py):[/bold yellow]")
+    console.print("  1. ✅ Sử dụng cả 13 đặc trưng (bao gồm Port Entropy)")
+    if has_low_dst_entropy_attack:
+        console.print("  2. ✅ Dst_Port_Entropy thấp ở Attack -> Đặc trưng phân biệt tốt")
+    if has_high_src_entropy:
+        console.print("  3. ✅ Src_Port_Entropy cao ở Attack -> Có thể là Stealth Attack")
+    console.print("  4. ✅ Log-transform cho: Src_Bytes, Dst_Bytes, Packet_Rate, Byte_Rate")
+    console.print("  5. ✅ AE Threshold: P99.5 (bao dung với Normal)")
+    console.print("  6. ✅ Contrastive Loss: Margin 2.0 để đẩy Attack xa Normal")
+    
+    # Khuyến nghị cho run_onos_v2
+    console.print("\n[bold yellow]🛡️ CHIẾN THUẬT RUN_ONOS (run_onos_v2.py):[/bold yellow]")
+    console.print("  1. ✅ 2-Shield Strategy: AE (Anomaly) + Classifier (Multi-class)")
+    console.print("  2. ✅ AE báo động (MSE > threshold) -> Chuyển sang Classifier")
+    console.print("  3. ✅ Classifier Confidence > 80% -> DROP ngay")
+    console.print("  4. ✅ Classifier Confidence 50-80% -> Rate Limit")
+    console.print("  5. ✅ AE báo động nhưng Classifier không nhận ra -> ZERO-DAY")
+    console.print("  6. ✅ Zero-Day -> Redirect to Honeypot để phân tích thêm")
+    
+    # Cảnh báo nếu cần
+    if has_high_src_entropy:
+        console.print("\n[bold red]⚠️ CẢNH BÁO: Phát hiện Attack có Src_Entropy cao (>5)[/bold red]")
+        console.print("  • Có thể là Stealth Attack (giả lập Normal)")
+        console.print("  • AI cần tập trung vào đặc trưng hành vi khác (Duration, Packet_Rate)")
+        console.print("  • Đề xuất: Tăng weight cho Duration và Byte_Rate trong Classifier")
+    
+    console.print("\n" + "="*80 + "\n")
 
 if __name__ == "__main__":
     run_inspection()

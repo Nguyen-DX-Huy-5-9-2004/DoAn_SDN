@@ -67,49 +67,55 @@ while True:
             "User-Agent": ua,
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
             "Accept-Language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
-            "Referer": target
+            "Referer": target,
+            "Connection": "close"  # BUỘC server đóng kết nối sau mỗi request
         }
-        session.headers.update(headers)
+        
+        # Mở session mới cho mỗi phiên (tránh Keep-Alive kéo dài gây nhiễu pattern)
+        with requests.Session() as s:
+            s.verify = False
+            s.headers.update(headers)
 
-        # TỐI ƯU: Giảm requests từ 3-10 → 2-5 (nhanh hơn, nhưng vẫn realistic)
-        num_requests = random.randint(2, 5)
-        for _ in range(num_requests):
-            # Biased random: 70% FAST paths, 30% MEDIUM paths
-            if random.random() < 0.7:
-                path = random.choice(FAST_PATHS)
-            else:
-                path = random.choice(MEDIUM_PATHS)
-            
-            url = f"{target.rstrip('/')}{path}"
-            
-            # Mô phỏng cả GET và thỉnh thoảng POST (như đang đăng nhập)
-            if path == "/accounts/login/" and random.random() > 0.5:
-                try:
-                    data = {"username": f"user_{random.randint(1,100)}", "password": "password123"}
-                    session.post(url, data=data, timeout=5)
-                    success_count += 1
-                except Exception as e:
-                    fail_count += 1
-            else:
-                try:
-                    r = session.get(url, timeout=5)
-                    # Nếu server trả về lỗi 5xx (quá tải) thì cũng nên tính là Fail
-                    if r.status_code >= 500:
-                        fail_count += 1
-                        print(f"[{socket.gethostname()}] Server Error {r.status_code} at {url}")
-                    else:
+            # TỐI ƯU: Giảm requests từ 3-10 → 2-5 (nhanh hơn, nhưng vẫn realistic)
+            num_requests = random.randint(2, 5)
+            for _ in range(num_requests):
+                # Biased random: 70% FAST paths, 30% MEDIUM paths
+                if random.random() < 0.7:
+                    path = random.choice(FAST_PATHS)
+                else:
+                    path = random.choice(MEDIUM_PATHS)
+                
+                url = f"{target.rstrip('/')}{path}"
+                
+                # Mô phỏng cả GET và thỉnh thoảng POST (như đang đăng nhập)
+                if path == "/accounts/login/" and random.random() > 0.5:
+                    try:
+                        data = {"username": f"user_{random.randint(1,100)}", "password": "password123"}
+                        s.post(url, data=data, timeout=5)
                         success_count += 1
-                except requests.exceptions.Timeout:
-                    fail_count += 1
-                    print(f"[{socket.gethostname()}] Timeout khi gọi {url}")
-                except requests.exceptions.ConnectionError:
-                    fail_count += 1
-                    print(f"[{host_name}] Connection Refused/Rớt mạng khi gọi {url}")
-                except Exception as e:
-                    fail_count += 1
-                    print(f"[{host_name}] Lỗi khác: {e}")
-            
-            time.sleep(random.uniform(0.05, 0.2))
+                    except Exception as e:
+                        fail_count += 1
+                else:
+                    try:
+                        r = s.get(url, timeout=5)
+                        # Nếu server trả về lỗi 5xx (quá tải) thì cũng nên tính là Fail
+                        if r.status_code >= 500:
+                            fail_count += 1
+                            print(f"[{socket.gethostname()}] Server Error {r.status_code} at {url}")
+                        else:
+                            success_count += 1
+                    except requests.exceptions.Timeout:
+                        fail_count += 1
+                        print(f"[{socket.gethostname()}] Timeout khi gọi {url}")
+                    except requests.exceptions.ConnectionError:
+                        fail_count += 1
+                        print(f"[{socket.gethostname()}] Connection Refused/Rớt mạng khi gọi {url}")
+                    except Exception as e:
+                        fail_count += 1
+                        print(f"[{socket.gethostname()}] Lỗi khác: {e}")
+                
+                # Sleep ngẫu nhiên giữa các request trong cùng session (Mô phỏng user đọc web)
+                time.sleep(random.uniform(0.5, 2.0))
             
     except requests.exceptions.ConnectionError as e:
         # Server might be starting or overloaded, wait longer to avoid "failed connection" traffic patterns

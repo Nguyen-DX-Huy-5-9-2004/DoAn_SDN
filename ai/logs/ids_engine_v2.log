@@ -329,3 +329,293 @@ RuntimeError: Pipeline load failed
 2026-04-22 15:33:26,627 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.3: DROP
 2026-04-22 15:33:26,629 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.1: DROP
 2026-04-22 15:33:26,636 - [INFO] - IDS_V2 - [SDN] Flow rule pushed for 10.0.1.2: DROP
+2026-04-22 16:35:03,458 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 16:35:03,458 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 16:35:03,459 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 16:35:03,459 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 16:35:03,459 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 16:35:03,459 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 16:35:03,459 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 16:35:03,459 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 16:35:05,146 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 16:35:05,146 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 16:36:03,658 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.64 tại of:0000000000000006
+2026-04-22 16:36:04,660 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.60 tại of:0000000000000006
+2026-04-22 16:36:13,875 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.63 tại of:0000000000000006
+2026-04-22 16:36:18,994 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.62 tại of:0000000000000006
+2026-04-22 16:36:49,716 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.61 tại of:0000000000000006
+2026-04-22 16:37:35,329 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000006
+2026-04-22 16:37:35,497 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000006
+2026-04-22 16:37:35,551 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000006
+2026-04-22 16:37:35,614 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000006
+2026-04-22 16:37:35,733 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000006
+2026-04-22 16:37:35,773 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000006
+2026-04-22 16:37:35,870 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000006
+2026-04-22 16:37:36,114 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000006
+2026-04-22 16:37:36,131 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000006
+2026-04-22 16:37:36,180 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000006
+2026-04-22 16:37:36,182 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000006
+2026-04-22 16:37:36,340 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000006
+2026-04-22 16:37:36,370 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000006
+2026-04-22 16:37:37,383 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000006
+2026-04-22 16:37:37,528 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000006
+2026-04-22 16:39:11,296 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.7 tại of:0000000000000006
+2026-04-22 16:39:11,350 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.6 tại of:0000000000000006
+2026-04-22 16:39:11,373 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.7 tại of:0000000000000006
+2026-04-22 16:39:11,410 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.5 tại of:0000000000000006
+2026-04-22 16:39:11,481 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.7 tại of:0000000000000006
+2026-04-22 16:39:11,533 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.5 tại of:0000000000000006
+2026-04-22 16:39:11,542 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.5 tại of:0000000000000006
+2026-04-22 17:33:56,596 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 17:33:56,597 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 17:33:56,597 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 17:33:56,597 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 17:33:56,597 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 17:33:56,597 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 17:33:56,598 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 17:33:56,598 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 17:33:58,283 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 17:33:58,283 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 17:34:13,741 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:14,765 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:15,788 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:16,812 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:17,836 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:18,860 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:19,884 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:20,908 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:21,932 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:22,956 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:23,980 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:25,004 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:26,028 - [ERROR] - IDS_V2 - [ERROR] 'IDSEngineV2' object has no attribute 'blocked_ips'
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 472, in run
+    if src_ip in self.blocked_ips:
+                 ^^^^^^^^^^^^^^^^
+AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
+2026-04-22 17:34:26,688 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-22 17:50:03,248 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 17:50:03,249 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 17:50:03,249 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 17:50:03,249 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 17:50:03,249 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 17:50:03,249 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 17:50:03,249 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 17:50:03,249 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 17:50:04,803 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 17:50:04,803 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 18:05:29,455 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-22 18:09:52,136 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 18:09:52,136 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 18:09:52,137 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 18:09:52,137 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 18:09:52,137 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 18:09:52,137 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.05
+2026-04-22 18:09:52,137 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 18:09:52,137 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 18:09:53,575 - [ERROR] - IDS_V2 - [CHECKPOINT] Lỗi đọc trí nhớ: Expecting value: line 1 column 15 (char 14)
+2026-04-22 18:09:53,576 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 18:09:53,576 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 18:10:57,217 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.62 tại of:0000000000000001
+2026-04-22 18:11:01,290 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.63 tại of:0000000000000001
+2026-04-22 18:11:04,362 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.64 tại of:0000000000000001
+2026-04-22 18:11:04,366 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.60 tại of:0000000000000001
+2026-04-22 18:11:07,699 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-22 18:28:57,087 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 18:28:57,087 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-22 18:28:57,087 - [INFO] - IDS_V2 - ======================================================================
+2026-04-22 18:28:57,087 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-22 18:28:57,087 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-22 18:28:57,087 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-04-22 18:28:57,087 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-22 18:28:57,087 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-22 18:28:58,416 - [ERROR] - IDS_V2 - [CHECKPOINT] Lỗi đọc trí nhớ: Expecting value: line 1 column 15 (char 14)
+2026-04-22 18:28:58,416 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-22 18:28:58,417 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.1409
+2026-04-22 18:30:31,734 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.61 tại of:0000000000000001
+2026-04-22 18:30:32,739 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.64 tại of:0000000000000001
+2026-04-22 18:30:35,811 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.63 tại of:0000000000000001
+2026-04-22 18:30:50,149 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.62 tại of:0000000000000001
+2026-04-22 18:30:55,271 - [INFO] - IDS_V2 - [SDN] Thành công: Luật HONEYPOT đã cắm cho IP 10.0.2.60 tại of:0000000000000001
+2026-04-22 18:34:31,785 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-04-22 18:34:31,835 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:31,850 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:31,858 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6402330994606018, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5766453146934509, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5727419853210449, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5677411556243896, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Duration_Sec', 'original_feature': 'Duration_Sec', 'type': 'Original', 'value': -0.6999591588973999, 'spatial_weight': 0.5594054460525513, 'meaning': 'Duration_Sec có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:31,863 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6197378635406494, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': 1.6943955421447754, 'spatial_weight': 0.5978336334228516, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5741936564445496, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5602520704269409, 'meaning': 'Byte_Rate có giá trị bất thường'}, {'rank': 5, 'feature': 'Src_Packets', 'original_feature': 'Src_Packets', 'type': 'Original', 'value': 1.7373008728027344, 'spatial_weight': 0.5439795255661011, 'meaning': 'Src_Packets có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. L7_App_Protocol (Original): L7_App_Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:31,881 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:31,900 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6456747055053711, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5780993103981018, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5745986104011536, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5715006589889526, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Duration_Sec', 'original_feature': 'Duration_Sec', 'type': 'Original', 'value': -0.6999591588973999, 'spatial_weight': 0.564835786819458, 'meaning': 'Duration_Sec có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:31,901 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6273007392883301, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5732221603393555, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5683697462081909, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5588737726211548, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5508632063865662, 'meaning': 'Byte_Rate có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,030 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6391764879226685, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5763639211654663, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5723827481269836, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5670132040977478, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Duration_Sec', 'original_feature': 'Duration_Sec', 'type': 'Original', 'value': -0.6999591588973999, 'spatial_weight': 0.5583535432815552, 'meaning': 'Duration_Sec có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,051 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:32,053 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:32,062 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6451469659805298, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5779578685760498, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5744181275367737, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5711353421211243, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Duration_Sec', 'original_feature': 'Duration_Sec', 'type': 'Original', 'value': -0.6999591588973999, 'spatial_weight': 0.564308226108551, 'meaning': 'Duration_Sec có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,075 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:32,083 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6407426595687866, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5767810940742493, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5729154348373413, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5680925250053406, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Duration_Sec', 'original_feature': 'Duration_Sec', 'type': 'Original', 'value': -0.6999591588973999, 'spatial_weight': 0.5599130392074585, 'meaning': 'Duration_Sec có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,095 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6322475075721741, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5745263695716858, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5700358152389526, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5622548460960388, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5520379543304443, 'meaning': 'Byte_Rate có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,098 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:32,098 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:32,100 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-04-22 18:34:32,111 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-04-22 18:34:32,118 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6207648515701294, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': 1.6943955421447754, 'spatial_weight': 0.5983673930168152, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5746368169784546, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5608603954315186, 'meaning': 'Byte_Rate có giá trị bất thường'}, {'rank': 5, 'feature': 'Src_Packets', 'original_feature': 'Src_Packets', 'type': 'Original', 'value': 1.7373008728027344, 'spatial_weight': 0.5445564389228821, 'meaning': 'Src_Packets có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. L7_App_Protocol (Original): L7_App_Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,118 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6162719130516052, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': 1.6943955421447754, 'spatial_weight': 0.5960347652435303, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5727005004882812, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5582024455070496, 'meaning': 'Byte_Rate có giá trị bất thường'}, {'rank': 5, 'feature': 'Src_Packets', 'original_feature': 'Src_Packets', 'type': 'Original', 'value': 1.7373008728027344, 'spatial_weight': 0.5420358777046204, 'meaning': 'Src_Packets có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. L7_App_Protocol (Original): L7_App_Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,118 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6372213959693909, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5758441686630249, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5717188715934753, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5656678676605225, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Duration_Sec', 'original_feature': 'Duration_Sec', 'type': 'Original', 'value': -0.6999591588973999, 'spatial_weight': 0.5564093589782715, 'meaning': 'Duration_Sec có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,123 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-04-22 18:34:32,123 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6139870882034302, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': 1.6943955421447754, 'spatial_weight': 0.5948508977890015, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5717182755470276, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5568540096282959, 'meaning': 'Byte_Rate có giá trị bất thường'}, {'rank': 5, 'feature': 'Src_Packets', 'original_feature': 'Src_Packets', 'type': 'Original', 'value': 1.7373008728027344, 'spatial_weight': 0.5407575964927673, 'meaning': 'Src_Packets có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. L7_App_Protocol (Original): L7_App_Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,149 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6197584867477417, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': 1.6943955421447754, 'spatial_weight': 0.5978443622589111, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5742025375366211, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5602642297744751, 'meaning': 'Byte_Rate có giá trị bất thường'}, {'rank': 5, 'feature': 'Src_Packets', 'original_feature': 'Src_Packets', 'type': 'Original', 'value': 1.7373008728027344, 'spatial_weight': 0.5439910292625427, 'meaning': 'Src_Packets có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. L7_App_Protocol (Original): L7_App_Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,149 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6324935555458069, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'Protocol', 'original_feature': 'Protocol', 'type': 'Original', 'value': 4.610302448272705, 'spatial_weight': 0.5745914578437805, 'meaning': 'Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5701188445091248, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': -2.4396812915802, 'spatial_weight': 0.5624233484268188, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 5, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5520964860916138, 'meaning': 'Byte_Rate có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. Protocol (Original): Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,156 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-04-22 18:34:32,157 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-22 18:34:32,473 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': 1.6943955421447754, 'spatial_weight': 0.6088804006576538, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 2, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.602109968662262, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5634788274765015, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 1.552702784538269, 'spatial_weight': 0.5535829663276672, 'meaning': 'Byte_Rate có giá trị bất thường'}, {'rank': 5, 'feature': 'Src_Packets', 'original_feature': 'Src_Packets', 'type': 'Original', 'value': 1.7373008728027344, 'spatial_weight': 0.5377731919288635, 'meaning': 'Src_Packets có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. L7_App_Protocol (Original): L7_App_Protocol có giá trị bất thường\n  2. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,487 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-04-22 18:34:32,497 - [ERROR] - IDS_V2 - [XAI ERROR] Unable to get render width for {'prediction': 1, 'label_name': 'UDP FLOOD', 'confidence': 0, 'explanations': [], 'temporal_analysis': {'suspicious_flow_index': np.int64(0), 'temporal_importance': 10.0, 'reason': 'Flow #0 có hành vi bất thường nhất trong chuỗi'}, 'spatial_analysis': {'top_features': [{'rank': 1, 'feature': 'd_L7_App_Protocol', 'original_feature': 'd_L7_App_Protocol', 'type': 'Differential', 'value': 0.00025287893367931247, 'spatial_weight': 0.6205014586448669, 'meaning': 'Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường'}, {'rank': 2, 'feature': 'L7_App_Protocol', 'original_feature': 'L7_App_Protocol', 'type': 'Original', 'value': 1.6943955421447754, 'spatial_weight': 0.5982304811477661, 'meaning': 'L7_App_Protocol có giá trị bất thường'}, {'rank': 3, 'feature': 'd_Byte_Rate', 'original_feature': 'd_Byte_Rate', 'type': 'Differential', 'value': -0.01020834781229496, 'spatial_weight': 0.5745231509208679, 'meaning': 'Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}, {'rank': 4, 'feature': 'Byte_Rate', 'original_feature': 'Byte_Rate', 'type': 'Original', 'value': 5.078587055206299, 'spatial_weight': 0.5607043504714966, 'meaning': 'Byte_Rate có giá trị bất thường'}, {'rank': 5, 'feature': 'Src_Packets', 'original_feature': 'Src_Packets', 'type': 'Original', 'value': 1.7373008728027344, 'spatial_weight': 0.5444084405899048, 'meaning': 'Src_Packets có giá trị bất thường'}], 'reason': 'Những đặc trưng này có trọng số cao nhất theo Spatial Attention'}, 'explanation_text': '\n        🚨 PHÁT HIỆN UDP FLOOD 🚨\n        \n        ⏱️  PHÂN TÍCH THỜI GIAN:\n        - Flow bất thường nhất: #0 (Tầm quan trọng: 10.0%)\n        \n        📊 PHÂN TÍCH ĐẶC TRƯNG (Top 3):\n        \n  1. d_L7_App_Protocol (Differential): Sự thay đổi trong d_L7_App_Protocol từ flow trước rất bất thường\n  2. L7_App_Protocol (Original): L7_App_Protocol có giá trị bất thường\n  3. d_Byte_Rate (Differential): Sự thay đổi trong d_Byte_Rate từ flow trước rất bất thường'}; a str, Segment, or object with __rich_console__ method is required
+2026-04-22 18:34:32,500 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-04-22 19:12:17,260 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-24 18:25:14,073 - [INFO] - IDS_V2 - ======================================================================
+2026-04-24 18:25:14,073 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-24 18:25:14,074 - [INFO] - IDS_V2 - ======================================================================
+2026-04-24 18:25:14,074 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-24 18:25:14,074 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-24 18:25:14,074 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-04-24 18:25:14,074 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-24 18:25:14,074 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-24 18:25:15,572 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-04-24 18:25:15,572 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-24 18:25:15,572 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-04-24 18:32:20,251 - [INFO] - IDS_V2 - [ADAPT] Threshold Updated: 0.0216 (Min: 0.0216)
+2026-04-24 18:32:20,252 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:20,253 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:21,176 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:22,198 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:23,226 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:23,226 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:34,489 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:34,490 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:35,515 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:35,517 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:35,517 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:36,533 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:47,796 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:49,850 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:49,851 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:50,875 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:50,876 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:32:50,877 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:33:02,136 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:33:02,138 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:33:04,180 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:33:05,210 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:33:05,210 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:33:07,252 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:33:21,204 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 18:33:24,559 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.3 tại S6 Gateway.
+2026-04-24 18:33:24,560 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 tại S6 Gateway.
+2026-04-24 18:33:25,567 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.2 tại S6 Gateway.
+2026-04-24 18:33:25,568 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.2 tại S6 Gateway.
+2026-04-24 18:38:25,154 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.3 tại S6 Gateway.
+2026-04-24 18:38:25,157 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 tại S6 Gateway.
+2026-04-24 18:38:25,157 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 tại S6 Gateway.
+2026-04-24 18:38:26,169 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.2 tại S6 Gateway.
+2026-04-24 18:43:25,366 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.3 tại S6 Gateway.
+2026-04-24 18:43:26,400 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.2 tại S6 Gateway.
+2026-04-24 18:43:26,402 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 tại S6 Gateway.
+2026-04-24 18:43:26,403 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 tại S6 Gateway.
+2026-04-24 18:48:08,271 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-24 19:47:58,529 - [INFO] - IDS_V2 - ======================================================================
+2026-04-24 19:47:58,529 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-24 19:47:58,530 - [INFO] - IDS_V2 - ======================================================================
+2026-04-24 19:47:58,530 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-24 19:47:58,530 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-24 19:47:58,530 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-04-24 19:47:58,530 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-24 19:47:58,530 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-24 19:48:00,041 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-04-24 19:48:00,041 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-24 19:48:00,041 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-04-24 19:49:11,898 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-24 19:56:27,984 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.2 qua ONOS.
+2026-04-24 19:56:27,988 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.3 qua ONOS.
+2026-04-24 19:56:27,990 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 qua ONOS.
+2026-04-24 19:56:28,007 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-04-24 19:56:28,008 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-04-24 19:56:28,009 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-24 19:58:33,965 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.5
+2026-04-24 19:58:33,965 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.7 qua ONOS.
+2026-04-24 19:58:33,979 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.5 qua ONOS.
+2026-04-24 19:58:33,984 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.7 tại of:0000000000000001
+2026-04-24 19:58:33,991 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.5 tại of:0000000000000001
+2026-04-24 19:58:34,032 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.6
+2026-04-24 19:58:34,036 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.6
+2026-04-24 19:58:34,082 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.6 qua ONOS.
+2026-04-24 19:58:34,088 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.6 tại of:0000000000000001
+2026-04-24 19:59:26,985 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.9 qua ONOS.
+2026-04-24 19:59:26,995 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.9 tại of:0000000000000001
+2026-04-24 19:59:26,996 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.10 qua ONOS.
+2026-04-24 19:59:27,007 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.10 tại of:0000000000000001
+2026-04-24 19:59:27,016 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.11 qua ONOS.
+2026-04-24 19:59:27,024 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.11 tại of:0000000000000001
+2026-04-24 20:01:02,101 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.18
+2026-04-24 20:01:20,528 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.16
+2026-04-24 20:01:23,598 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.17
+2026-04-24 20:01:23,600 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.18
+2026-04-24 20:02:00,072 - [INFO] - IDS_V2 - [EXIT] Interrupted by user

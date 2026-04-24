@@ -18,7 +18,7 @@ sleep 5
 sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
 
 cd ~/Documents/DoAn_SDN
-
+web1 sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 &'
 check lệnh drop: sh ovs-ofctl dump-flows s1 -O OpenFlow13
 h1 wget --no-check-certificate https://10.0.0.10
 h1 wget -qO- http://10.0.0.11 > /dev/null
@@ -26,9 +26,8 @@ h1 wget -qO- http://10.0.0.11 > /dev/null
 h60 curl -I -m 3 http://10.0.0.11:8000
 h60 curl -I -m 3 http://10.0.0.10:8000
 
-py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') for i in range(60, 65)]
-py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 65)]
-
+py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') for i in range(60, 66)]
+py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]
 py [net.get(f'h{i}').cmd('pkill -f attack/ &') for i in range(1, 21)]
 
 ter1: ./start.sh
@@ -43,11 +42,13 @@ py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 jso
 py [net.get(f'h{i}').cmd('python3 attack/slowloris.py http://10.0.0.11:8000 &') for i in range(16, 19)]
 ter2: cd ai
 sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python run_onos_v2.py
+
 ter3: cd ai
 sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python batPack_v2.py
 sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python auto_dataset_generator.py
 sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python data_collector.py
 sudo ./start.sh
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python ai/batPack_v2.py
 docker run -t -d --name onos \
   -m 4g \
   --cpus="5.0" \
@@ -126,7 +127,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "cải thiện bằng thu thập dữ liễu hệ thoongsm đã lựa chọn nfstream và tối ưu nhiều lần thu được v4"
+git commit -m "banr ai v2, fix leenhj drop"
 git branch -M main
 git push origin main
 
@@ -365,5 +366,3 @@ Nếu độ tin cậy > 95%: Bắn lệnh DROP ngay lập tức.
 Nếu độ tin cậy từ 80% đến 95%: Không DROP hẳn, mà bắn lệnh yêu cầu Switch giảm băng thông (Rate Limiting / Metering) của IP đó xuống mức tối thiểu (ví dụ: 10Kbps) để ép kẻ tấn công chậm lại nhưng không làm đứt hẳn kết nối.
 
 Nếu là Zero-Day (Autoencoder báo động): Ra lệnh cho Switch đổi hướng (Redirect) toàn bộ gói tin của IP đó chui vào một máy chủ giả lập (Honeypot) để ghi log và theo dõi thêm hành vi của hacker.
-
-
