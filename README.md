@@ -3399,7 +3399,109 @@ Vì kiến trúc Conformer trong AI v3 quá nặng, tôi gặp vấn đề phầ
 
 **🤖 Giai đoạn 4: Khi AI Gặp Khó Khăn (Tuần 13-20)**
 
-Là sinh viên AI, tôi tưởng rằng phần Deep Learning sẽ dễ nhất. Nhưng không:
+Là sinh viên AI, tôi tưởng rằng phần Deep Learning sẽ dễ nhất. Nhưng không - **thử thách lớn nhất là thu thập dữ liệu chất lượng cao**.
+
+**😓 Khó khăn chưa từng có: Thu thập Dataset thủ công trên Mininet**
+
+```
+⚠️ SỰ THẬT VỀ DATASET COLLECTION:
+├── Mỗi phiên bản dataset (V2 → V3 → V4 → V5 → V6 → V7)
+├── Mất khoảng 36 GIỜ THU THẬP liên tục
+├── Không thể tự động hóa 100% vì Mininet> là môi trường độc lập
+└── Phải GIÁM SÁT THỦ CÔNG suốt quá trình
+```
+
+**Quy trình thu thập một dataset (ví dụ: V5):**
+
+```
+Ngày 1-2: Chuẩn bị và Test
+├── 4 giờ: Setup môi trường Mininet sạch
+├── 2 giờ: Test các attack scripts hoạt động đúng
+├── 2 giờ: Cấu hình timeout cho batPack_v2.py
+└── 2 giờ: Test thử 1 vòng để đảm bảo flow đúng
+
+Ngày 3: Thu thập Normal (8 giờ liên tục)
+├── Khởi động: python auto_dataset_generator.py --phase normal
+├── Mở Mininet terminal: sudo python system.py
+├── Chạy batPack_v2.py để capture flows
+├── Theo dõi: Kiểm tra số lượng flows mỗi 30 phút
+├── Vấn đề phát sinh: Ctrl+C nếu lỗi, sửa lại, chạy lại từ đầu
+└── Mục tiêu: 200,000 Normal samples (10 flows = 1 sequence)
+
+Ngày 4-5: Thu thập 4 loại Attack (16 giờ liên tục)
+├── Phase UDP Flood: 2 giờ (cần giám sát bandwidth)
+├── Phase SYN Flood: 2 giờ (watchdog kiểm tra kết nối)
+├── Phase HTTP Flood: 2 giờ (theo dõi web server response)
+├── Phase Slowloris: 8 giờ (LÂU NHẤT - connections kéo dài)
+└── Mỗi phase: phải switch marker files thủ công
+
+Ngày 6: Kiểm định và Làm lại nếu lỗi
+├── 4 giờ: Chạy check_data.py để kiểm tra chất lượng
+├── Nếu Duration bất thường → Bỏ, làm lại từ đầu
+├── Nếu class imbalance quá cao → Bỏ, thu thập thêm
+└── Nếu ổn: Merge vào master_dataset_v{X}.csv
+```
+
+**🚨 Vấn đề không thể tự động hóa:**
+
+| Vấn đề | Tại sao không tự động? | Giải pháp thủ công |
+|--------|------------------------|-------------------|
+| **Mininet> prompt** | Không nhận stdin tự động | Phải ngồi chờ, gõ lệnh tay |
+| **Attack timing** | Mỗi attack cần thời gian khác | Tự điều chỉnh dựa trên số lượng flows |
+| **Marker files** | Cần đồng bộ giữa 2 terminals | Gõ `touch .marker_udp` thủ công |
+| **Crash/Error** | OOM, network error bất ngờ | Giám sát liên tục để restart kịp thời |
+| **Quality check** | Chỉ biết lỗi sau khi thu xong | Kiểm tra mỗi 30 phút, abort sớm nếu sai |
+
+**💔 Những lần thất bại đau đớn:**
+
+```python
+"""
+[V3 - Dataset thất bại] - Mất 36 giờ, kết quả: Bỏ
+├── Thu thập xong 500k samples
+├── Kiểm định: Normal Duration = 0.02s (quá ngắn!)
+├── Nguyên nhân: IDLE_TIMEOUT = 1.0s trong batPack
+└── Kết quả: Bỏ toàn bộ, làm lại V4
+
+[V5 - Dataset thất bại] - Mất 40 giờ, kết quả: Bỏ  
+├── Thu thập xong 600k samples
+├── Kiểm định: Slowloris L7 = 0.02 (chỉ 2% nhận diện HTTP)
+├── Nguyên nhân: Timeout không đủ dài cho handshake
+└── Kết quả: Bỏ, tăng timeout, làm lại V6
+
+[V6 - Gần thất bại] - Mất 38 giờ, kết quả: Chấp nhận được
+├── Kiểm định: Port Entropy giống nhau ở tất cả lớp
+├── Quyết định: Không làm lại, giảm weight Port Entropy trong AI
+└── Đây là lý do có feature weighting trong V4 AI
+"""
+```
+
+**⏰ Tổng thời gian đầu tư cho Data Collection:**
+```
+V2: 36 giờ (bỏ - lỗi cấu hình)
+V3: 36 giờ (bỏ - duration quá ngắn)
+V4: 38 giờ (bỏ - imbalance quá cao)
+V5: 40 giờ (bỏ - L7 detection kém)
+V6: 38 giờ (chấp nhận được, nhưng có vấn đề)
+V7: 36 giờ (final - 95% chất lượng)
+-----------------------------------
+TỔNG: ~220 giờ = 9 NGÀY LIÊN TỤC chỉ cho data collection
+(Chưa tính thời gian training, debug, tuning)
+```
+
+**💪 Sự kiên nhẫn và tỉ mỉ:**
+
+> Không thể có "nút bấm tự động" vì Mininet là môi trường giả lập có giới hạn. Tôi phải:
+> - Ngồi 8-10 giờ mỗi ngày trước màn hình
+> - Theo dõi 2 terminals song song (Mininet> và auto_dataset_generator)
+> - Switch phases đúng thời điểm (nếu sai là hỏng cả dataset)
+> - Không thể để máy chạy overnight vì sợ crash giữa chừng
+> - Mỗi lần fail là 36 giờ công sức đổ sông đổ bể
+
+Là sinh viên AI, tôi tưởng phần khó nhất là training model. Hóa ra **phần khó nhất là có dataset chất lượng để train**.
+
+---
+
+**Các vấn đề AI khác:**
 - **Vấn đề 1:** Dataset ban đầu 46GB → Không thể train
 - **Vấn đề 2:** Normal traffic quá ngắn (3-5s) → AI không học được pattern
 - **Vấn đề 3:** AI v3 bị "ảo giác" (hallucination) - nhìn đâu cũng thấy tấn công
