@@ -31,6 +31,10 @@ monitor/runtime/*.csv
 *.png
 *.jpg
 
+# NHƯNG cho phép ảnh trong thư mục anhQuaTrinhLam (minh chứng quá trình làm)
+!anhQuaTrinhLam/*.png
+!anhQuaTrinhLam/*.jpg
+
 master_dataset_v3.csv
 master_dataset_v4.csv
 
