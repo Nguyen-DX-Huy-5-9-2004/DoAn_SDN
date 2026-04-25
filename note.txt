@@ -127,7 +127,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "banr ai v2, fix leenhj drop"
+git commit -m "Hoàn thành bản ai v4 và dataset v7, mô hình xử lý rất tốt, bản tốt nhất cho đến hiện tại"
 git branch -M main
 git push origin main
 

@@ -8,7 +8,7 @@ from rich.live import Live
 from rich.panel import Panel
 from rich.text import Text
 
-# 🎯 Optimized for s6-eth1 (L3 backbone capture point)
+# Optimized for s6-eth1 (L3 backbone capture point)
 PREFERRED_INTERFACE = "s6-eth1"
 FALLBACK_INTERFACES = ["s6-eth4", "h82-eth1", "any"]
 
