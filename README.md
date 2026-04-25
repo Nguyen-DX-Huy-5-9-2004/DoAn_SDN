@@ -1325,6 +1325,62 @@ def handle_potential_zero_day(flow, ae_score, clf_probs):
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### **2.5.2b Lựa Chọn SDN Controller: Thử Nghiệm Ryu và ONOS**
+
+Trong quá trình thiết lập hạ tầng, nhóm đã thử nghiệm cả hai SDN Controller phổ biến là **Ryu** và **ONOS** trước khi đưa ra quyết định cuối cùng.
+
+**Thử nghiệm với Ryu (2 ngày):**
+
+```python
+# Cài đặt và cấu hình Ryu Controller
+pip install ryu
+ryu-manager --verbose ryu.app.simple_switch_13
+```
+
+| Khía cạnh | Kết quả thử nghiệm |
+|-----------|-------------------|
+| **Độ phức tạp** | Đơn giản, code Python dễ hiểu |
+| **Tài liệu** | Hạn chế, cộng đồng nhỏ |
+| **GUI/Web Interface** | Không có sẵn, phải tự phát triển |
+| **Tích hợp Mininet** | Ổn định, kết nối OpenFlow đơn giản |
+| **Khả năng mở rộng** | Hạn chế, phù hợp lab nhỏ |
+
+**Nhược điểm quyết định:**
+- Không có GUI quản lý trực quan, khó debug topology lớn
+- Thiếu các ứng dụng built-in (DHCP, Proxy ARP, Firewall)
+- Khó khăn trong việc monitoring real-time các flows và ports
+
+---
+
+**Thử nghiệm với ONOS (3 ngày):**
+
+```bash
+# Khởi động ONOS qua Docker
+docker run -t -d --name onos \
+  -p 8181:8181 -p 6653:6653 -p 8101:8101 \
+  -e "ONOS_APPS=drivers,openflow,fwd,proxyarp,gui" \
+  onosproject/onos:latest
+```
+
+| Khía cạnh | Kết quả thử nghiệm |
+|-----------|-------------------|
+| **Độ phức tạp** | Phức tạp hơn, Java-based |
+| **Tài liệu** | Phong phú, cộng đồng lớn |
+| **GUI/Web Interface** | Có sẵn, trực quan (port 8181) |
+| **Tích hợp Mininet** | Ổn định, hỗ trợ nhiều giao thức |
+| **Khả năng mở rộng** | Tốt, production-grade |
+
+**Ưu điểm quyết định:**
+- **GUI đầy đủ:** Xem topology, flows, ports real-time qua web browser
+- **Ứng dụng built-in:** `fwd` (forwarding), `proxyarp` (ARP handling), `gui` (web interface)
+- **REST API mạnh:** Dễ dàng tích hợp với Python scripts để push flow rules
+- **Khả năng clustering:** Mặc dù đồ án không dùng, nhưng đảm bảo kiến trúc production-ready
+
+**Quyết định cuối cùng:**
+> Chọn **ONOS** vì GUI và tài liệu phong phú giúp debug và giám sát hệ thống dễ dàng hơn, đặc biệt khi làm việc với topology 3-layer phức tạp.
+
+---
+
 ### **2.5.3 Luồng Hoạt Động Khi Chạy `start.sh`**
 
 **PHASE 1: CLEANUP & PREPARATION**
@@ -3797,30 +3853,31 @@ class L3SDNTopology:
         # Configured via: ovs-vsctl -- set Bridge s6 mirrors=@m ...
 ```
 
-### 6.5.4 Hành Trình Của Sinh Viên AI Học Networking Từ Con Số 0
+### 6.5.4 Quá Trình Học Networking và Giải Quyết Vấn Đề Kỹ Thuật
 
-**🎓 Bối cảnh cá nhân:**
-Tôi là sinh viên chuyên ngành **Trí tuệ Nhân tạo và Thị giác Máy tính (AI & Computer Vision)**. Với nền tảng toán học và lập trình Python vững chắc, tôi từng nghĩ đồ án tốt nghiệp sẽ là một bài toán Computer Vision như object detection hoặc segmentation. Tuy nhiên, khi được giao đề tài **"Hệ thống phát hiện tấn công DDoS bằng Deep Learning trên mạng SDN"**, tôi nhận ra mình đang đứng trước một thử thách hoàn toàn xa lạ.
+**Bối cảnh:**
+Sinh viên thực hiện đồ án có nền tảng chính về **Trí tuệ Nhân tạo và Thị giác Máy tính (AI & Computer Vision)**. Đề tài **"Hệ thống phát hiện tấn công DDoS bằng Deep Learning trên mạng SDN"** yêu cầu kết hợp kiến thức AI với networking, lĩnh vực chưa có nhiều kinh nghiệm thực hành.
 
-**😰 Giai đoạn 1: Shock và Bối Rối (Tuần 1-2)**
+**Giai đoạn 1: Làm Quen Với Công Nghệ SDN (Tuần 1-2)**
 
-Lần đầu tiên mở tài liệu về SDN, ONOS, OpenFlow... tôi không hiểu gì:
-- *"Flow rule là gì? Có liên quan gì đến TensorFlow không?"* 😅
-- *"TCAM? Ternary Content-Addressable Memory? Đây là phần cứng hay phần mềm?"*
-- *"L2 switching vs L3 routing? Tôi chỉ biết CNN vs RNN thôi mà!"*
+Các khái niệm cần nắm vững trong giai đoạn này:
+- **Flow rules:** Các quy tắc định tuyến trong switch SDN (khác với machine learning models)
+- **TCAM (Ternary Content-Addressable Memory):** Bộ nhớ phần cứng trong switch dùng để lưu flow rules
+- **L2 vs L3:** L2 (Data Link - MAC-based) và L3 (Network - IP-based) networking
 
-Tôi đã thử chạy ONOS theo tutorial và gặp phải vô số lỗi không giải thích được. Mạng Mininet tôi tạo ra không liên thông - các host không ping được nhau. Tôi gần như muốn bỏ cuộc.
+**Vấn đề gặp phải:**
+Mạng Mininet ban đầu không liên thông - các host không ping được nhau do cấu hình flow rules thiếu sót.
 
-📷 *Minh chứng:* `MangTuCauHInhbandau_khongLienThong.png` - Mạng lúc đầu hoàn toàn không liên thông
+📷 *Minh chứng:* `MangTuCauHInhbandau_khongLienThong.png` - Mạng ban đầu chưa liên thông do thiếu default routes
 
-**📚 Giai đoạn 2: Học Từ Con Số 0 (Tuần 3-6)**
+**Giai đoạn 2: Học Các Khái Niệm Networking Cơ Bản (Tuần 3-6)**
 
-Tôi quyết định "reset mindset" và học networking như một freshman:
-1. **Đọc sách "Computer Networking: A Top-Down Approach"** của Kurose & Ross (chương 1-4)
-2. **Xem YouTube:** "Networking Fundamentals" series của NetworkChuck
-3. **Labs trên Cisco Packet Tracer** để hiểu về VLAN, subnetting, routing
-4. **So sánh với AI:**
-   - IP Address ≈ Feature Vector
+Tài liệu tham khảo và phương pháp học:
+1. **Sách giáo trình:** "Computer Networking: A Top-Down Approach" (Kurose & Ross, chương 1-4)
+2. **Video hướng dẫn:** "Networking Fundamentals" series (NetworkChuck)
+3. **Thực hành:** Labs trên Cisco Packet Tracer về VLAN, subnetting, routing
+4. **Ánh xạ sang AI:**
+   - IP Address ≈ Feature Vector (biểu diễn không gian)
    - Routing Table ≈ Attention Weights (probability distribution)
    - Flow Rules ≈ Model Parameters (cần optimize)
 
@@ -3828,13 +3885,13 @@ Tôi quyết định "reset mindset" và học networking như một freshman:
 - `caiDatThuNghiemRyuSauDoluaChonOnosChoDoAn.png` - Thử nghiệm Ryu controller trước khi chọn ONOS
 - `kiemTraCacTruongDataCoTheThuDuoc.png` - Nghiên cứu các trường dữ liệu có thể thu thập
 
-**🔧 Giai đoạn 3: Thử Và Sai Liên Tục (Tuần 7-12)**
+**Giai đoạn 3: Triển Khai Web Server và Chuyển Đổi L2/L3 (Tuần 7-12)**
 
-**Thử thách 1: Cấu hình Web Server**
-Vì là sinh viên AI, tôi chưa từng deploy web server production. Tôi đã:
-- Thử Django → Gặp lỗi static files
-- Thử Flask → Không đủ mạnh cho multi-threading
-- Cuối cùng: Django + Gunicorn + Nginx (học từ documentation)
+**Vấn đề 1: Cấu hình Web Server**
+Quá trình thử nghiệm các stack khác nhau:
+- **Django standalone:** Gặp lỗi static files serving
+- **Flask:** Hạn chế về multi-threading performance
+- **Final stack:** Django + Gunicorn + Nginx (dựa trên production best practices)
 
 📷 *Minh chứng:* 
 - `biLoiTrongQuaTrinhCauHinhWeb.png` - Lỗi cấu hình web
@@ -3843,13 +3900,15 @@ Vì là sinh viên AI, tôi chưa từng deploy web server production. Tôi đã
 - `dichVuWe&databaseBinhThuong.png` - Cuối cùng web và database hoạt động bình thường
 - `phuongThucDangNhapcuaweb.png` - Phương thức đăng nhập web đã cấu hình thành công
 
-**Thử thách 2: Chuyển từ L2 sang L3 (Bước ngoặt quan trọng)**
+**Vấn đề 2: Chuyển Đổi từ L2 Switching sang L3 Routing**
 
-Tôi nhận ra hệ thống ONOS mặc định chỉ hỗ trợ L2 switching (như một con switch thông thường), nhưng production networks dùng L3 routing. Đây là khoảnh khắc "aha":
+**Phân tích:**
+ONOS mặc định chỉ hỗ trợ L2 switching (MAC-based), nhưng các hệ thống production (Google Cloud, AWS) đều sử dụng L3 routing (IP-based). Chuyển đổi sang L3 là cần thiết để:
+- Hỗ trợ multi-subnet (DMZ, Botnet, Client zones)
+- Tận dụng IP routing thay vì MAC flooding
+- Phân đoạn mạng rõ ràng theo chức năng
 
-> *"Nếu Google Cloud và AWS đều dùng L3 networking, tại sao tôi lại làm L2 cho đồ án tốt nghiệp?"*
-
-Tôi đã phải:
+**Các bước thực hiện:
 - Học về IP routing, static routes, default gateways
 - Đọc RFC 1918 về private IP ranges
 - Tự viết lại toàn bộ `system.py` để hỗ trợ multi-subnet
@@ -3860,27 +3919,30 @@ Tôi đã phải:
 - `heThongMangSupDoKhiBiTanCong.png` - Mạng sụp đỗ khi bị tấn công (trước khi có AI)
 - `mangKhiChuaBiTanCong_normal.png` - Mạng bình thường trước khi bị tấn công
 
-**Thử thách 3: AI chạy trên CPU thay vì GPU**
+**Vấn đề 3: Tối Ưu AI Cho Chạy Trên CPU**
 
-Vì kiến trúc Conformer trong AI v3 quá nặng, tôi gặp vấn đề phần cứng. Giải pháp:
+**Vấn đề:**
+Kiến trúc Conformer (AI v3) yêu cầu GPU và tài nguyên lớn, không phù hợp với môi trường lab. Cần tối ưu để chạy trên CPU.
+
+**Các biện pháp tối ưu:
 - Tinh chỉnh kiến trúc CNN-GRU nhẹ hơn
 - Chuyển sang CPU với tối ưu batch size
 - Sử dụng quantization (int8) cho model
 
 📷 *Minh chứng:* `chuyenViecHienThiHeThongChoGpuDeGiaiQuyetVanDePhanCung.png` - Chuyển đổi hiển thị hệ thống sang GPU để giải quyết vấn đề phần cứng
 
-**🤖 Giai đoạn 4: Khi AI Gặp Khó Khăn (Tuần 13-20)**
+**Giai đoạn 4: Thu Thập Dữ Liệu và Training AI (Tuần 13-20)**
 
-Là sinh viên AI, tôi tưởng rằng phần Deep Learning sẽ dễ nhất. Nhưng không - **thử thách lớn nhất là thu thập dữ liệu chất lượng cao**.
+**Vấn đề chính:**
+Thu thập dataset chất lượng cao tốn nhiều thời gian và công sức hơn dự kiến. Mỗi phiên bản dataset (V2-V7) cần khoảng 36 giờ thu thập liên tục với giám sát thủ công do các hạn chế của Mininet environment.
 
-**😓 Khó khăn chưa từng có: Thu thập Dataset thủ công trên Mininet**
-
+**Thông tin thu thập dataset:**
 ```
-⚠️ SỰ THẬT VỀ DATASET COLLECTION:
-├── Mỗi phiên bản dataset (V2 → V3 → V4 → V5 → V6 → V7)
-├── Mất khoảng 36 GIỜ THU THẬP liên tục
-├── Không thể tự động hóa 100% vì Mininet> là môi trường độc lập
-└── Phải GIÁM SÁT THỦ CÔNG suốt quá trình
+Thống kê thu thập dataset:
+├── Các phiên bản: V2 → V3 → V4 → V5 → V6 → V7
+├── Thời gian: ~36 giờ/dataset (không thể tự động hóa hoàn toàn)
+├── Hạn chế: Mininet> prompt độc lập, cần giám sát manual
+└── Tổng thời gian: ~220 giờ cho tất cả các phiên bản
 ```
 
 **Quy trình thu thập một dataset (ví dụ: V5):**
@@ -3914,17 +3976,17 @@ Ngày 6: Kiểm định và Làm lại nếu lỗi
 └── Nếu ổn: Merge vào master_dataset_v{X}.csv
 ```
 
-**🚨 Vấn đề không thể tự động hóa:**
+**Hạn chế của quá trình tự động hóa:**
 
-| Vấn đề | Tại sao không tự động? | Giải pháp thủ công |
-|--------|------------------------|-------------------|
-| **Mininet> prompt** | Không nhận stdin tự động | Phải ngồi chờ, gõ lệnh tay |
-| **Attack timing** | Mỗi attack cần thời gian khác | Tự điều chỉnh dựa trên số lượng flows |
-| **Marker files** | Cần đồng bộ giữa 2 terminals | Gõ `touch .marker_udp` thủ công |
-| **Crash/Error** | OOM, network error bất ngờ | Giám sát liên tục để restart kịp thời |
-| **Quality check** | Chỉ biết lỗi sau khi thu xong | Kiểm tra mỗi 30 phút, abort sớm nếu sai |
+| Hạn chế | Nguyên nhân | Giải pháp áp dụng |
+|---------|-------------|-------------------|
+| **Mininet> prompt** | Không nhận stdin tự động | Giám sát và điều khiển thủ công |
+| **Attack timing** | Mỗi attack cần thời gian khác nhau | Điều chỉnh dựa trên số lượng flows |
+| **Marker files** | Cần đồng bộ giữa 2 terminals | Tạo marker files thủ công |
+| **Crash/Error** | OOM, network error bất ngờ | Giám sát liên tục, restart khi cần |
+| **Quality check** | Chỉ kiểm định được sau khi thu xong | Kiểm tra mỗi 30 phút, abort sớm nếu phát hiện lỗi |
 
-**💔 Những lần thất bại đau đớn:**
+**Các lần thu thập không đạt yêu cầu:**
 
 ```python
 """
