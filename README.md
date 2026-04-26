@@ -1707,9 +1707,14 @@ ngay cả khi chúng cố tình tấn công chậm để lách bộ lọc.
 
 **Tiến hóa Dataset qua các phiên bản:**
 
-📊 **Dataset V0 Report (Phiên bản thử nghiệm đầu tiên):**
-- `dataset_v0_report.png` - Báo cáo phân tích dataset ban đầu với cấu trúc đơn giản
-- Đặc điểm: 13 features, chưa có differential, nhiều vấn đề về timeout
+📊 **Dataset V0 Report (Dataset Internet - Phiên bản thử nghiệm đầu tiên):**
+- `dataset_v0_report.png` - Báo cáo phân tích dataset thu thập từ internet
+- Quy trình xử lý: **46GB+ dữ liệu thô** → Lọc, xử lý, trích chọn → **~800MB dataset**
+- Vấn đề: Dù đã giảm 98% kích thước, dữ liệu vẫn **không phù hợp** với mô hình
+  - Format mismatch với NFStream output
+  - Thiếu flow-based sequences cần thiết cho AI
+  - Class distribution không kiểm soát được
+- Kết luận: Quyết định **tự thu thập dataset** (V2-V7) thay vì dùng dataset có sẵn
 
 📊 **Dataset V4 Report (Phiên bản 26 đặc trưng):**
 - `dataset_v4_report.png` - Báo cáo chi tiết dataset V4 với đầy đủ 26 features
@@ -1723,13 +1728,15 @@ ngay cả khi chúng cố tình tấn công chậm để lách bộ lọc.
 
 **So sánh qua các phiên bản:**
 
-| Metric | V0 | V4 | V7 |
-|--------|----|----|----|
-| Features | 13 | 26 | 26 |
-| Class Balance | ❌ Poor | ✅ Good | ✅✅ Excellent |
-| L7 Detection | ❌ 5% | ✅ 60% | ✅✅ 85% |
-| Duration Accuracy | ❌ 30% | ✅ 70% | ✅✅ 95% |
-| Training Quality | 0.65 F1 | 0.82 F1 | 0.91 F1 |
+| Metric | V0 (Internet) | V4 (Custom) | V7 (Final) |
+|--------|---------------|-------------|------------|
+| Data Source | Internet 46GB → 800MB | Self-collected | Self-collected |
+| Features | 13 (mismatch format) | 26 (differential) | 26 (optimized) |
+| Class Balance | ❌ Uncontrolled | ✅ Good | ✅✅ Excellent |
+| L7 Detection | ❌ N/A | ✅ 60% | ✅✅ 85% |
+| Duration Accuracy | ❌ N/A | ✅ 70% | ✅✅ 95% |
+| Training Quality | ❌ Unusable | 0.82 F1 | 0.91 F1 |
+| Suitability | ❌ **Not compatible** | ✅ Working | ✅✅ Production |
 
 ---
 
