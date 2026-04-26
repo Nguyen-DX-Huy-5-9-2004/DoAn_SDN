@@ -26,7 +26,8 @@
 - [3. Kiến Trúc Kỹ Thuật Chi Tiết](#3-kiến-trúc-kỹ-thuật-chi-tiết)
   - [3.0 Kiến Trúc Thu Thập Dữ Liệu Tốc Độ Cao](#30-kiến-trúc-thu-thập-dữ-liệu-tốc-độ-cao)
   - [3.3.10 WhiteList & BlackList Mechanism](#3310-whitelist--blacklist-mechanism-ai-v4-enhancement)
-  - [3.3.11 Demo Results](#3311-demo-results---hệ-thống-phát-hiện-và-xử-lý-tấn-công)
+  - [3.3.11 Feedback Loop](#3311-feedback-loop---cải-thiện-mô-hình-từ-false-positives)
+  - [3.3.12 Demo Results](#3312-demo-results---hệ-thống-phát-hiện-và-xử-lý-tấn-công)
 - [4. Tech Stack](#4-tech-stack)
 - [5. Hướng Dẫn Sử Dụng](#5-hướng-dẫn-sử-dụng)
 - [6. Kết Luận & Bài Học](#6-kết-luận--bài-học)
@@ -3361,7 +3362,114 @@ src_ip = "10.0.1.99"  # Botnet mới
 
 ---
 
-#### 3.3.11 Demo Results - Hệ Thống Phát Hiện và Xử Lý Tấn Công
+#### 3.3.11 Feedback Loop - Cải Thiện Mô Hình Từ False Positives
+
+**Vấn đề:**
+- AI đôi khi chặn nhầm (False Positives) - legitimate traffic bị đánh dấu là attack
+- Cần cơ chế thu thập các trường hợp nghi ngờ để cải thiện mô hình
+
+**Giải pháp:** Lưu trữ potential false positives để phân tích và retrain.
+
+```python
+# run_onos_v2.py - Feedback Loop Implementation
+
+class IDSEngineV2:
+    def __init__(self):
+        # ... existing init ...
+        
+        # Feedback Loop: Lưu potential false positives
+        self.feedback_dir = "potential_false_positives"
+        if not os.path.exists(self.feedback_dir):
+            os.makedirs(self.feedback_dir)
+    
+    def save_potential_fp(self, src_ip, sequence, predicted_label, confidence):
+        """
+        Lưu sample khi:
+        - Confidence thấp (60-85%) - AI không chắc chắn
+        - WhiteList IP bị đánh dấu attack - có thể là FP
+        - User feedback "không phải attack" - manual review
+        """
+        import uuid
+        from datetime import datetime
+        
+        if 60.0 < confidence < 85.0:  # Grey zone
+            sample = {
+                "timestamp": datetime.now().isoformat(),
+                "src_ip": src_ip,
+                "predicted_label": predicted_label,
+                "confidence": confidence,
+                "sequence": sequence.tolist(),  # 10 flows × 26 features
+                "reviewed": False  # Chờ human review
+            }
+            
+            filename = f"{self.feedback_dir}/fp_{uuid.uuid4().hex[:8]}.json"
+            with open(filename, 'w') as f:
+                json.dump(sample, f, indent=2)
+            
+            logger.info(f"[FEEDBACK] Saved potential FP from {src_ip} for review")
+    
+    def submit_human_feedback(self, sample_id, is_false_positive, correct_label=None):
+        """
+        Human-in-the-loop: Admin review và cung cấp ground truth
+        """
+        filepath = f"{self.feedback_dir}/{sample_id}.json"
+        if os.path.exists(filepath):
+            with open(filepath, 'r') as f:
+                sample = json.load(f)
+            
+            sample["reviewed"] = True
+            sample["is_false_positive"] = is_false_positive
+            sample["correct_label"] = correct_label
+            sample["review_timestamp"] = datetime.now().isoformat()
+            
+            with open(filepath, 'w') as f:
+                json.dump(sample, f, indent=2)
+            
+            # Nếu đủ samples, trigger retraining
+            if self._count_reviewed_samples() > 100:
+                logger.info("[FEEDBACK] Đủ 100+ reviewed samples, có thể retrain model")
+```
+
+**Workflow Feedback Loop:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    FEEDBACK LOOP WORKFLOW                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  AI Detection (Confidence: 65%)                                          │
+│       ↓                                                                  │
+│  Grey Zone Decision (Không chắc chắn)                                    │
+│       ↓                                                                  │
+│  ┌──────────────────────┐                                               │
+│  │ Save to potential_fp/ │                                               │
+│  │ fp_a3f7d2e9.json     │                                               │
+│  └──────────┬────────────┘                                               │
+│             ↓                                                            │
+│  Admin Review (Human-in-the-loop)                                        │
+│     • Kiểm tra flow details                                              │
+│     • Xác nhận: False Positive?                                          │
+│     • Cung cấp correct label                                             │
+│             ↓                                                            │
+│  ┌──────────────────────┐                                               │
+│  │ Update: reviewed=True │                                               │
+│  │ correct_label=Normal │                                               │
+│  └──────────┬────────────┘                                               │
+│             ↓                                                            │
+│  Đủ 100+ samples? ──Yes──► Trigger Re-training                           │
+│                             (Incremental Learning)                       │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Lợi ích:**
+- **Continuous Improvement**: Mô hình cải thiện qua thời gian từ real-world feedback
+- **Human Oversight**: Admin có thể can thiệp và sửa sai của AI
+- **Incremental Learning**: Retrain chỉ với samples mới, không cần train từ đầu
+
+---
+
+#### 3.3.12 Demo Results - Hệ Thống Phát Hiện và Xử Lý Tấn Công
 
 **Kết quả chạy demo thực tế với các loại tấn công:**
 
@@ -3915,9 +4023,17 @@ DoAn_SDN/
 | Đặc điểm | Mô tả |
 |----------|-------|
 | **Robustness** | Xử lý IP spoofing, Flash Crowd, Zero-day |
-| **Explainability** | XAI module giải thích từng dự đoán |
+| **Explainability** | XAI module giải thích từng dự đoán (Temporal + Spatial Attention) |
 | **Scalability** | Garbage collector quản lý RAM, adaptive threshold thích ứng |
 | **Accuracy** | 96% trên dataset local, false positive < 1% |
+| **Dual-Shield** | 2-Shield Architecture (Autoencoder + Classifier) với Veto Power |
+| **Parallel Fusion** | CNN và GRU xử lý song song (không tuần tự) |
+| **Multi-Scale CNN** | Kernel 3 (local) + Kernel 5 (context) với Residual Connections |
+| **White/Black List** | Cơ chế bảo vệ IP tin cậy và chặn attacker lặp lại |
+| **Honeypot** | Decoy IP 10.0.0.201 để thu hút và phân tích attacker |
+| **Feedback Loop** | Lưu potential false positives để cải thiện mô hình |
+| **Persistence** | Checkpoint & Recovery sau restart |
+| **Real-time** | Latency ~50ms/flow trên CPU |
 
 ### ⚠️ Challenges Vẫn Còn
 
@@ -4698,6 +4814,47 @@ PROXY_CONFIG = {
 - **Aggregation**: Nhiều client → 1 proxy → Web server, giảm số kết nối trực tiếp
 - **Header Analysis**: X-Forwarded-For giúp trace real client IP
 - **Content Filtering**: Chặn malicious domains ngay tại proxy
+
+#### 7.2.4 Honeypot Integration (Decoy System)
+
+**Mục đích:** Thu hút attacker, phân tích hành vi tấn công, bảo vệ legitimate services.
+
+```python
+# Topology configuration
+HONEYPOT_CONFIG = {
+    "ip": "10.0.0.201/24",  # Trong DMZ nhưng isolated
+    "type": "Cowrie SSH Honeypot",  # Giả lập SSH server
+    "services": {
+        "ssh": {
+            "port": 2222,  # Fake SSH port
+            "banner": "SSH-2.0-OpenSSH_7.4",  # Giả mạo banner
+            "honeypot_type": "medium_interaction"
+        },
+        "http": {
+            "port": 8080,  # Fake HTTP admin panel
+            "content": "Fake Admin Panel v1.0"
+        }
+    },
+    "monitoring": {
+        "capture_commands": True,  # Ghi lại commands attacker chạy
+        "capture_files": True,     # Ghi lại files upload
+        "mirror_to_ids": True      # Chuyển traffic đến IDS phân tích
+    }
+}
+```
+
+**Vai trò trong hệ thống:**
+- **Decoy**: Lure attacker away from real services (web1:10.0.0.10)
+- **Intelligence**: Thu thập IoC (Indicators of Compromise) mới
+- **Zero-Day Detection**: Phát hiện attack patterns chưa từng thấy
+- **Delay Tactics**: Giữ chân attacker để IDS có thời gian phân tích và phản ứng
+
+**Integration với IDS:**
+- Traffic đến honeypot được mirror sang IDS probe (10.0.0.50)
+- Các flows đến honeypot được đánh dấu đặc biệt trong dataset
+- Dùng để training AI với "confirmed attack" data
+
+---
 
 ### 7.3 Open vSwitch Configuration (Port Mirroring)
 
