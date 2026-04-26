@@ -21,6 +21,7 @@
 
 - [1. Lời Mở Đầu & Triết Lý Phát Triển](#1-lời-mở-đầu--triết-lý-phát-triển)
 - [2. Hành Trình Tiến Hóa (V1 → V4)](#2-hành-trình-tiến-hóa-v1--v4)
+  - [2.6.3 Dataset V1: Tổng Hợp và Ánh Xạ Đặc Trưng](#263-dataset-v1-tổng-hợp-và-ánh-xạ-đặc-trưng)
   - [2.7.3 Báo Cáo Phân Tích Dataset](#273-báo-cáo-phân-tích-dataset)
 - [3. Kiến Trúc Kỹ Thuật Chi Tiết](#3-kiến-trúc-kỹ-thuật-chi-tiết)
   - [3.0 Kiến Trúc Thu Thập Dữ Liệu Tốc Độ Cao](#30-kiến-trúc-thu-thập-dữ-liệu-tốc-độ-cao)
@@ -1589,6 +1590,43 @@ Sau khi khảo sát các dataset DDoS phổ biến trên Internet (CICDDoS2019, 
 - NSL-KDD chỉ có 41 features, **thiếu hoàn toàn dữ liệu thời gian thực**
 - Zeek có thông tin chi tiết nhưng **quá nặng cho real-time**
 - **NFStream cân bằng tốt nhất**: Vừa có L7 (nhờ nDPI), vừa nhẹ, vừa flow-based
+
+### **2.6.3 Dataset V1: Tổng Hợp và Ánh Xạ Đặc Trưng**
+
+**Quá trình xây dựng Dataset V1 (Tiền thân của V0):**
+
+Sau khi xác định các trường dữ liệu có thể thu thập được qua Zeek, nhóm đã **tổng hợp các dataset DDoS được chia sẻ trên mạng** (hơn 64GB từ nhiều nguồn) và tiến hành lọc, xử lý dựa trên bảng ánh xạ đặc trưng.
+
+![Bảng Ánh Xạ 20 Đặc Trưng Ban Đầu](anhQuaTrinhLam/bangAnhXa20DacTrungBanDau.png)
+
+**Quy trình xử lý Dataset V1:**
+```
+Bước 1: Thu thập dataset từ Internet
+├─ CICDDoS2019, NSL-KDD, UNSW-NB15, v.v.
+├─ Tổng cộng: 64GB+ dữ liệu thô
+└─ Định dạng: CSV, PCAP, log files khác nhau
+
+Bước 2: Ánh xạ đặc trưng dựa trên Zeek analysis
+├─ Xác định 20 trường có thể thu được từ hệ thống
+├─ Loại bỏ các trường không tương thích (e.g., IP addresses riêng lẻ)
+└─ Chuẩn hóa format về flow-based
+
+Bước 3: Lọc và làm sạch
+├─ Remove duplicates
+├─ Handle missing values
+├─ Filter irrelevant protocols
+└─ Balance classes (undersampling majority)
+
+Kết quả: 64GB → ~800MB (20 features, chưa phù hợp với model)
+```
+
+**Vấn đề của Dataset V1/V0:**
+- Dữ liệu từ các nguồn khác nhau → format không đồng nhất
+- Thiếu **flow sequences** cần thiết cho CNN-GRU
+- Class imbalance không kiểm soát được
+- Không có **differential features** (chỉ có giá trị tuyệt đối)
+
+→ Quyết định: **Tự thu thập dataset** (V2-V7) thay vì dùng dataset có sẵn.
 
 ---
 
@@ -4408,6 +4446,7 @@ Tất cả hình ảnh trong thư mục `anhQuaTrinhLam/` là bằng chứng th�
 |------|-------|-----------|
 | `MangTuCauHInhbandau_khongLienThong.png` | Mạng lúc đầu không liên thông | Giai đoạn 1 |
 | `heThongMangTuCauHinh_mangL2.png` | Hệ thống mạng tự cấu hình L2 (trước khi chuyển L3) | Giai đoạn 1 |
+| `bangAnhXa20DacTrungBanDau.png` | Bảng ánh xạ 20 đặc trưng ban đầu (Dataset V1 từ Internet) | Giai đoạn 1 |
 | `caiDatThuNghiemRyuSauDoluaChonOnosChoDoAn.png` | Thử nghiệm Ryu trước khi chọn ONOS | Giai đoạn 2 |
 | `moHInhNhanDienNguoiDungBTh.png` | Mô hình nhận diện người dùng bình thường | Giai đoạn 2 |
 | `kiemTraCacTruongDataCoTheThuDuoc.png` | Nghiên cứu các trường dữ liệu thu thập được | Giai đoạn 2 |
