@@ -23,6 +23,7 @@
 - [2. Hành Trình Tiến Hóa (V1 → V4)](#2-hành-trình-tiến-hóa-v1--v4)
 - [3. Kiến Trúc Kỹ Thuật Chi Tiết](#3-kiến-trúc-kỹ-thuật-chi-tiết)
   - [3.0 Kiến Trúc Thu Thập Dữ Liệu Tốc Độ Cao](#30-kiến-trúc-thu-thập-dữ-liệu-tốc-độ-cao)
+  - [3.3.10 WhiteList & BlackList Mechanism](#3310-whitelist--blacklist-mechanism-ai-v4-enhancement)
 - [4. Tech Stack](#4-tech-stack)
 - [5. Hướng Dẫn Sử Dụng](#5-hướng-dẫn-sử-dụng)
 - [6. Kết Luận & Bài Học](#6-kết-luận--bài-học)
@@ -3062,6 +3063,226 @@ def execute_mitigation(self, src_ip, attack_name, confidence, is_zero_day=False)
     
     self.stats["blocked_ips"][src_ip] = time.time()
     self.stats["blocked"] += 1
+
+#### 3.3.10 WhiteList & BlackList Mechanism (AI V4 Enhancement)
+
+**Vấn đề:**
+- **BlackList:** Các IP đã từng tấn công có thể tấn công lại → Cần nhớ và chặn ngay
+- **WhiteList:** IP tin cậy (DNS server, Gateway) không nên bị chặn nhầm → Bảo vệ đặc biệt
+
+**Giải pháp:** Cơ chế WhiteList/BlackList tích hợp vào AI V4.
+
+```python
+# config_v2.py - WhiteList & BlackList Configuration
+class SDNConfigV2:
+    """Enhanced configuration với whitelist/blacklist"""
+    
+    # ===== WHITELIST =====
+    # Các IP tuyệt đối không được chặn (Critical infrastructure)
+    WHITELIST_IPS = {
+        "10.0.0.10",    # Proxy Server (Nginx HTTPS)
+        "10.0.0.20",    # Database Server (PostgreSQL)
+        "10.0.0.30",    # DNS Server
+        "10.0.0.1",     # Gateway/Default Route
+        "10.0.0.50",    # ONOS Controller
+    }
+    
+    # ===== BLACKLIST =====
+    # Các IP đã từng tấn công (persistent storage)
+    BLACKLIST_FILE = "blacklist.json"
+    BLACKLIST_COOLDOWN = 300  # 5 phút trước khi kiểm tra lại
+    
+    # ===== CONFIDENCE THRESHOLDS =====
+    # Ngưỡng để đưa vào blacklist (phải rất cao)
+    BLACKLIST_CONFIDENCE_THRESHOLD = 98.0
+    BLACKLIST_CONSECUTIVE_DETECTIONS = 3  # Số lần phát hiện liên tiếp
+```
+
+**Kiến trúc WhiteList/BlackList:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│              WHITELIST & BLACKLIST MECHANISM (AI V4)                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  INCOMING FLOW from batPack_v2.py                                      │
+│       │                                                                  │
+│       ▼                                                                  │
+│  ┌─────────────────┐                                                    │
+│  │ CHECK WHITELIST │ ← "10.0.0.10" (Proxy)  → BYPASS AI               │
+│  │   (Critical)    │   Không qua AI, không log → Protected             │
+│  └────────┬────────┘                                                    │
+│           │ Not in Whitelist                                           │
+│           ▼                                                              │
+│  ┌─────────────────┐                                                    │
+│  │ CHECK BLACKLIST │ ← "10.0.1.15" (Known Botnet) → DROP ngay       │
+│  │   (History)     │   Không cần AI, chặn ngay lập tức                │
+│  └────────┬────────┘                                                    │
+│           │ Not in Blacklist                                           │
+│           ▼                                                              │
+│  ┌─────────────────┐    ┌─────────────┐    ┌─────────────────────────┐ │
+│  │   AI V4         │ →  │  Decision   │ →  │  Update BlackList?     │ │
+│  │ (2-Shield)      │    │  (DROP/RL)  │    │  (3 detections → BL)  │ │
+│  │ Classification  │    └─────────────┘    └─────────────────────────┘ │
+│  └─────────────────┘                                                    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Code Implementation:**
+
+```python
+# run_onos_v2.py - WhiteList & BlackList Integration
+
+class IDSEngineV2:
+    def __init__(self):
+        # ... existing init ...
+        
+        # Load blacklist từ file (persistent across restarts)
+        self.blacklist = self._load_blacklist()
+        self.blacklist_counters = {}  # Đếm số lần phát hiện mỗi IP
+        
+    def _load_blacklist(self):
+        """Load blacklist từ file JSON"""
+        try:
+            with open(SDNConfigV2.BLACKLIST_FILE, 'r') as f:
+                data = json.load(f)
+                # Lọc các entry còn hiệu lực (chưa hết hạn)
+                valid_ips = {}
+                for ip, info in data.items():
+                    if time.time() - info['timestamp'] < 86400:  # 24h expiry
+                        valid_ips[ip] = info
+                return valid_ips
+        except FileNotFoundError:
+            return {}
+    
+    def _save_blacklist(self):
+        """Lưu blacklist vào file"""
+        with open(SDNConfigV2.BLACKLIST_FILE, 'w') as f:
+            json.dump(self.blacklist, f)
+    
+    def check_whitelist(self, src_ip):
+        """
+        Kiểm tra WhiteList - IP tuyệt đối không được chặn
+        Return: True nếu IP được bảo vệ (bypass AI hoàn toàn)
+        """
+        if src_ip in SDNConfigV2.WHITELIST_IPS:
+            logger.info(f"[WHITELIST] {src_ip} - Critical infrastructure, bypass AI")
+            return True
+        return False
+    
+    def check_blacklist(self, src_ip):
+        """
+        Kiểm tra BlackList - IP đã từng tấn công
+        Return: True nếu IP bị chặn ngay lập tức
+        """
+        if src_ip in self.blacklist:
+            last_seen = self.blacklist[src_ip]['timestamp']
+            # Cooldown 5 phút để kiểm tra lại (tránh chặn vĩnh viễn nhầm)
+            if time.time() - last_seen < SDNConfigV2.BLACKLIST_COOLDOWN:
+                logger.critical(f"[BLACKLIST] {src_ip} - Known attacker, DROP immediately")
+                SDNControllerV2.push_flow_rule(src_ip, treatment_type="DROP")
+                return True
+        return False
+    
+    def update_blacklist(self, src_ip, attack_name, confidence):
+        """
+        Cập nhật BlackList - Thêm IP sau nhiều lần phát hiện
+        Chỉ thêm vào blacklist sau BLACKLIST_CONSECUTIVE_DETECTIONS lần
+        với confidence > BLACKLIST_CONFIDENCE_THRESHOLD
+        """
+        if confidence < SDNConfigV2.BLACKLIST_CONFIDENCE_THRESHOLD:
+            return  # Chưa đủ confidence
+        
+        # Đếm số lần phát hiện
+        key = f"{src_ip}_{attack_name}"
+        self.blacklist_counters[key] = self.blacklist_counters.get(key, 0) + 1
+        
+        if self.blacklist_counters[key] >= SDNConfigV2.BLACKLIST_CONSECUTIVE_DETECTIONS:
+            # Đủ điều kiện đưa vào blacklist
+            self.blacklist[src_ip] = {
+                'first_seen': time.time(),
+                'timestamp': time.time(),
+                'attack_history': [attack_name],
+                'confidence': confidence
+            }
+            self._save_blacklist()
+            logger.critical(f"[BLACKLIST-ADD] {src_ip} → Added to permanent blacklist "
+                          f"({self.blacklist_counters[key]} detections)")
+```
+
+**Luồng xử lý đầy đủ với WhiteList/BlackList:**
+
+```python
+def process_flow_with_lists(self, flow_data, src_ip):
+    """
+    Pipeline đầy đủ với WhiteList/BlackList checks
+    """
+    # === STEP 1: WHITELIST CHECK ===
+    if self.check_whitelist(src_ip):
+        # Critical IP - Không qua AI, không log, return ngay
+        return {"action": "BYPASS", "reason": "WHITELIST"}
+    
+    # === STEP 2: BLACKLIST CHECK ===
+    if self.check_blacklist(src_ip):
+        # Known attacker - Chặn ngay, không cần AI
+        return {"action": "DROP", "reason": "BLACKLIST"}
+    
+    # === STEP 3: AI PROCESSING (2-Shield) ===
+    result = self.ai_engine.predict(flow_data)
+    
+    # === STEP 4: DECISION & UPDATE ===
+    if result['is_attack']:
+        # Thực hiện mitigation
+        self.execute_mitigation(src_ip, result['attack_type'], 
+                            result['confidence'], result['is_zero_day'])
+        
+        # Cập nhật blacklist nếu đủ điều kiện
+        self.update_blacklist(src_ip, result['attack_type'], result['confidence'])
+        
+        return {"action": "DROP", "reason": "AI-DETECTED"}
+    
+    return {"action": "ALLOW", "reason": "NORMAL"}
+```
+
+**Bảng Quyết Định WhiteList/BlackList:**
+
+| IP Type | Kiểm tra | AI Processing | Hành động | Ví dụ |
+|---------|----------|---------------|-----------|-------|
+| **WhiteList** | Đầu tiên | ❌ Bypass | Allow ngay | 10.0.0.10 (Proxy), 10.0.0.20 (DB) |
+| **BlackList** | Thứ hai | ❌ Skip | Drop ngay | 10.0.1.15 (Known Botnet) |
+| **Unknown** | Qua AI | ✅ Full | Theo AI | 10.0.2.45 (User bình thường) |
+
+**Benefits:**
+
+1. **Zero Latency cho Critical IPs:** WhiteList IP không qua AI → Không delay
+2. **Instant Block cho Repeat Offenders:** BlackList chặn ngay → Không tốn tài nguyên AI
+3. **Persistent Memory:** BlackList lưu file JSON → Survive restart
+4. **False Positive Protection:** WhiteList đảm bảo infrastructure không bị chặn nhầm
+
+**Ví dụ Thực Tế:**
+
+```python
+# Scenario 1: DNS Server (WhiteList)
+src_ip = "10.0.0.30"  # DNS Server
+result = engine.process_flow_with_lists(flow, src_ip)
+# Output: {"action": "BYPASS", "reason": "WHITELIST"}
+# → Không qua AI, không log spam
+
+# Scenario 2: Known Botnet (BlackList)
+src_ip = "10.0.1.15"  # Đã tấn công 3 lần trước đó
+result = engine.process_flow_with_lists(flow, src_ip)
+# Output: {"action": "DROP", "reason": "BLACKLIST"}
+# → Chặn ngay lập tức, không cần AI
+
+# Scenario 3: New Attack (AI Detection + BlackList Update)
+src_ip = "10.0.1.99"  # Botnet mới
+# Lần 1: AI detect (Conf: 99%) → DROP
+# Lần 2: AI detect (Conf: 98%) → DROP  
+# Lần 3: AI detect (Conf: 99%) → DROP + ADD TO BLACKLIST
+```
+
+---
 
 ### 3.4 Docker & Web Server Infrastructure
 
