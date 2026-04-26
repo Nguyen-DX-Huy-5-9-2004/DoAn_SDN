@@ -3321,41 +3321,59 @@ src_ip = "10.0.1.99"  # Botnet mới
 **Kết quả chạy demo thực tế với các loại tấn công:**
 
 🎯 **Demo 1: UDP Flood Detection & Mitigation**
-- `nhanDienVaXuLyUDPFlood.png` - Demo nhận diện và xử lý UDP Flood
+
+![UDP Flood Detection](anhQuaTrinhLam/nhanDienVaXuLyUDPFlood.png)
+
 - Kết quả: Phát hiện trong 50ms, DROP rule push thành công
 - AI Confidence: 99.2% (UDP Flood)
 - Mitigation: DROP packet từ source IP
+- Flow Analysis: High packet rate (>1000 pkt/s), entropy spikes
 
 🎯 **Demo 2: SYN Flood Detection & Mitigation**
-- `nhanDienVaXuLySYNFlood.png` - Demo nhận diện và xử lý SYN Flood
+
+![SYN Flood Detection](anhQuaTrinhLam/nhanDienVaXuLySYNFlood.png)
+
 - Kết quả: Phát hiện half-open connections, RATE_LIMIT áp dụng
 - AI Confidence: 97.8% (SYN Flood)
 - Mitigation: RATE_LIMIT (10 pkt/s) sau đó DROP khi confirm
+- Conn State Analysis: S0 (SYN sent, no ACK)
 
 🎯 **Demo 3: HTTPS Flood Detection & Mitigation**
-- `nhanDienVaXuLyHttpsFlood.png` - Demo nhận diện và xử lý HTTPS Flood
+
+![HTTPS Flood Detection](anhQuaTrinhLam/nhanDienVaXuLyHttpsFlood.png)
+
 - Kết quả: Phân biệt HTTPS Flood với normal browsing qua L7 features
 - AI Confidence: 98.5% (HTTP Flood)
 - Mitigation: DROP kết nối abusive
+- L7 Detection: HTTP method analysis, request rate monitoring
 
 🎯 **Demo 4: Slowloris Detection & Mitigation**
-- `nhanDienVaXuLySlowloris.png` - Demo nhận diện và xử lý Slowloris
+
+![Slowloris Detection](anhQuaTrinhLam/nhanDienVaXuLySlowloris.png)
+
 - Kết quả: Phát hiện connection duration bất thường (45s)
 - AI Confidence: 96.3% (Slowloris)
 - Mitigation: DROP partial connections
+- Duration Analysis: Abnormally long connections vs normal (<2s)
 
 **Kiểm chứng hệ thống sau tấn công:**
 
 ✅ **Kiểm tra lệnh DROP từ ONOS:**
-- `ketQuaKiemTraLenhDrop.png` - Kết quả kiểm tra flow rules trên ONOS
+
+![Kiểm tra lệnh DROP](anhQuaTrinhLam/ketQuaKiemTraLenhDrop.png)
+
 - Xác nhận: DROP rules được push thành công với Priority 40000
 - Thời gian tồn tại: 5 phút (auto-expire để tránh chặn vĩnh viễn)
+- Flow Table: Active blocking rules for attacker IPs
 
 ✅ **Kiểm tra Web Server sau tấn công:**
-- `kiemTraSucKhoeWebServerSauTanCong.png` - Health check web server
+
+![Health Check Web Server](anhQuaTrinhLam/kiemTraSucKhoeWebServerSauTanCong.png)
+
 - Kết quả: Web server hoạt động bình thường sau khi attack bị chặn
 - Response time: <100ms (trở lại mức bình thường)
 - Availability: 99.9% (chỉ 0.1% downtime trong lúc attack peak)
+- Service Recovery: Tất cả endpoints hoạt động bình thường
 
 **Tổng kết Demo:**
 
@@ -4382,7 +4400,9 @@ Tất cả hình ảnh trong thư mục `anhQuaTrinhLam/` là bằng chứng th�
 | File | Mô tả | Giai đoạn |
 |------|-------|-----------|
 | `MangTuCauHInhbandau_khongLienThong.png` | Mạng lúc đầu không liên thông | Giai đoạn 1 |
+| `heThongMangTuCauHinh_mangL2.png` | Hệ thống mạng tự cấu hình L2 (trước khi chuyển L3) | Giai đoạn 1 |
 | `caiDatThuNghiemRyuSauDoluaChonOnosChoDoAn.png` | Thử nghiệm Ryu trước khi chọn ONOS | Giai đoạn 2 |
+| `moHInhNhanDienNguoiDungBTh.png` | Mô hình nhận diện người dùng bình thường | Giai đoạn 2 |
 | `kiemTraCacTruongDataCoTheThuDuoc.png` | Nghiên cứu các trường dữ liệu thu thập được | Giai đoạn 2 |
 | `biLoiTrongQuaTrinhCauHinhWeb.png` | Lỗi trong quá trình cấu hình web | Giai đoạn 3 |
 | `loiMoiTruongNoSandboxTrngquaTrinhXayDungWeb.png` | Lỗi môi trường no-sandbox | Giai đoạn 3 |
@@ -4398,6 +4418,7 @@ Tất cả hình ảnh trong thư mục `anhQuaTrinhLam/` là bằng chứng th�
 | `testAIv3.png` | Test AI v3 | Giai đoạn 4 |
 | `thuThapDatasetV6.png` | Thu thập dataset V6 | Giai đoạn 4 |
 | `thuThapDatasetV7.png` | Thu thập dataset V7 | Giai đoạn 4 |
+| `tienTrinhHutDataChoAI.png` | Tiến trình hút data cho AI (NFStream flow capture) | Giai đoạn 4 |
 | `kiemDinhDatasetV5_tuThu_truocKhitrain.png` | Kiểm định dataset V5 | Giai đoạn 4 |
 | `kiemDinhDatasetv4.png` | Kiểm định dataset V4 | Giai đoạn 4 |
 | `kiemDinhdatasetv4(2).png` | Kiểm định dataset V4 (bổ sung) | Giai đoạn 4 |
