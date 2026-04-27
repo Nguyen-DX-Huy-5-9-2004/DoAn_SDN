@@ -55,7 +55,25 @@ Trước khi thiết kế hệ thống, nhóm đã phân tích sâu về taxonom
 - **Tại sao ĐỘC NHẤT và KHÓ PHÁT HIỆN NHẤT:** Không cần nhiều bandwidth (1KB/s đủ), không cần nhiều packets (10-20 phút), trông giống "user chậm" hơn "attacker", Firewalls/WAF thường không phát hiện (traffic thấp), cần timeout đặc biệt để detect (30s+), **KHÔNG CÓ TRONG CÁC DATASET CÔNG KỘNG!**
 - **Chữ ký V4:** Duration >> Normal (300-600s vs 5-30s), Byte_Rate << Normal (1-5KB/s vs 100KB/s), Packet_Rate thấp (10-20 packets/min), Connections max out nhưng bandwidth thấp.
 
-**Code Minh Họa: Shannon Entropy (Từ README)**
+**Công Thức Toán Học: Shannon Entropy**
+
+Shannon Entropy là đo lường lượng thông tin (information content) của một biến ngẫu nhiên. Trong ngữ cảnh phát hiện DDoS, nó đo độ đa dạng (diversity) của các port được sử dụng:
+
+$$H(X) = -\sum_{i=1}^{n} p(x_i) \cdot \log_2(p(x_i))$$
+
+Trong đó:
+- $H(X)$: Entropy của tập dữ liệu X
+- $p(x_i)$: Xác suất xuất hiện của giá trị $x_i$ (port thứ i)
+- $n$: Số lượng port khác nhau trong cửa sổ quan sát
+- $\log_2$: Logarit cơ số 2, đơn vị tính là bits
+
+**Ý nghĩa trong phát hiện tấn công:**
+
+| Loại Traffic | Entropy | Giải thích |
+|-------------|---------|-----------|
+| **Normal User** | $H \approx 3.0 - 3.5$ | Mở nhiều tab → nhiều port ngẫu nhiên → Entropy cao |
+| **UDP Flood** | $H \approx 0.0 - 0.5$ | 1 port cố định (6666) → Entropy thấp |
+| **SYN Flood** | $H \approx 0.0$ | Botnet dùng cùng 1 src_port → Entropy = 0 |
 
 [CHÈN ẢNH: code_shannonEntropy.png - Tiêu đề: Code tính Shannon Entropy cho cổng từ README]
 
@@ -383,26 +401,15 @@ Ngoài các khối chức năng chính, hệ thống còn tích hợp nhiều c�
 
 •	Explainable AI (XAI): Thay vì chỉ đưa ra dự đoán "đây là UDP Flood", hệ thống sử dụng Spatial Attention và Temporal Attention để giải thích chi tiết: Flow nào bất thường (trong 10 flows), đặc trưng nào quan trọng nhất (Entropy, Packet_Rate...), giúp admin hiểu tại sao AI quyết định như vậy.
 
-•	Persistence & Recovery: Hệ thống tự động lưu checkpoint (ngưỡng động threshold, danh sách WL/BL) mỗi 60 giây. Khi restart, AI khôi phục trạng thái cũ với giá trị MIN đảm bảo (threshold không thể thấp hơn 90% giá trị cơ bản), tránh mất "trí nhớ" sau sự cố.
+•-	Bổ sung Đặc trưng biến thiên (Differential Features): Tại phiên bản V4, nhóm phát hiện ra rằng để nhận diện được các đợt tấn công "nhỏ giọt" lẩn trốn bộ lọc, hệ thống không thể chỉ nhìn vào con số tuyệt đối. Nhóm lập trình bổ sung thêm 13 đặc trưng biến thiên bằng toán học vi phân (tính gia tốc chênh lệch).
 
-**Code Minh Họa Từ README: Port Mirroring & Network Config**
+**Công Thức Toán Học: Differential Features (Đặc trưng biến thiên)**
 
-[CHÈN ẢNH: code_portMirroring.png - Tiêu đề: Code cấu hình Port Mirroring từ README]
+Thay vì chỉ dùng giá trị tuyệt đối $f_t$ tại thời điểm $t$, ta tính sự thay đổi (delta) so với thời điểm trước đó:
 
-```python
-# Port Mirroring (OVS) - Không chạy trên Web Server
-# Toàn bộ traffic qua Gateway s6 được nhân bản ra cổng giám sát riêng
-mirrors = [
-    {
-        "name": "flow_mirror",
-        "ports": ["s6-eth2", "s6-eth3"],  # Web traffic
-        "mirror-port": "s6-eth1"         # → NFStream collector
-    }
-]
-# Ưu điểm: Dù Web1 crash, collector vẫn sống (không chạy trên Web1)
-```
+$$\Delta f_t = f_t - f_{t-1}$$
 
-[CHÈN ẢNH: code_networkConfig.png - Tiêu đề: Code cấu hình Network Topology từ README]
+Hoặc dưới dạng toán tử vi phân rời rạc:
 
 ```python
 # Topology Configuration (mininet/topology.py)
