@@ -228,9 +228,48 @@ Trong quá trình chạy thực tế, nhóm đã vấp phải 3 sự cố nghiê
 1.	Hiện tượng Bùng nổ đạo hàm (Exploding Gradients):
 o	Sự cố: Khi huấn luyện chuỗi thời gian 10 bước (Seq_Len=10), giá trị Gradient tăng vọt khiến đồ thị Loss nhảy múa hình "răng cưa", mô hình không thể hội tụ.
 o	Giải pháp: Tích hợp kỹ thuật Gradient Clipping (max_norm=1.0). Cơ chế này hoạt động như một chốt chặn, không cho phép bất kỳ lực cập nhật trọng số nào vượt quá giới hạn an toàn.
+
+**Công Thức Toán Học: Gradient Clipping**
+
+Khi gradient quá lớn, ta cắt bớt (clip) để tránh "bùng nổ":
+
+$$\text{g}_{\text{clipped}} = \begin{cases} 
+g & \text{nếu } \|g\| \leq \text{max\_norm} \\\
+\frac{g \cdot \text{max\_norm}}{\|g\|} & \text{nếu } \|g\| > \text{max\_norm}
+\end{cases}$$
+
+Trong đó:
+- $g$: Gradient vector ban đầu
+- $\|g\|$: Norm (độ lớn) của gradient
+- $\text{max\_norm} = 1.0$: Ngưỡng tối đa cho phép
+
+**Ví dụ:**
+- Gradient tính ra: $\|g\| = 5.0$ (quá lớn)
+- Sau clipping: $g_{\text{clipped}} = \frac{g \cdot 1.0}{5.0} = 0.2 \cdot g$ (giảm 5 lần)
+
+→ Kết quả: Trọng số cập nhật ổn định, loss giảm mượt mà.
 2.	Sự "hoang tưởng" và Báo động giả (Overconfidence):
 o	Sự cố: Ở các phiên bản đầu, AI mắc bệnh "hoang tưởng" - ép xác suất lên 100% khi dự đoán tấn công. Sự tự tin thái quá này khiến mô hình dễ bị lừa, dẫn đến việc chặn nhầm hàng loạt người dùng thật.
 o	Giải pháp: Nhóm cấu hình kỹ thuật Label Smoothing (0.1). Thay vì tin tưởng tuyệt đối, AI bị ép phải "chừa đường lui" (phân bổ 10% xác suất cho các trường hợp khác). Việc này giúp giảm tỷ lệ False Positive xuống mức tối thiểu.
+
+**Công Thức Toán Học: Label Smoothing**
+
+Thay vì nhãn cứng (hard labels): $y = [0, 1, 0, 0, 0]$ (100% cho class 1), ta làm mềm:
+
+$$y_{\text{smooth}} = y \cdot (1 - \epsilon) + \frac{\epsilon}{K}$$
+
+Trong đó:
+- $y$: Nhãn gốc (one-hot encoding)
+- $\epsilon = 0.1$: Mức độ làm mềm
+- $K = 5$: Số lớp (classes)
+
+**Ví dụ:**
+- Nhãn gốc (HTTP Flood): $y = [0, 0, 1, 0, 0]$ (100% cho class 2)
+- Sau smoothing: $y_{\text{smooth}} = [0.02, 0.02, 0.9, 0.02, 0.02]$
+  - 90% cho HTTP Flood
+  - 2% cho mỗi lớp khác (chừa đường lui)
+
+→ Kết quả: AI không tự tin quá mức, giảm overfitting, giảm False Positive.
 3.	Mất cân bằng dữ liệu của Slowloris:
 o	Sự cố: Slowloris là loại tấn công cực kỳ tinh vi, có số lượng mẫu ít. Ban đầu nhóm đặt trọng số phạt (Class Weight) lên đến 10.0 để ép AI chú ý. Hậu quả là AI sợ bỏ sót nên đã nhận diện nhầm luồng HTTP bình thường thành Slowloris.
 o	Giải pháp: Nhóm giảm giới hạn trọng số xuống mức tối đa là 6.0, kết hợp với hàm mất mát Focal Loss (Gamma=2.0) để AI tập trung vào các "mẫu khó" thay vì chỉ tập trung vào số lượng. Kỹ thuật này đã kéo chỉ số F1-Score của Slowloris từ 0.71 lên 0.81.
@@ -255,6 +294,42 @@ Trong đó:
 | Thấp (0.1) | 0.9 | 0.81 | Giảm 1.2x | **Mẫu khó, cần học nhiều** |
 
 → Kết quả: AI tự động tập trung vào các mẫu Slowloris khó phân biệt thay vì ngập trong số lượng lớn UDP Flood dễ phân biệt.
+
+**Công Thức Toán Học: Weight Decay (L2 Regularization)**
+
+Để ngăn overfitting, ta thêm hình phạt cho trọng số lớn vào hàm loss:
+
+$$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{task}} + \lambda \cdot \frac{1}{2} \sum_{i} w_i^2$$
+
+Trong đó:
+- $\mathcal{L}_{\text{task}}$: Loss gốc (CrossEntropy, Focal Loss, v.v.)
+- $\lambda = 5 \times 10^{-3}$: Hệ số regularization (weight_decay)
+- $w_i$: Trọng số thứ $i$ của mô hình
+- $\sum w_i^2$: Tổng bình phương tất cả trọng số (L2 norm)
+
+**Ý nghĩa:**
+- Trọng số lớn ($w_i$ cao) → Phạt nặng
+- Trọng số nhỏ ($w_i$ gần 0) → Không phạt
+→ Ép mô hình học các trọng số nhỏ, đơn giản, tránh overfitting.
+
+**Công Thức Toán Học: Dropout**
+
+Trong quá trình huấn luyện, tắt ngẫu nhiên một tỷ lệ neuron để ngăn phụ thuộc:
+
+$$r_j^{(l)} \sim \text{Bernoulli}(p)$$
+
+$$y^{(l)} = r^{(l)} \cdot f(W^{(l)} x^{(l)} + b^{(l)})$$
+
+Trong đó:
+- $p = 0.4$: Xác suất giữ neuron (keep probability)
+- $r_j^{(l)}$: Mask ngẫu nhiên (0 hoặc 1) cho neuron $j$ tại layer $l$
+- $f$: Hàm kích hoạt (ReLU, tanh, v.v.)
+
+**Ví dụ:**
+- Layer có 100 neuron
+- Dropout $p = 0.4$ → Tắt ngẫu nhiên 60 neuron (60%), chỉ giữ 40 neuron
+→ Mỗi lần forward khác nhau, ép mô hình học robust features.
+
 Kết hợp với bộ lập lịch OneCycleLR giúp tăng tốc độ học (Learning Rate) ở giai đoạn đầu để vượt qua cực tiểu địa phương, quá trình huấn luyện đã kết thúc mượt mà và tự động dừng sớm để chống quá khớp (Overfitting).
 **Hình ảnh kết quả huấn luyện (từ README):**
 
@@ -305,6 +380,37 @@ c. Truyền tải dữ liệu bằng Ống ảo (Named Pipes - FIFO IPC) Một n
 Hình 3.7. Logic khởi tạo luồng dữ liệu thời gian thực và bộ lọc IP/IPv6
 → Nhờ kết hợp OVS Port Mirroring, NFStream cấu hình Timeout động và Named Pipes, nhóm đã xây dựng được một hệ thống hoàn hảo, cung cấp dòng dữ liệu đặc trưng (bao gồm cả gia tốc biến thiên) sạch sẽ, tức thời để AI đưa ra phán quyết trong chớp mắt.
 3.1.3.3. Logic phân tích và ra quyết định (Detection Logic)
+
+**Bảng Chân Lý (Truth Table) - Logic Ra Quyết Định Dual-Shield**
+
+Hệ thống sử dụng logic kiểm duyệt chéo (cross-validation) giữa 2 lớp khiên (Shield) để đưa ra quyết định cuối cùng:
+
+| Shield 1 (Autoencoder) | Shield 2 (Classifier) | Veto Power | Quyết Định Cuối | Hành Động | Giải Thích |
+|----------------------|---------------------|------------|----------------|-----------|------------|
+| **Normal** (MSE < θ) | Normal (>80%) | - | ✅ BÌNH THƯỜNG | Cho qua | Cả 2 đồng ý là Normal |
+| **Normal** (MSE < θ) | Attack (<80%) | - | ⚠️ XEM XÉT | Rate Limit | Shield 1 không nghi ngờ, nhưng Shield 2 thấy pattern lạ |
+| **Anomaly** (MSE ≥ θ) | Normal (>80%) | ✅ KÍCH HOẠT | ✅ BÌNH THƯỜNG (Veto) | Cho qua | Shield 2 tin chắc là Normal, override Shield 1 |
+| **Anomaly** (MSE ≥ θ) | Attack (<80%) Confidence < 85% | - | 🚫 TẤN CÔNG | Rate Limit | Cả 2 đồng ý là Attack, nhưng chưa chắc chắn |
+| **Anomaly** (MSE ≥ θ) | Attack (>85%) | - | 🚫🚫 TẤN CÔNG NGUY HIỂM | DROP | Cả 2 đồng ý chắc chắn là Attack |
+
+Trong đó:
+- $\theta$ (threshold): Ngưỡng MSE động từ EMA (thường 0.1 - 2.0)
+- **Veto Power**: Kích hoạt khi Shield 2 confidence > 80% Normal (bất chấp Shield 1 nghi ngờ)
+- **Confidence**: Xác suất dự đoán của Classifier (Shield 2)
+
+**Công Thức Logic Veto Power:**
+
+$$\text{Decision} = \begin{cases}
+\text{Normal (Veto)} & \text{nếu } \text{Shield1} = \text{Anomaly} \land \text{Shield2\_conf} > 0.8 \\
+\text{Attack} & \text{nếu } \text{Shield1} = \text{Anomaly} \land \text{Shield2\_conf} < 0.8 \\
+\text{Normal} & \text{nếu } \text{Shield1} = \text{Normal}
+\end{cases}$$
+
+**Ý nghĩa:**
+- Giảm False Positive từ 60% → 3%
+- Bảo vệ user thật khi click nhanh/tải file lớn
+- Không bỏ sót tấn công thực sự
+
 [CHÈN ẢNH: code_detectionLogic.png - Tiêu đề: Code Detection Logic Dual-Shield từ README]
 -	Kịch bản 4 - Quyền phủ quyết bảo vệ người dùng: Khi một người dùng hợp lệ cố tình mở hàng chục tab trình duyệt hoặc tải file lớn, sai số MSE có thể vượt ngưỡng cảnh báo. Lúc này, nếu Lớp 2 phân tích kỹ và nhận ra các dấu hiệu biến thiên vẫn mang tính chất của lưu lượng Normal với độ tin cậy , hệ thống sẽ dùng quyền phủ quyết để cho gói tin đi qua.
 Cơ chế logic kiểm duyệt chéo này là chìa khóa then chốt giúp hệ thống khắc phục triệt để điểm mù của các IDS truyền thống: vừa không bỏ lọt các loại tấn công lẩn trốn, vừa bảo vệ trải nghiệm của người dùng, kéo tỷ lệ báo động giả từ mức 60% ban đầu xuống chỉ còn dưới 3% khi vận hành thực tế.

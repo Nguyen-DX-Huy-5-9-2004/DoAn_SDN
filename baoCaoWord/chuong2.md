@@ -97,6 +97,51 @@ udp_flood_ports = [6666, 6666, 6666, 6666, 6666]    # → Entropy = 0.0
 # MODEL NGAY THẤY: Entropy khác biệt rõ ràng ➜ Dễ phân biệt!
 ```
 
+**Công Thức Toán Học: Packet Rate và Byte Rate**
+
+Hai đặc trưng quan trọng nhất để phát hiện tấn công DDoS dựa trên tốc độ:
+
+**1. Packet Rate (Tốc độ gói tin):**
+
+$$\text{Packet\_Rate} = \frac{\text{Src\_Packets}}{\text{Duration\_Sec}} \quad (\text{packets/sec})$$
+
+**2. Byte Rate (Tốc độ byte):**
+
+$$\text{Byte\_Rate} = \frac{\text{Src\_Bytes}}{\text{Duration\_Sec}} \quad (\text{bytes/sec})$$
+
+**Ý nghĩa trong phát hiện tấn công:**
+
+| Loại Traffic | Packet Rate | Byte Rate | Giải thích |
+|-------------|-------------|-----------|------------|
+| **Normal User** | 5-50 pps | 100KB-1MB/s | Tốc độ tự nhiên, không ổn định |
+| **UDP Flood** | 10,000+ pps | 100MB/s | Volumetric attack - bandwidth exhaustion |
+| **SYN Flood** | 1,000+ pps | Thấp (~1KB/s) | Half-open connections, asymmetric |
+| **Slowloris** | 10-20 pps | 1-5KB/s | Low-rate, nhưng kéo dài 300-600s |
+
+→ **Tấn công DDoS không phải "mở port nào", mà là "hành vi lạ trong port đó"**
+
+**Công Thức Toán Học: StandardScaler (Z-Score Normalization)**
+
+Để đưa dữ liệu về cùng phân phối chuẩn N(0, 1) trước khi đưa vào AI:
+
+$$z = \frac{x - \mu}{\sigma}$$
+
+Trong đó:
+- $x$: Giá trị gốc của đặc trưng
+- $\mu$ (mu): Giá trị trung bình (mean) của đặc trưng
+- $\sigma$ (sigma): Độ lệch chuẩn (standard deviation)
+- $z$: Giá trị đã chuẩn hóa (z-score)
+
+**Tại sao cần chuẩn hóa:**
+
+| Đặc trưng | Giá trị gốc | Sau StandardScaler | Ý nghĩa |
+|-----------|-------------|-------------------|---------|
+| Src_Bytes | 0 - 1,000,000 | ~N(0, 1) | Đưa về cùng thang đo |
+| Packet_Rate | 0 - 50,000 | ~N(0, 1) | Tránh bias do scale khác nhau |
+| Duration | 0.001 - 600 | ~N(0, 1) | AI học công bằng |
+
+→ Kết quả: AI không bị "thiên vị" bởi các đặc trưng có giá trị lớn.
+
 **So Sánh Tổng Hợp:**
 | Đặc điểm | UDP Flood | SYN Flood | HTTP Flood | Slowloris |
 |----------|-----------|-----------|------------|-----------|
