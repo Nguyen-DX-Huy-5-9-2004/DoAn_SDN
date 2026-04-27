@@ -147,6 +147,16 @@ o	Giải pháp: Nhóm cấu hình kỹ thuật Label Smoothing (0.1). Thay vì t
 o	Sự cố: Slowloris là loại tấn công cực kỳ tinh vi, có số lượng mẫu ít. Ban đầu nhóm đặt trọng số phạt (Class Weight) lên đến 10.0 để ép AI chú ý. Hậu quả là AI sợ bỏ sót nên đã nhận diện nhầm luồng HTTP bình thường thành Slowloris.
 o	Giải pháp: Nhóm giảm giới hạn trọng số xuống mức tối đa là 6.0, kết hợp với hàm mất mát Focal Loss (Gamma=2.0) để AI tập trung vào các "mẫu khó" thay vì chỉ tập trung vào số lượng. Kỹ thuật này đã kéo chỉ số F1-Score của Slowloris từ 0.71 lên 0.81.
 Kết hợp với bộ lập lịch OneCycleLR giúp tăng tốc độ học (Learning Rate) ở giai đoạn đầu để vượt qua cực tiểu địa phương, quá trình huấn luyện đã kết thúc mượt mà và tự động dừng sớm để chống quá khớp (Overfitting).
+**Hình ảnh kết quả huấn luyện (từ README):**
+
+[CHÈN ẢNH: ketQuaTrainlop1_aiv4_datasetv7.png - Tiêu đề: Kết quả huấn luyện Lớp 1 (Autoencoder) với Dataset V7 - MSE loss giảm ổn định]
+
+[CHÈN ẢNH: ketQuaTrainKhien2_aiv4_datasetv7.png - Tiêu đề: Kết quả huấn luyện Lớp 2 (CNN-GRU-Attention) với Dataset V7 - Accuracy đạt 96%]
+
+[CHÈN ẢNH: maTranNhamLancuaAiv3.png - Tiêu đề: Ma trận nhầm lẫn của AI V3 - So sánh trước/sau cải tiến]
+
+[CHÈN ẢNH: ketQuaV3-AoGiac.png - Tiêu đề: Vấn đề "Ảo giác" của V3 - False Positive cao do thiếu Veto Power]
+
 d. Đóng gói Tri thức (Model Export) Sau khi huấn luyện thành công, toàn bộ "chất xám" của hệ thống được xuất ra thành 4 tệp tin cốt lõi, sẵn sàng chuyển giao cho bộ điều khiển ONOS:
 -	sdn_scaler.pkl: Chứa tham số để chuẩn hóa 26 chiều dữ liệu thực tế.
 -	sdn_autoencoder.pth: Trọng số của lớp Khiên 1 (Autoencoder).
@@ -235,7 +245,27 @@ Các kết quả demo thực tế cho thấy khả năng phát hiện chính xá
 
 [CHÈN ẢNH: nhanDienVaXuLySYNFlood.png - Tiêu đề: Demo phát hiện SYN Flood - Confidence 98.7%, phát hiện Evasive Attack]
 
-[CHÈN ẢNH: nhanDienVaXuLyHTTPFlood.png - Tiêu đề: Demo phát hiện HTTP Flood (nếu có ảnh trong thư mục anhQuaTrinhLam)]
+[CHÈN ẢNH: nhanDienVaXuLyHTTPFlood.png - Tiêu đề: Demo phát hiện HTTP Flood - Confidence 95.4%]
+
+[CHÈN ẢNH: nhanDienVaXuLyHttpsFlood.png - Tiêu đề: Demo phát hiện HTTPS Flood (Web bảo mật SSL/TLS)]
+
+[CHÈN ẢNH: nhanDienVaXuLySlowloris.png - Tiêu đề: Demo phát hiện Slowloris - Duration 600s, Byte_Rate cực thấp]
+
+[CHÈN ẢNH: dashBroadTanCongHttpHash.png - Tiêu đề: Dashboard hiển thị tấn công HTTP Flood (dạng Hash view)]
+
+[CHÈN ẢNH: dashBroadTanCongHttpJson.png - Tiêu đề: Dashboard hiển thị tấn công HTTP (JSON metrics)]
+
+[CHÈN ẢNH: dashBroadTanCongSyn.png - Tiêu đề: Dashboard hiển thị SYN Flood Attack real-time]
+
+[CHÈN ẢNH: ketQuaKiemTraLenhDrop.png - Tiêu đề: Kiểm tra lệnh DROP trên Open vSwitch sau khi AI ra quyết định]
+
+[CHÈN ẢNH: heThongMangSupDoKhiBiTanCong.png - Tiêu đề: Hệ thống mạng sụp đổ khi bị tấn công (trước khi có AI)]
+
+[CHÈN ẢNH: heThongMangL3_lienThong.png - Tiêu đề: Hệ thống mạng L3 liên thông hoàn chỉnh sau khi chuyển từ L2]
+
+[CHÈN ẢNH: mangKhiChuaBiTanCong_normal.png - Tiêu đề: Mạng hoạt động bình thường trước tấn công (Baseline)]
+
+[CHÈN ẢNH: kiemTraSucKhoeWebServerSauTanCong.png - Tiêu đề: Kiểm tra sức khỏe Web Server sau khi bị tấn công và được AI bảo vệ]
  
 Hình 3.13. Mô hình ngăn chặn tấn công thành công
 3.2.2. Đánh giá hiệu năng mô hình AI (Model Performance)

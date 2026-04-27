@@ -199,6 +199,14 @@ Nhóm quyết định loại bỏ hoàn toàn bộ dữ liệu 46GB từ Interne
 
 [CHÈN ẢNH: thuThapDatasetV7.png - Tiêu đề: Thu thập Dataset V7 (Phiên bản cuối cùng)]
 
+[CHÈN ẢNH: dataset_v4_report.png - Tiêu đề: Báo cáo phân tích Dataset V4 (26 đặc trưng)]
+
+[CHÈN ẢNH: dataset_v7_evaluation.png - Tiêu đề: Đánh giá chất lượng Dataset V7 (75K mẫu cân bằng)]
+
+[CHÈN ẢNH: kiemDinhDatasetv4.png - Tiêu đề: Kiểm định Dataset V4 - Class distribution]
+
+[CHÈN ẢNH: kiemDinhDatasetV5_tuThu_truocKhitrain.png - Tiêu đề: Kiểm định Dataset V5 trước khi train]
+
 **C. Tiến hóa kiến trúc AI: Từ V1 đến V4**
 
 | Phiên bản | Kiến trúc | Đặc điểm | Vấn đề gặp phải |
