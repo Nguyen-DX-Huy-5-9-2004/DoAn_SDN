@@ -55,6 +55,30 @@ Trước khi thiết kế hệ thống, nhóm đã phân tích sâu về taxonom
 - **Tại sao ĐỘC NHẤT và KHÓ PHÁT HIỆN NHẤT:** Không cần nhiều bandwidth (1KB/s đủ), không cần nhiều packets (10-20 phút), trông giống "user chậm" hơn "attacker", Firewalls/WAF thường không phát hiện (traffic thấp), cần timeout đặc biệt để detect (30s+), **KHÔNG CÓ TRONG CÁC DATASET CÔNG KỘNG!**
 - **Chữ ký V4:** Duration >> Normal (300-600s vs 5-30s), Byte_Rate << Normal (1-5KB/s vs 100KB/s), Packet_Rate thấp (10-20 packets/min), Connections max out nhưng bandwidth thấp.
 
+**Code Minh Họa: Shannon Entropy (Từ README)**
+
+[CHÈN ẢNH: code_shannonEntropy.png - Tiêu đề: Code tính Shannon Entropy cho cổng từ README]
+
+```python
+# Code minh họa từ README - Tính Shannon Entropy
+from collections import Counter
+import math
+
+def calculate_port_entropy(ports_window: List[int], window_size=10) -> float:
+    """Shannon Entropy của cổng trong cửa sổ trượt"""
+    counts = Counter(ports_window)
+    entropy = 0
+    for count in counts.values():
+        p = count / len(ports_window)
+        entropy -= p * math.log2(p)
+    return round(entropy, 4)
+
+# Ví dụ:
+normal_ports = [45821, 45822, 45823, 45824, 45825]  # → Entropy = 3.32
+udp_flood_ports = [6666, 6666, 6666, 6666, 6666]    # → Entropy = 0.0
+# MODEL NGAY THẤY: Entropy khác biệt rõ ràng ➜ Dễ phân biệt!
+```
+
 **So Sánh Tổng Hợp:**
 | Đặc điểm | UDP Flood | SYN Flood | HTTP Flood | Slowloris |
 |----------|-----------|-----------|------------|-----------|
@@ -239,6 +263,41 @@ Khi Khiên 1 phát hiện bất thường, Khiên 2 (CNN-GRU-Attention) sẽ đ�
 
 → **Kết quả:** Triết lý này giúp giảm False Positive từ 60% (V1) xuống chỉ còn 3% (V4), đồng thời đạt 89.3% phát hiện Zero-day.
 
+**F. Code Minh Họa Từ README (Thực Tế)**
+
+[CHÈN ẢNH: code_trietLy3LopBaoVe.png - Tiêu đề: Code Python minh họa Triết Lý 3 Lớp Bảo Vệ từ README]
+
+```python
+# Code minh họa từ README - Triết Lý 3 Lớp Bảo Vệ
+# Lớp 2: Khiên 1 - Autoencoder (Anomaly Detection)
+class Contrastive_Autoencoder(nn.Module):
+    """Ép Normal/Reconstruction error thấp, Ép Attack/Error CAO"""
+    def forward(self, x):
+        reconstructed = self.decode(self.encode(x))
+        mse = F.mse_loss(reconstructed, x)
+        return mse  # Normal: ~0.0001, Attack: >0.05
+
+# Lớp 3: Khiên 2 - Parallel CNN-GRU
+class ParallelFusion(nn.Module):
+    def forward(self, x):
+        x_cnn = x.permute(0, 2, 1)
+        cnn_out = self.cnn(x_cnn)  # [B, 128]
+        gru_out, _ = self.gru(x)   # [B, Seq, 256]
+        fused = torch.cat([cnn_out, gru_out], dim=1)
+        return classifier(fused)  # [B, 5]
+
+# Lớp 4: Runtime - Adaptive Threshold (EMA)
+class AdaptiveThreshold:
+    def update(self, mse_normal_batch):
+        batch_mean = np.mean(mse_normal_batch)
+        self.threshold = (1 - self.alpha) * self.threshold + self.alpha * batch_mean
+        self.threshold = np.clip(self.threshold, 0.1, 2.0)
+```
+
+[CHÈN ẢNH: code_adaptiveThresholdEMA.png - Tiêu đề: Code Adaptive Threshold EMA từ README]
+
+[CHÈN ẢNH: code_garbageCollector.png - Tiêu đề: Code Garbage Collector từ README]
+
 **E. Bài Học Qua Các Phiên Bản (Lessons Learned)**
 
 Hành trình từ V1 đến V4 không chỉ là quá trình cải tiến kỹ thuật mà còn là quá trình học hỏi từ thất bại. Dưới đây là những bài học quý giá nhất:
@@ -317,6 +376,47 @@ Ngoài các khối chức năng chính, hệ thống còn tích hợp nhiều c�
 •	Explainable AI (XAI): Thay vì chỉ đưa ra dự đoán "đây là UDP Flood", hệ thống sử dụng Spatial Attention và Temporal Attention để giải thích chi tiết: Flow nào bất thường (trong 10 flows), đặc trưng nào quan trọng nhất (Entropy, Packet_Rate...), giúp admin hiểu tại sao AI quyết định như vậy.
 
 •	Persistence & Recovery: Hệ thống tự động lưu checkpoint (ngưỡng động threshold, danh sách WL/BL) mỗi 60 giây. Khi restart, AI khôi phục trạng thái cũ với giá trị MIN đảm bảo (threshold không thể thấp hơn 90% giá trị cơ bản), tránh mất "trí nhớ" sau sự cố.
+
+**Code Minh Họa Từ README: Port Mirroring & Network Config**
+
+[CHÈN ẢNH: code_portMirroring.png - Tiêu đề: Code cấu hình Port Mirroring từ README]
+
+```python
+# Port Mirroring (OVS) - Không chạy trên Web Server
+# Toàn bộ traffic qua Gateway s6 được nhân bản ra cổng giám sát riêng
+mirrors = [
+    {
+        "name": "flow_mirror",
+        "ports": ["s6-eth2", "s6-eth3"],  # Web traffic
+        "mirror-port": "s6-eth1"         # → NFStream collector
+    }
+]
+# Ưu điểm: Dù Web1 crash, collector vẫn sống (không chạy trên Web1)
+```
+
+[CHÈN ẢNH: code_networkConfig.png - Tiêu đề: Code cấu hình Network Topology từ README]
+
+```python
+# Topology Configuration (mininet/topology.py)
+NETWORK_CONFIG = {
+    "core_switch": {
+        "name": "s6",
+        "dpid": "0000000000000006",
+        "ports": {
+            "s6-eth1": "IDS Mirror Port (nfstream capture)",
+            "s6-eth2": "DMZ Zone",
+            "s6-eth3": "Internal Zone",
+            "s6-eth4": "Honeypot Zone",
+            "s6-eth5": "Controller Connection"
+        }
+    },
+    "subnets": {
+        "dmz": {"cidr": "10.0.0.0/24", "hosts": [("web1", "10.0.0.10/24")]},
+        "attackers": {"cidr": "10.0.1.0/24", "hosts": 20},
+        "legitimate": {"cidr": "10.0.2.0/24", "hosts": 40}
+    }
+}
+```
 
 [CHÈN ẢNH: nhanDienVaXuLyUDPFlood.png - Tiêu đề: Demo phát hiện và xử lý UDP Flood thời gian thực]
 

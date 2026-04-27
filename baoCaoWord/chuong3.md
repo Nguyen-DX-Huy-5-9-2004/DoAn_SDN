@@ -51,7 +51,27 @@ Thêm ảnh Bộ dữ liệu chuẩn
 c.	Đột phá trong trích xuất Đặc trưng (Feature Engineering)
 Thay vì trích xuất 20 đặc trưng tĩnh rời rạc, nhóm đã thực hiện những tối ưu toán học mang tính bước ngoặt nhằm kiến tạo lại bộ đầu vào cho AI:
 -	Sử dụng Shannon Entropy thay cho Cổng vật lý: Để chống lại kỹ thuật làm giả IP và Port, nhóm loại bỏ hoàn toàn việc phân tích số hiệu Port thô. Thay vào đó, công thức Entropy được áp dụng để đo lường độ hỗn loạn của cổng đích và cổng nguồn. Entropy thấp thể hiện truy cập có chủ đích của người dùng, trong khi Entropy cao báo hiệu sự ngẫu nhiên của các máy Botnet. Quá trình này giúp chắt lọc ra 13 đặc trưng gốc cốt lõi phản ánh đúng "hành vi" mạng.
--	Bổ sung Đặc trưng biến thiên (Differential Features): Tại phiên bản V4, nhóm phát hiện ra rằng để nhận diện được các đợt tấn công "nhỏ giọt" lẩn trốn bộ lọc, hệ thống không thể chỉ nhìn vào con số tuyệt đối. Nhóm lập trình bổ sung thêm 13 đặc trưng biến thiên bằng toán học vi phân (tính gia tốc chênh lệch: ).
+-	Bổ sung Đặc trưng biến thiên (Differential Features): Tại phiên bản V4, nhóm phát hiện ra rằng để nhận diện được các đợt tấn công "nhỏ giọt" lẩn trốn bộ lọc, hệ thống không thể chỉ nhìn vào con số tuyệt đối. Nhóm lập trình bổ sung thêm 13 đặc trưng biến thiên bằng toán học vi phân (tính gia tốc chênh lệch).
+
+**Code Minh Họa: Differential Features (Từ README)**
+
+[CHÈN ẢNH: code_differentialFeatures.png - Tiêu đề: Code tính Differential Features từ README]
+
+```python
+def differential_features_numpy(X):
+    """
+    Tính đặc trưng biến thiên
+    X: [Batch, Seq, Features] = [B, 10, 13]
+    Return: [B, 10, 26] (13 gốc + 13 biến thiên)
+    """
+    batch_size, seq_len, num_features = X.shape
+    diff = np.zeros_like(X)
+    diff[:, 1:, :] = X[:, 1:, :] - X[:, :-1, :]  # Tính sự thay đổi
+    
+    combined = np.concatenate([X, diff], axis=-1)
+    return combined  # [Batch, Seq, 26]
+```
+
 Việc tính toán sự chênh lệch này giúp tạo ra một bộ Tensor 26 chiều đặc trưng (13 tĩnh + 13 biến thiên). Cấu trúc này trao cho "bộ não" AI khả năng nhìn thấy "vận tốc" thay đổi của luồng mạng, từ đó phân biệt rạch ròi giữa việc người dùng đang click chuột cực nhanh (biến thiên ngẫu nhiên) với một cuộc tấn công do máy móc tự động sinh ra (biến thiên bằng 0).
 Cuối cùng, toàn bộ cấu trúc dữ liệu 26 chiều đa nguồn được kết nối thông qua thư viện Pandas (pd.concat) và đưa qua hàm StandardScaler để chuẩn hóa về cùng phân phối trước khi đóng gói cho các mạng nơ-ron học sâu.
 STT	Đặc trưng tĩnh (Core Features)	Đặc trưng biến thiên (Differential - Δ)	Ý nghĩa và Vai trò trong phân loại tấn công DDoS
@@ -76,6 +96,30 @@ Chính ma trận này đã mang lại cho mô hình CNN-GRU khả năng phân bi
 3.1.2.2. Huấn luyện mô hình
 Trên cơ sở hạ tầng mạng và tập dữ liệu V7 (với 26 chiều đặc trưng) đã chuẩn bị, quy trình xây dựng "bộ não" AI được tiến hành. Nhằm tận dụng sức mạnh tính toán, toàn bộ quy trình huấn luyện được thực hiện trên nền tảng Google Colab. Quá trình này không diễn ra suôn sẻ ngay từ đầu mà là một hành trình tinh chỉnh liên tục qua các phiên bản, được chia làm hai giai đoạn chiến lược nhằm xử lý triệt để các rào cản kỹ thuật phức tạp.
 a.	Giai đoạn 1: Huấn luyện bộ lọc bất thường (Contrastive Autoencoder) Thay vì sử dụng mạng Autoencoder với hàm mất mát MSE (Mean Squared Error) cơ bản như các nghiên cứu trước, nhóm đã áp dụng kỹ thuật Học tương phản (Contrastive Learning) với hàm Margin Loss.
+
+**Code Minh Họa: Contrastive Loss (Từ README)**
+
+[CHÈN ẢNH: code_contrastiveLoss.png - Tiêu đề: Code Contrastive Loss từ README]
+
+```python
+class ContrastiveLoss(nn.Module):
+    def __init__(self, margin=AE_MARGIN):  # AE_MARGIN = 2.0
+        super().__init__()
+        self.margin = margin
+    
+    def forward(self, ae_model, x_normal, x_attack):
+        # Normal: MSE phải thấp
+        mse_normal = MSE(x_normal, ae_model(x_normal))
+        
+        # Attack: MSE phải cao hơn margin
+        mse_attack = MSE(x_attack, ae_model(x_attack))
+        
+        # Hinge loss: max(0, margin - attack_mse)^2
+        loss = mse_normal + max(0, margin - mse_attack)**2
+        
+        return loss
+```
+
 -	Cách thức: Mô hình chỉ được cung cấp dữ liệu của người dùng hợp lệ (Normal). Hàm Margin (được cấu hình bằng 2.0) sẽ ép mô hình phải siết chặt ranh giới nhận diện: nén và giải nén hoàn hảo các luồng Normal, đồng thời đẩy sai số tái tạo của các luồng Attack vượt qua ngưỡng cho phép.
 -	Kết quả: Tạo ra lớp khiên thứ nhất có khả năng phát hiện 89.3% các cuộc tấn công Zero-day chưa từng xuất hiện trong tập huấn luyện.
 b.	Giai đoạn 2: Huấn luyện bộ định danh chuyên sâu (Parallel CNN-GRU-Attention với Multi-Scale Residual)
@@ -142,12 +186,7 @@ c. Truyền tải dữ liệu bằng Ống ảo (Named Pipes - FIFO IPC) Một n
 Hình 3.7. Logic khởi tạo luồng dữ liệu thời gian thực và bộ lọc IP/IPv6
 → Nhờ kết hợp OVS Port Mirroring, NFStream cấu hình Timeout động và Named Pipes, nhóm đã xây dựng được một hệ thống hoàn hảo, cung cấp dòng dữ liệu đặc trưng (bao gồm cả gia tốc biến thiên) sạch sẽ, tức thời để AI đưa ra phán quyết trong chớp mắt.
 3.1.3.3. Logic phân tích và ra quyết định (Detection Logic)
-Sau khi luồng dữ liệu 10 bước thời gian (với ma trận kích thước 10 x 26 chiều) được đưa vào từ ống truyền tải tốc độ cao, quá trình suy luận của mạng AI chính thức bắt đầu. Thay vì sử dụng các cấu trúc if-else đơn giản hay ngưỡng chặn cứng (Static Threshold) như các hệ thống truyền thống, logic ra quyết định của đề tài được lập trình dựa trên Cơ chế Hai lớp khiên (Dual-Shield) thông qua một Bảng chân lý (Truth Table) phức tạp.
-Trước hết, dữ liệu đi qua lớp khiên số 1 (Anomaly Autoencoder) để tính toán mức độ sai số tái tạo (Mse). Trong môi trường SDN thực tế, lưu lượng mạng luôn biến động liên tục (tăng vọt vào giờ cao điểm, giảm sâu vào ban đêm). Nếu áp dụng một ngưỡng phát hiện cố định, hệ thống sẽ liên tục báo động giả khi lưu lượng tăng tự nhiên. Để khắc phục, nhóm đã lập trình thuật toán Trung bình trượt hàm mũ (EMA - Exponential Moving Average) với hệ số nhằm tính toán ra một Ngưỡng động (Dynamic Threshold). Ngưỡng này có khả năng tự động nới lỏng hoặc siết chặt dựa trên đường cơ sở (baseline) của mạng theo thời gian thực. Bên cạnh đó, để tránh việc bộ não AI bị "ảo giác" do các nhiễu sóng mạng ngẫu nhiên, toàn bộ chuỗi giá trị MSE cũng được hệ thống áp dụng kỹ thuật làm mịn (MSE EMA Smoothing) trước khi đưa vào đối chiếu.
-Khi đã có điểm số dị thường (MSE) từ lớp 1 và xác suất định danh từ mạng CNN-GRU ở Lớp 2, tác tử AI không tin tưởng mù quáng vào một mạng duy nhất mà sẽ thực hiện đối chiếu chéo thông qua 4 kịch bản của Bảng chân lý:
--	Kịch bản 1 - Đồng thuận tấn công: Nếu sai số MSE vượt qua ngưỡng động, và mạng phân loại Lớp 2 cũng khẳng định đây là tấn công với độ tin cậy , hệ thống lập tức chốt nhãn (ví dụ: HTTP Flood) và gửi cảnh báo.
--	Kịch bản 2 - Bắt giữ Zero-Day: Nếu sai số MSE vượt ngưỡng, nhưng mạng lớp 2 bị bối rối và cho ra xác suất phân loại, hệ thống vẫn ưu tiên đặt an toàn lên hàng đầu, tự động chốt nhãn là Tấn công Zero-day và tiến hành chặn.
--	Kịch bản 3 - Tấn công lẩn trốn: Kẻ tấn công (như Slowloris) có thể ngụy trang quá hoàn hảo khiến sai số MSE cực thấp, lách qua được lớp kiểm tra dị thường. NHƯNG nếu mạng Lớp 2 phát hiện ra nhịp điệu thời gian lặp lại bất thường với độ tin cậy tuyệt đối, Lớp 2 sẽ kích hoạt quyền ưu tiên, phủ quyết kết quả của Lớp 1 và xác nhận đây là tấn công.
+[CHÈN ẢNH: code_detectionLogic.png - Tiêu đề: Code Detection Logic Dual-Shield từ README]
 -	Kịch bản 4 - Quyền phủ quyết bảo vệ người dùng: Khi một người dùng hợp lệ cố tình mở hàng chục tab trình duyệt hoặc tải file lớn, sai số MSE có thể vượt ngưỡng cảnh báo. Lúc này, nếu Lớp 2 phân tích kỹ và nhận ra các dấu hiệu biến thiên vẫn mang tính chất của lưu lượng Normal với độ tin cậy , hệ thống sẽ dùng quyền phủ quyết để cho gói tin đi qua.
 Cơ chế logic kiểm duyệt chéo này là chìa khóa then chốt giúp hệ thống khắc phục triệt để điểm mù của các IDS truyền thống: vừa không bỏ lọt các loại tấn công lẩn trốn, vừa bảo vệ trải nghiệm của người dùng, kéo tỷ lệ báo động giả từ mức 60% ban đầu xuống chỉ còn dưới 3% khi vận hành thực tế.
 3.1.3.4. Logic phản vệ và ngăn chặn (Mitigation Logic)
@@ -261,16 +300,3 @@ Về mặt lý thuyết và khoa học:
 •	Đề xuất kiến tạo thành công Ma trận 26 chiều đặc trưng. Bằng việc áp dụng toán học vi phân để tính toán "gia tốc biến thiên" kết hợp với kỹ thuật đo lường độ hỗn loạn (Port Entropy), hệ thống đã tạo ra tiền đề khoa học vững chắc để bóc tách các hành vi ngụy trang tinh vi.
 Về mặt thực tiễn và triển khai: Hệ thống AI phòng thủ (V4) đã khắc phục triệt để 3 điểm yếu chí mạng của các hệ thống Phát hiện xâm nhập (IDS) truyền thống:
 •	Triệt tiêu báo động giả (False Positive): Bằng việc thiết kế logic ra quyết định theo Cơ chế Hai lớp khiên (Dual-Shield) kết hợp Quyền phủ quyết (Veto Power) và ngưỡng thích nghi động (EMA), hệ thống biết "chừa đường lui" để bảo vệ người dùng hợp lệ. Kết quả thực nghiệm cho thấy tỷ lệ báo động giả giảm từ mức 60% ở các mô hình cũ xuống chỉ còn dưới 3%.
-•	Tốc độ phản ứng siêu tốc (Sub-second Response): Xây dựng thành công đường ống thu thập dữ liệu 4 tầng độc lập. Việc kết hợp sao chép cổng (Port Mirroring) cùng kỹ thuật truyền tải trên RAM (Named Pipes - FIFO) đã nén độ trễ từ lúc phát hiện đến khi Switch cài đặt luật chặn xuống chỉ còn ~100ms. Hệ thống không bị nghẽn cổ chai ngay cả khi băng thông tấn công lên tới hàng Gigabit.
-•	Bắt giữ tấn công chưa biết (Zero-day) và Tấn công lẩn trốn: Lớp khiên Autoencoder với hàm mất mát Contrastive giúp hệ thống nhận diện thành công tới 89.3% các biến thể tấn công mới. Đồng thời, mạng định danh chuyên sâu CNN-GRU-Attention đạt điểm F1-Score trung bình 0.94, tóm gọn thành công các cuộc tấn công ngâm kết nối cực chậm như Slowloris.
-2. Những hạn chế còn tồn tại
-Dù đạt được những kết quả khả quan, dưới góc độ của một hệ thống quy mô công nghiệp, đề tài vẫn còn một số giới hạn:
-•	Giới hạn môi trường: Hệ thống mới được triển khai trên môi trường mô phỏng ảo hóa Mininet và Open vSwitch. Các thiết bị chuyển mạch vật lý (Hardware Switch) có thể sẽ có các đặc tính xử lý độ trễ khác biệt chưa được đo lường hết.
-•	Rủi ro tràn TCAM: Đối mặt với các đợt tấn công làm giả hàng vạn IP ngẫu nhiên (IP Spoofing), việc đẩy hàng vạn luật cấm (DROP rules) xuống Switch với thời gian sống (Timeout) cố định có thể làm cạn kiệt nhanh chóng bộ nhớ phần cứng TCAM của Switch.
-•	Nút thắt REST API: Cơ chế thu thập dữ liệu và giao tiếp qua REST API của ONOS Controller vẫn tồn tại một độ trễ nhỏ (overhead).
-3. Định hướng phát triển tương lai (Research Roadmap)
-Dựa trên những kinh nghiệm đúc kết được, nhóm nghiên cứu đề xuất một lộ trình nâng cấp hệ thống trong tương lai như sau:
-•	Quản lý bộ nhớ TCAM bằng Học tăng cường (RL): Tích hợp RL để AI tự động học cách đánh giá và chủ động xóa (eviction) các luật cấm cũ ít nguy hiểm, nhường chỗ cho luật mới, giúp Switch không bao giờ bị "chết đứng" vì tràn bộ nhớ.
-•	Triển khai TinyML trên Rìa mạng (Edge Computing): Chuyển dịch một phần mô hình phân tích xuống trực tiếp các Switch vật lý hoặc Node cạnh (Federated Learning) để phân tán rủi ro, triệt tiêu độ trễ mạng và mở rộng quy mô phòng thủ vô hạn.
-•	Tối ưu hóa thành chuẩn gRPC: Chuyển đổi giao thức điều khiển từ REST API sang Streaming Telemetry (gRPC) kết hợp định dạng ONNX Runtime nhằm ép độ trễ phản ứng xuống ngưỡng siêu tốc dưới 15ms.
-LỜI KẾT: Khóa luận tốt nghiệp này không chỉ là bản báo cáo về một mô hình trí tuệ nhân tạo, mà là minh chứng cho một hành trình kỹ thuật thực thụ. Việc kết hợp linh hoạt giữa cơ sở toán học thuần túy (Entropy, Contrastive Learning) và tư duy kiến trúc hệ thống (Memory Management, Zero-copy IPC) đã cho ra đời một sản phẩm phòng thủ SDN có tính ứng dụng cao. Chúng em tin rằng, kiến trúc “hai lớp khiên" này sẽ là một nền tảng tham khảo giá trị cho các nghiên cứu chuyên sâu về An toàn thông tin trên hạ tầng mạng thế hệ mới.
