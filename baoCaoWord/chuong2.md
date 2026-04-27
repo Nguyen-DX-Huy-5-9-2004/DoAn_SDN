@@ -9,6 +9,64 @@ CHƯƠNG 2: PHÂN TÍCH, THIẾT KẾ VÀ XÂY DỰNG MÔ HÌNH HỆ THỐNG
 -	Một số đồ án/luận văn gần đây đã bắt đầu tích hợp AI, nhưng đa phần dừng lại ở mô phỏng phát hiện (Detection) mà chưa chú trọng nhiều vào cơ chế giảm thiểu (Mitigation) tự động hoặc tối ưu hóa thời gian thực.
 2.1.3. Khoảng trống nghiên cứu (Research Gap)
 -	Hầu hết các nghiên cứu tập trung vào độ chính xác (Accuracy) mà bỏ qua yếu tố thời gian trễ (Latency). Trong SDN, nếu phát hiện chậm, Controller sẽ bị sập trước khi kịp chặn tấn công. Đây là điểm mà đề tài này sẽ tập trung cải thiện.
+
+2.1.4. Phân tích đặc thù 4 loại tấn công DDoS mục tiêu
+
+Trước khi thiết kế hệ thống, nhóm đã phân tích sâu về taxonomy của DDoS attacks để chọn 4 loại đại diện cho toàn bộ spectrum:
+
+```
+┌─────────────────┬─────────────────┬─────────────────┐
+│  Volumetric     │  Protocol       │  Application    │
+│  (Layer 3)      │  (Layer 4)      │  (Layer 7)      │
+├─────────────────┼─────────────────┼─────────────────┤
+│  UDP Flood      │  SYN Flood      │  HTTP Flood     │
+│  ICMP Flood     │  Ping of Death  │  Slowloris      │
+│  DNS Amplify    │  Smurf          │  RUDY           │
+└─────────────────┴─────────────────┴─────────────────┘
+
+4 Loại được chọn ĐẠI DIỆN:
+• UDP Flood    → Volumetric (ăn băng thông)
+• SYN Flood    → Protocol (ăn connection table)
+• HTTP Flood   → Application (ăn CPU/DB resources)
+• Slowloris    → Slow Application (khó phát hiện nhất)
+```
+
+**1. UDP Flood - Volumetric Attack (Layer 3)**
+- **Cơ chế:** UDP là connectionless, attacker gửi packets kích thước lớn (65,507 bytes) không cần chờ response. Target là băng thông mạng và CPU xử lý packets.
+- **Biểu hiện:** Network Interface RX errors tăng vọt, CPU system load cao, kernel buffer đầy, bandwidth 100% utilization.
+- **Tại sao khó phát hiện:** UDP traffic là hợp lệ, có thể spoof source IP, không có connection state để track.
+- **Chữ ký V4:** Packet_Rate > 30,000 pps, Byte_Rate > 100MB/s, Port_Entropy ≈ 0 (fixed port), nDPI: "Unknown" protocol.
+
+**2. SYN Flood - Protocol Attack (Layer 4)**
+- **Cơ chế:** Khai thác TCP 3-way handshake. Attacker gửi SYN → Server allocates resources → Không gửi ACK → Connection half-open → Server chờ timeout (75 giây) → Connection table đầy.
+- **Biểu hiện:** netstat -an: SYN_RECV connections hàng ngàn, kernel "TCP: out of memory", ứng dụng không accept được connection mới.
+- **Tại sao KHÓ PHÁT HIỆN hơn UDP:** SYN packets là hợp lệ TCP, có thể spoof IP, traffic volume thấp hơn UDP nhưng hiệu quả hơn, trông giống "busy server" hơn "attack".
+- **Chữ ký V4:** Conn_State = 0 (half-open), SYN packets >> ACK packets (ratio > 10:1), Short Duration (< 1s per attempt), Src_IP entropy cao (spoofed).
+
+**3. HTTP Flood - Application Attack (Layer 7)**
+- **Cơ chế:** Attacker gửi HTTP requests HỢP LỆ, GET/POST đến URLs tốn nhiều resources (ví dụ: /search?q=test). Mỗi request kích hoạt: Nginx → WSGI → Database → Response.
+- **Biểu hiện:** Nginx worker processes 100% CPU, Database connection pool exhausted, Application response time > 30 giây, "504 Gateway Timeout".
+- **Tại sao CỰC KỲ KHÓ PHÁT HIỆN:** Requests là hợp lệ (valid HTTP/1.1), headers đầy đủ, không có signature đặc biệt, có thể rotate qua nhiều IPs (botnet), Cloudflare/WAF thường không block.
+- **Chữ ký V4:** Request rate >> Normal user (100x), No think time (0s between requests), URL entropy cao (random paths), nDPI: "HTTP" protocol detected, Temporal pattern không có "bursts" như normal.
+
+**4. Slowloris - Slow Application Attack (Layer 7)**
+- **Cơ chế:** Attacker mở HTTP connection, gửi request từng phần dần dần, giữ connection sống bằng headers rác định kỳ, không bao giờ kết thúc request (không gửi \r\n\r\n) → Server giữ connection mở chờ request hoàn chỉnh.
+- **Biểu hiện:** Nginx "upstream timed out" errors, netstat: ESTABLISHED connections hàng trăm từ 1 IP, Server đạt max connections nhưng traffic thấp, "Cannot connect to server".
+- **Tại sao ĐỘC NHẤT và KHÓ PHÁT HIỆN NHẤT:** Không cần nhiều bandwidth (1KB/s đủ), không cần nhiều packets (10-20 phút), trông giống "user chậm" hơn "attacker", Firewalls/WAF thường không phát hiện (traffic thấp), cần timeout đặc biệt để detect (30s+), **KHÔNG CÓ TRONG CÁC DATASET CÔNG KỘNG!**
+- **Chữ ký V4:** Duration >> Normal (300-600s vs 5-30s), Byte_Rate << Normal (1-5KB/s vs 100KB/s), Packet_Rate thấp (10-20 packets/min), Connections max out nhưng bandwidth thấp.
+
+**So Sánh Tổng Hợp:**
+| Đặc điểm | UDP Flood | SYN Flood | HTTP Flood | Slowloris |
+|----------|-----------|-----------|------------|-----------|
+| **Layer** | 3 (Network) | 4 (Transport) | 7 (Application) | 7 (Application) |
+| **Target** | Bandwidth | Connection Table | CPU/DB | Connection Pool |
+| **Speed** | Very Fast | Fast | Medium | Very Slow |
+| **Volume** | High (GB/s) | Medium (MB/s) | Low (MB/s) | Very Low (KB/s) |
+| **Detection** | Easy | Medium | Hard | Very Hard |
+| **Dataset** | Có sẵn | Có sẵn | Có sẵn | **KHÔNG CÓ** |
+
+→ **Lý do chọn 4 loại:** Đại diện cho toàn bộ spectrum DDoS, từ dễ đến khó, đặc biệt Slowloris là độc nhất và không có trong bất kỳ dataset public nào.
+
 2.2. Thực trạng có liên quan đến KLTN
 2.2.1. Hoạt động quản lý và vận hành mạng SDN
 -	Trong mô hình hiện tại, Quản trị viên sử dụng Controller để định tuyến tập trung.
@@ -127,6 +185,88 @@ Nhóm quyết định loại bỏ hoàn toàn bộ dữ liệu 46GB từ Interne
 | **V4** (Final) | **Parallel CNN-GRU + Attention + Autoencoder** | Song song, nhẹ, nhanh, 2-Shield | **Tối ưu cho SDN real-time** |
 
 → **Quyết định quan trọng:** Chuyển từ kiến trúc tuần tự (CNN rồi đến GRU) sang kiến trúc **Song song (Parallel Fusion)**, giúp CNN và GRU hoạt động độc lập không làm nhiễu thông tin nhau.
+
+**D. Triết Lý Phát Triển: "3 Lớp Bảo Vệ" (Three-Layer Defense Philosophy)**
+
+Sau hành trình đầy thử thách từ V0 đến V7 và từ V1 đến V4 AI, nhóm đúc kết ra triết lý cốt lõi: **"AI không thể tin tưởng mù quáng"**. Hệ thống phải được xây dựng theo kiến trúc "Dual-Shield" với 3 lớp bảo vệ liên hoàn:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Lớp 1: Dữ Liệu (Data Cleansing)                                  │
+│ • Cắt bỏ port số → Dùng Shannon Entropy                         │
+│ • Thêm Differential Features → Nhìn "gia tốc" không chỉ "vận tốc"│
+│ • Lọc Subnet thông minh → Bảo vệ Normal user (10.0.2.x)         │
+└─────────────────────────────────────────────────────────────────┘
+                                    ⬇️
+┌─────────────────────────────────────────────────────────────────┐
+│ Lớp 2: Khiên 1 - Autoencoder (Anomaly Detection)                │
+│ • Contrastive Learning → Ép Normal/Attack xa nhau             │
+│ • Margin = 2.0 (siết chặt ranh giới)                            │
+│ • Threshold Adaptive (EMA) → Thích ứng với Flash Crowd          │
+│ • → Phát hiện Zero-day (89.3% biến thể mới)                    │
+└─────────────────────────────────────────────────────────────────┘
+                                    ⬇️
+┌─────────────────────────────────────────────────────────────────┐
+│ Lớp 3: Khiên 2 - Classifier (CNN-GRU)                          │
+│ • CNN (Spatial) + GRU (Temporal) → Song song (Parallel)         │
+│ • Attention (Temporal + Spatial) → Chỉ thị flow bất thường      │
+│ • Feature Weighting x2.0 → Duration/Packet_Rate quan trọng      │
+│ • → Phân biệt 5 loại attack rõ ràng                             │
+└─────────────────────────────────────────────────────────────────┘
+                                    ⬇️
+┌─────────────────────────────────────────────────────────────────┐
+│ Lớp 4: Vận Hành (Runtime)                                       │
+│ • Veto Power (>80% Normal = TIN) → Không chặn người dùng vô căn cứ│
+│ • Temporal Consistency (5 chuỗi) → Attack thật = 3/5 đồng ý     │
+│ • Garbage Collector → Xóa 20% IP cũ khi RAM gần cạn             │
+│ • Rate Limiting + DROP → 2 lệnh, 2 mức độ                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Giải thích chi tiết từng lớp:**
+
+**Lớp 1 - Làm sạch từ gốc (Data Cleansing):**
+Thay vì dùng dữ liệu thô, nhóm đã áp dụng nhiều kỹ thuật tiền xử lý để "làm sạch" dữ liệu trước khi đưa vào AI. Việc loại bỏ port number và thay bằng Entropy giúp tránh hiện tượng "học vẹt" theo cổng dịch vụ. Thêm Differential Features cho phép AI nhìn thấy sự thay đổi (gia tốc) của luồng mạng, không chỉ giá trị tuyệt đối.
+
+**Lớp 2 - Khiên bất thường (Anomaly Detection):**
+Autoencoder được huấn luyện chỉ trên dữ liệu Normal (học không giám sát). Mô hình học cách nén và giải nén các luồng dữ liệu hợp lệ. Khi gặp bất kỳ luồng nào có pattern khác (kể cả Zero-day chưa từng thấy), reconstruction error sẽ tăng vọt và vượt ngưỡng. Đây là lớp phòng thủ đầu tiên, có khả năng bắt mọi dạng tấn công bất thường.
+
+**Lớp 3 - Khiên phân loại (Classifier):**
+Khi Khiên 1 phát hiện bất thường, Khiên 2 (CNN-GRU-Attention) sẽ định danh chính xác loại tấn công. Kiến trúc Parallel giúp CNN học pattern không gian và GRU học pattern thời gian độc lập, không làm nhiễu nhau. Attention mechanism giúp AI tập trung vào các bước thời gian quan trọng nhất.
+
+**Lớp 4 - Kiểm soát thực tế (Runtime):**
+Để tránh chặn nhầm người dùng thật, hệ thống tích hợp Veto Power. Nếu Classifier khẳng định >80% là Normal (dù Autoencoder nghi ngờ), hệ thống sẽ "tin" Classifier và cho phép đi qua. Garbage Collector giúp quản lý RAM khi bị tấn công IP spoofing quy mô lớn.
+
+→ **Kết quả:** Triết lý này giúp giảm False Positive từ 60% (V1) xuống chỉ còn 3% (V4), đồng thời đạt 89.3% phát hiện Zero-day.
+
+**E. Bài Học Qua Các Phiên Bản (Lessons Learned)**
+
+Hành trình từ V1 đến V4 không chỉ là quá trình cải tiến kỹ thuật mà còn là quá trình học hỏi từ thất bại. Dưới đây là những bài học quý giá nhất:
+
+| Giai Đoạn | Sai Lầm | Bài Học | Cải Tiến Chính |
+|-----------|---------|---------|----------------|
+| **V1** | Dùng dataset CIC-IDS2019 công cộng | ❌ Dataset phải từ target domain | Chuyển sang thu thập dữ liệu tự động từ Mininet |
+| **V1** | Random Forest với 20 features | ❌ Chỉ phân tích điểm, không thấy chuỗi thời gian | Chuyển sang CNN + GRU để bắt pattern không gian và thời gian |
+| **V2** | Dataset 46GB từ nhiều nguồn | ❌ Dataset quality > quantity | Xây dựng pipeline thu thập riêng, tự kiểm định |
+| **V2** | Giữ port number làm feature | ❌ Port thay đổi ngẫu nhiên → dùng Entropy | Thay src_port bằng Src_Port_Entropy |
+| **V3** | Autoencoder đơn giản (MSE loss) | ❌ Cần Spatial + Temporal (CNN-GRU) | Thêm Parallel CNN-GRU + Attention |
+| **V3** | Threshold tĩnh (0.5) | ❌ Không thích ứng với flash crowd | Chuyển sang EMA adaptive threshold |
+| **V4** | CNN rồi đến GRU (tuần tự) | ❌ CNN làm nhiễu thông tin GRU | Chuyển sang Parallel Fusion (CNN || GRU) |
+| **V4** | Thiếu cơ chế chặn nhầm | ❌ Cần "quyền phủ quyết" | Thêm Veto Power (>80% Normal = tin) |
+
+**Những Insight Quan Trọng:**
+
+1. **Dataset Quality > Quantity:** 800MB curated từ môi trường thực tế (V7) tốt hơn 46GB raw từ Internet (V0).
+
+2. **Feature Engineering là chìa khóa:** Việc thay port number bằng Shannon Entropy giúp giải quyết triệt để vấn đề IP spoofing và port randomization.
+
+3. **Kiến trúc Parallel thay vì Sequential:** CNN và GRU hoạt động độc lập (không nối tiếp) giúp tăng accuracy từ 0.89 lên 0.96.
+
+4. **Adaptive Threshold thay vì Static:** EMA giúp hệ thống tự động nới lỏng ngưỡng vào giờ cao điểm, tránh báo động giả.
+
+5. **Dual-Shield kiểm duyệt chéo:** Sự kết hợp Autoencoder + Classifier giúp giảm False Positive từ 60% xuống 3%.
+
+6. **Tự động hóa kiểm định:** Xây dựng `check_data.py` để kiểm tra class balance, Slowloris presence, feature distribution trước khi train là bắt buộc.
 
 Kiến trúc Web của hệ thống cũng được thiết kế theo mô hình phân lớp đặc trưng của SDN, phân tách rõ ràng giữa giao diện điều khiển và máy chủ thực thi:
 -	Lớp Ứng dụng: Tập trung các logic quản lý và Dashboard giám sát, giúp quản trị viên tương tác với tầng điều khiển ONOS để thực thi các chính sách bảo mật.
