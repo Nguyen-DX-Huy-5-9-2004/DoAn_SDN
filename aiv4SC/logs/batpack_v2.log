@@ -1,0 +1,55 @@
+2026-04-25 19:48:49,209 - [INFO] - ======================================================================
+2026-04-25 19:48:49,209 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-04-25 19:48:49,209 - [INFO] - ======================================================================
+2026-04-25 19:48:49,210 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-04-25 19:48:49,210 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream_slowloris.json
+2026-04-25 19:48:49,210 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-04-25 19:48:49,210 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows
+2026-04-25 19:48:49,210 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=10s, IDLE_TIMEOUT=5s
+2026-04-25 19:48:49,210 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-04-25 19:48:49,210 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-04-25 19:48:49,210 - [INFO] - [DATASET MODE] Waiting for markers from auto_dataset_generator.py
+2026-04-25 19:48:49,211 - [INFO] - [WAIT] No marker detected. Waiting for generator to start...
+2026-04-25 19:48:49,211 - [INFO] - [WAIT] Please run: python auto_dataset_generator.py
+2026-04-25 19:56:57,096 - [INFO] - 
+[EXIT] Interrupted by user
+2026-04-25 19:56:59,825 - [INFO] - ======================================================================
+2026-04-25 19:56:59,825 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-04-25 19:56:59,825 - [INFO] - ======================================================================
+2026-04-25 19:56:59,825 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-04-25 19:56:59,826 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream_slowloris.json
+2026-04-25 19:56:59,826 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-04-25 19:56:59,826 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows
+2026-04-25 19:56:59,826 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=10s, IDLE_TIMEOUT=5s
+2026-04-25 19:56:59,826 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-04-25 19:56:59,826 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-04-25 19:56:59,826 - [INFO] - ======================================================================
+2026-04-25 19:56:59,826 - [INFO] - 🚀 IDS/DEMO MODE - No markers required
+2026-04-25 19:56:59,826 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-04-25 19:56:59,826 - [INFO] - ======================================================================
+2026-04-25 19:56:59,826 - [INFO] - [IDS MODE] Using NORMAL profile: ACTIVE=10s, IDLE=5s
+2026-04-25 19:56:59,827 - [INFO] - [IDS MODE] Output to: /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream.json
+2026-04-25 19:56:59,827 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-04-25 19:56:59,827 - [INFO] - [FIFO] Output: /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream.json
+2026-04-25 19:56:59,827 - [INFO] - [STREAM] Starting on interface: s6-eth1
+2026-04-25 19:56:59,827 - [ERROR] - [NORMAL] Error: 'NoneType' object is not subscriptable
+2026-04-25 19:57:12,156 - [INFO] - ======================================================================
+2026-04-25 19:57:12,156 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-04-25 19:57:12,156 - [INFO] - ======================================================================
+2026-04-25 19:57:12,156 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-04-25 19:57:12,156 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream_slowloris.json
+2026-04-25 19:57:12,156 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-04-25 19:57:12,156 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows
+2026-04-25 19:57:12,156 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=10s, IDLE_TIMEOUT=5s
+2026-04-25 19:57:12,156 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-04-25 19:57:12,157 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-04-25 19:57:12,157 - [INFO] - ======================================================================
+2026-04-25 19:57:12,157 - [INFO] - 🚀 IDS/DEMO MODE - No markers required
+2026-04-25 19:57:12,157 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-04-25 19:57:12,157 - [INFO] - ======================================================================
+2026-04-25 19:57:12,157 - [INFO] - [IDS MODE] Using NORMAL profile: ACTIVE=10s, IDLE=5s
+2026-04-25 19:57:12,157 - [INFO] - [IDS MODE] Output to: /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream.json
+2026-04-25 19:57:12,157 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-04-25 19:57:12,157 - [INFO] - [FIFO] Output: /home/tgf/Documents/DoAn_SDN/aiv4SC/zeek_stream.json
+2026-04-25 19:57:12,157 - [INFO] - [STREAM] Starting on interface: s6-eth1
+2026-04-25 19:57:12,157 - [ERROR] - [NORMAL] Error: 'NoneType' object is not subscriptable

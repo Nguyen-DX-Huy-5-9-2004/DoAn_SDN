@@ -1789,6 +1789,12 @@ ngay cả khi chúng cố tình tấn công chậm để lách bộ lọc.
 
 #### 3.0.1 Tổng Quan Kiến Trúc Thu Thập
 
+**Quy trình xử lý và phân tích lưu lượng mạng:**
+
+![Quy trình xử lý và phân tích lưu lượng mạng cre gemini](anhQuaTrinhLam/quyTrinhHeThong_creGemini.png)
+
+> *Hình: Pipeline xử lý dữ liệu từ capture → feature extraction → AI inference → mitigation decision*
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │              HIGH-PERFORMANCE DATA COLLECTION ARCHITECTURE                │

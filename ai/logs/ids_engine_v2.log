@@ -619,3 +619,88 @@ AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
 2026-04-24 20:01:23,598 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.17
 2026-04-24 20:01:23,600 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho 10.0.1.18
 2026-04-24 20:02:00,072 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-04-26 06:37:46,778 - [INFO] - IDS_V2 - ======================================================================
+2026-04-26 06:37:46,779 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-26 06:37:46,779 - [INFO] - IDS_V2 - ======================================================================
+2026-04-26 06:37:46,779 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-26 06:37:46,779 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-26 06:37:46,780 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-04-26 06:37:46,780 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-26 06:37:46,780 - [INFO] - IDS_V2 - [CONFIG] WL Timeout: 180s, BL Timeout: 600s
+2026-04-26 06:37:46,780 - [INFO] - IDS_V2 - [CONFIG] WL/BL Normal Confidence: 85.0%, Attack Confidence: 90.0%
+2026-04-26 06:37:46,780 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-26 06:37:49,180 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-04-26 06:37:49,180 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-26 06:37:49,180 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-04-26 06:39:17,433 - [INFO] - IDS_V2 - [WL] IP 10.0.2.64 đã thêm vào white_list (timeout: 180s)
+2026-04-26 06:39:17,435 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-04-26 06:39:18,373 - [INFO] - IDS_V2 - [WL] IP 10.0.2.61 đã thêm vào white_list (timeout: 180s)
+2026-04-26 06:39:19,405 - [INFO] - IDS_V2 - [WL] IP 10.0.2.62 đã thêm vào white_list (timeout: 180s)
+2026-04-26 06:39:19,407 - [INFO] - IDS_V2 - [WL] IP 10.0.2.60 đã thêm vào white_list (timeout: 180s)
+2026-04-26 06:39:19,409 - [INFO] - IDS_V2 - [WL] IP 10.0.2.63 đã thêm vào white_list (timeout: 180s)
+2026-04-26 06:39:21,445 - [INFO] - IDS_V2 - [WL] IP 10.0.2.65 đã thêm vào white_list (timeout: 180s)
+2026-04-26 06:40:29,736 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.3 qua ONOS.
+2026-04-26 06:40:29,737 - [INFO] - IDS_V2 - [BL] IP 10.0.1.3 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:40:29,757 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.3 tại of:0000000000000001
+2026-04-26 06:40:30,765 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 qua ONOS.
+2026-04-26 06:40:30,765 - [INFO] - IDS_V2 - [BL] IP 10.0.1.1 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:40:30,768 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.2 qua ONOS.
+2026-04-26 06:40:30,768 - [INFO] - IDS_V2 - [BL] IP 10.0.1.2 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:40:30,774 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-04-26 06:40:30,775 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-04-26 06:42:18,285 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.5 qua ONOS.
+2026-04-26 06:42:18,285 - [INFO] - IDS_V2 - [BL] IP 10.0.1.5 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:42:18,291 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.5 tại of:0000000000000001
+2026-04-26 06:42:19,308 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.6 qua ONOS.
+2026-04-26 06:42:19,309 - [INFO] - IDS_V2 - [BL] IP 10.0.1.6 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:42:19,315 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.6 tại of:0000000000000001
+2026-04-26 06:42:20,332 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.7 qua ONOS.
+2026-04-26 06:42:20,332 - [INFO] - IDS_V2 - [BL] IP 10.0.1.7 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:42:20,339 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.7 tại of:0000000000000001
+2026-04-26 06:43:55,170 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.15 qua ONOS.
+2026-04-26 06:43:55,177 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.15 tại of:0000000000000001
+2026-04-26 06:43:55,177 - [INFO] - IDS_V2 - [BL] IP 10.0.1.15 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:43:55,183 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.13 qua ONOS.
+2026-04-26 06:43:55,184 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.13 tại of:0000000000000001
+2026-04-26 06:43:55,184 - [INFO] - IDS_V2 - [BL] IP 10.0.1.13 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:43:55,199 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.14 qua ONOS.
+2026-04-26 06:43:55,200 - [INFO] - IDS_V2 - [BL] IP 10.0.1.14 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:43:55,206 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.14 tại of:0000000000000001
+2026-04-26 06:48:35,691 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.16 qua ONOS
+2026-04-26 06:48:35,711 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.16 tại of:0000000000000001
+2026-04-26 06:48:41,830 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.16 qua ONOS
+2026-04-26 06:48:41,835 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.16 tại of:0000000000000001
+2026-04-26 06:48:56,182 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.16 qua ONOS
+2026-04-26 06:48:56,193 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.16 tại of:0000000000000001
+2026-04-26 06:48:56,204 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.16 qua ONOS
+2026-04-26 06:48:56,204 - [INFO] - IDS_V2 - [BL] IP 10.0.1.16 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:48:56,208 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.16 qua ONOS
+2026-04-26 06:48:56,209 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.16 tại of:0000000000000001
+2026-04-26 06:48:56,213 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.16 tại of:0000000000000001
+2026-04-26 06:49:01,234 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.16 qua ONOS.
+2026-04-26 06:49:01,237 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.16 qua ONOS.
+2026-04-26 06:49:01,241 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.16 qua ONOS
+2026-04-26 06:49:01,242 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.16 tại of:0000000000000001
+2026-04-26 06:49:01,242 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.16 tại of:0000000000000001
+2026-04-26 06:49:01,253 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.16 tại of:0000000000000001
+2026-04-26 06:49:05,439 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.18 qua ONOS.
+2026-04-26 06:49:05,441 - [INFO] - IDS_V2 - [BL] IP 10.0.1.18 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:49:05,447 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.17 qua ONOS
+2026-04-26 06:49:05,448 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.18 tại of:0000000000000001
+2026-04-26 06:49:05,461 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.17 qua ONOS.
+2026-04-26 06:49:05,464 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.17 tại of:0000000000000001
+2026-04-26 06:49:05,467 - [INFO] - IDS_V2 - [BL] IP 10.0.1.17 đã thêm vào black_list (timeout: 600s)
+2026-04-26 06:49:05,468 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.17 tại of:0000000000000001
+2026-04-26 06:49:05,481 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.18 qua ONOS
+2026-04-26 06:49:05,485 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.17 qua ONOS
+2026-04-26 06:49:05,492 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.18 tại of:0000000000000001
+2026-04-26 06:49:05,496 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.17 qua ONOS
+2026-04-26 06:49:05,500 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.17 qua ONOS
+2026-04-26 06:49:05,501 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.17 tại of:0000000000000001
+2026-04-26 06:49:05,503 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-04-26 06:49:05,506 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.17 tại of:0000000000000001
+2026-04-26 06:49:05,506 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.17 qua ONOS
+2026-04-26 06:49:05,512 - [WARNING] - IDS_V2 - [MITIGATION] Level 1: Đã áp dụng Rate Limit cho 10.0.1.18 qua ONOS
+2026-04-26 06:49:05,513 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.17 tại of:0000000000000001
+2026-04-26 06:49:05,514 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.17 tại of:0000000000000001
+2026-04-26 06:49:05,518 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.18 tại of:0000000000000001

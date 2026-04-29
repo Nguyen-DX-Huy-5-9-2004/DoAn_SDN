@@ -1,0 +1,11 @@
+2026-04-25 19:49:22,343 - [INFO] - IDS_V2 - ======================================================================
+2026-04-25 19:49:22,343 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-04-25 19:49:22,344 - [INFO] - IDS_V2 - ======================================================================
+2026-04-25 19:49:22,344 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-04-25 19:49:22,344 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-04-25 19:49:22,344 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-04-25 19:49:22,344 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-04-25 19:49:22,344 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-04-25 19:49:23,896 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-04-25 19:49:23,897 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-04-25 19:49:23,897 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180

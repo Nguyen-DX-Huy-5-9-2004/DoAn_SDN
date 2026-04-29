@@ -15,10 +15,6 @@ if not target.startswith('http://') and not target.startswith('https://'):
 
 print(f"[NORMAL TRAFFIC] Host {socket.gethostname()} (PID {os.getpid()}) bắt đầu truy cập {target}...")
 
-
-
-
-
 # Danh sách User-Agents thực tế
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",

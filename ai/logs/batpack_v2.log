@@ -27302,3 +27302,36 @@
 2026-04-24 20:02:02,143 - [INFO] - [FIFO] Output: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
 2026-04-24 20:02:02,338 - [INFO] - 
 [EXIT] Interrupted by user
+2026-04-25 20:01:35,647 - [INFO] - ======================================================================
+2026-04-25 20:01:35,653 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-04-25 20:01:35,653 - [INFO] - ======================================================================
+2026-04-25 20:01:35,654 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-04-25 20:01:35,654 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-04-25 20:01:35,654 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-04-25 20:01:35,654 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows
+2026-04-25 20:01:35,654 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=10s, IDLE_TIMEOUT=5s
+2026-04-25 20:01:35,654 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-04-25 20:01:35,654 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-04-25 20:01:35,654 - [INFO] - [DATASET MODE] Waiting for markers from auto_dataset_generator.py
+2026-04-25 20:01:35,654 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-04-25 20:01:35,655 - [INFO] - [FIFO] Output: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-04-26 06:37:48,226 - [INFO] - ======================================================================
+2026-04-26 06:37:48,227 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-04-26 06:37:48,227 - [INFO] - ======================================================================
+2026-04-26 06:37:48,227 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-04-26 06:37:48,227 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-04-26 06:37:48,228 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-04-26 06:37:48,228 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows
+2026-04-26 06:37:48,228 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=10s, IDLE_TIMEOUT=5s
+2026-04-26 06:37:48,228 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-04-26 06:37:48,228 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-04-26 06:37:48,228 - [INFO] - [DATASET MODE] Waiting for markers from auto_dataset_generator.py
+2026-04-26 06:37:48,228 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-04-26 06:37:48,228 - [INFO] - [FIFO] Output: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-04-26 06:37:49,194 - [INFO] - [STREAM] Starting on interface: s6-eth1
+2026-04-26 06:37:49,195 - [INFO] - [PROFILE] Phase=NORMAL: Normal: Standard bidirectional flows
+2026-04-26 06:37:49,195 - [INFO] - [PROFILE] Using timeouts: ACTIVE=10s, IDLE=5s
+2026-04-26 06:50:26,228 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-04-26 06:50:26,237 - [INFO] - [FIFO] Output: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-04-26 06:50:26,991 - [INFO] - 
+[EXIT] Interrupted by user
