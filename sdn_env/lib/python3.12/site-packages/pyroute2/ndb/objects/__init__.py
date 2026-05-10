@@ -109,6 +109,12 @@ class ObjectFlags(IntFlag):
     SNAPSHOT = 0x1
 
 
+class ReplacementPolicy(IntFlag):
+    FAIL = 0x0
+    ADD_REMOVE = 0x1
+    CHANGE = 0x2
+
+
 class AsyncObject(dict):
     '''
     The common base class for NDB objects -- interfaces, routes, rules
@@ -141,7 +147,7 @@ class AsyncObject(dict):
     _apply_script_snapshots = []
     _key = None
     _replace = None
-    _replace_on_key_change = False
+    _replace_on_key_change = ReplacementPolicy.FAIL
     _init_complete = False
 
     # 8<------------------------------------------------------------
@@ -424,13 +430,18 @@ class AsyncObject(dict):
         for nkey, nvalue in self.object_data.filter(key, value).items():
             if self.get(nkey) == nvalue:
                 continue
-            if self.state == 'system' and nkey in self.knorm:
-                if self._replace_on_key_change:
+            if self.state in ('system', 'change') and nkey in self.knorm:
+                if self._replace_on_key_change & ReplacementPolicy.ADD_REMOVE:
                     self.log.debug(
                         f'prepare replace {nkey} = {nvalue} in {self.key}'
                     )
                     self._replace = type(self)(self.view, self.key)
                     self.state.set('replace')
+                elif (
+                    self._replace_on_key_change & ReplacementPolicy.CHANGE
+                    and key in self.key_extra_fields
+                ):
+                    self.state.set('change')
                 else:
                     raise ValueError(
                         'attempt to change a key field (%s)' % nkey
@@ -753,6 +764,7 @@ class AsyncObject(dict):
             ('setns', 'invalid'),
             ('setns', 'system'),
             ('replace', 'system'),
+            ('change', 'system'),
         )
 
         self.load_sql()
@@ -837,7 +849,6 @@ class AsyncObject(dict):
             self.schema.commit()
         except Exception:
             pass
-        self.load_sql(set_state=False)
         if self.state == 'system' and self.get_count() == 0:
             state = self.state.set('invalid')
         else:
@@ -865,6 +876,8 @@ class AsyncObject(dict):
                 )
 
             method = 'add'
+        elif state == 'change':
+            method = 'set'  # FIXME
         elif state == 'system':
             method = 'set'
         elif state == 'setns':
@@ -884,6 +897,9 @@ class AsyncObject(dict):
         for itn in range(10):
             try:
                 self.log.debug('API call %s (%s)' % (method, req))
+                # resolve localhost reference in the net_ns_fd
+                if req.get('net_ns_fd') == self.ndb.localhost:
+                    req['net_ns_fd'] = self.ndb.localns
                 await self.sources[self['target']].api(self.api, method, **req)
                 first_call_success = True
                 await self.hook_apply(method, **req)
@@ -925,24 +941,16 @@ class AsyncObject(dict):
                 else:
                     raise e
 
-            nq = self.schema.stats.get(self['target'])
-            if nq is not None:
-                nqsize = nq.qsize
-            else:
-                nqsize = 0
-            self.log.debug(
-                f'stats: apply {method} '
-                f'{{ objid {id(self)}, nqsize {nqsize} }}'
-            )
-            if self.check():
-                self.log.debug('checked')
-                break
-            self.log.debug('check failed')
+            self.log.debug(f'stats: apply {method} {{ objid {id(self)} }}')
             try:
                 await asyncio.wait_for(self.load_event.wait(), 1)
             except asyncio.TimeoutError:
                 pass
             self.load_event.clear()
+            if self.check():
+                self.log.debug('checked')
+                break
+            self.log.debug('check failed')
         else:
             self.log.debug('stats: %s apply %s fail' % (id(self), method))
             if not await self.use_db_resync(lambda x: x, self.check):
@@ -1075,13 +1083,10 @@ class AsyncObject(dict):
                 'discard %s: %s (expected %s)' % (key, value, self.get(key))
             )
 
-    def load_sql(self, table=None, ctxid=None, set_state=True):
+    def fetch_sql(self, table=None, ctxid=None):
         '''
-        Load the data from the database.
+        Fetch data from the database.
         '''
-        if not self.key:
-            return
-
         if table is None:
             if ctxid is None:
                 table = self.etable
@@ -1099,18 +1104,25 @@ class AsyncObject(dict):
         spec = self.ndb.schema.fetchone(
             'SELECT * FROM %s WHERE %s' % (table, ' AND '.join(keys)), values
         )
-        self.log.debug('load_sql load: %s' % str(spec))
-        self.log.debug('load_sql names: %s' % str(self.names))
-        if set_state:
-            with self.lock:
-                if spec is None:
-                    if self.state != 'invalid':
-                        # No such object (anymore)
-                        self.state.set('invalid')
-                        self.changed = set()
-                elif self.state not in ('remove', 'setns'):
-                    self.update_from_sql(spec)
-                    self.state.set('system')
+        self.log.debug('fetch_sql data: %s' % str(spec))
+        self.log.debug('fetch_sql names: %s' % str(self.names))
+        return spec
+
+    def load_sql(self, table=None, ctxid=None):
+        '''
+        Load the data from the database.
+        '''
+        if not self.key:
+            return
+        spec = self.fetch_sql(table, ctxid)
+        if spec is None:
+            if self.state != 'invalid':
+                # No such object (anymore)
+                self.state.set('invalid')
+                self.changed = set()
+        elif self.state not in ('remove', 'setns'):
+            self.update_from_sql(spec)
+            self.state.set('system')
         return spec
 
     async def load_rtnlmsg(self, sources, target, event):
@@ -1185,10 +1197,8 @@ class RTNL_Object(SyncBase):
     def exists(self, key):
         return self._main_sync_call(self.asyncore.exists, key)
 
-    def load_sql(self, table=None, ctxid=None, set_state=True):
-        return self._main_sync_call(
-            self.asyncore.load_sql, table, ctxid, set_state
-        )
+    def load_sql(self, table=None, ctxid=None):
+        return self._main_sync_call(self.asyncore.load_sql, table, ctxid)
 
     def load_value(self, key, value):
         return self._main_sync_call(self.asyncore.load_value, key, value)

@@ -704,3 +704,1151 @@ AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
 2026-04-26 06:49:05,513 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.17 tại of:0000000000000001
 2026-04-26 06:49:05,514 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.17 tại of:0000000000000001
 2026-04-26 06:49:05,518 - [INFO] - IDS_V2 - [SDN] Thành công: Luật RATE_LIMIT đã cắm cho IP 10.0.1.18 tại of:0000000000000001
+2026-05-04 17:19:34,998 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 17:19:34,998 - [INFO] - IDS_V2 - 🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-04 17:19:34,999 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 17:19:34,999 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-04 17:19:34,999 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-04 17:19:34,999 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-04 17:19:34,999 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-04 17:19:34,999 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-04 17:19:36,446 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-04 17:19:36,446 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-04 17:19:36,446 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-04 17:20:21,763 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.2 qua ONOS.
+2026-05-04 17:20:21,801 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-05-04 17:20:22,727 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 qua ONOS.
+2026-05-04 17:20:22,735 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-05-04 17:26:34,438 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.2 qua ONOS.
+2026-05-04 17:26:34,440 - [ERROR] - IDS_V2 - [IPS] 🛡️ Đã thực thi lệnh DROP cho IP 10.0.1.1 qua ONOS.
+2026-05-04 17:26:34,442 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-05-04 17:26:34,445 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-05-04 17:36:18,924 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-04 19:31:31,699 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 19:31:31,700 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-04 19:31:31,700 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 19:31:31,700 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-04 19:31:31,700 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-04 19:31:31,700 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-04 19:31:31,700 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-04 19:31:31,700 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-04 19:31:33,073 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-04 19:31:33,073 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-04 19:31:33,073 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-04 19:32:38,801 - [ERROR] - IDS_V2 - [IPS] Level 2: Đã áp dụng DROP cho IP 10.0.1.1 (confidence: 9988.1%) qua ONOS.
+2026-05-04 19:32:38,804 - [ERROR] - IDS_V2 - [IPS] Level 2: Đã áp dụng DROP cho IP 10.0.1.1 (confidence: 9986.8%) qua ONOS.
+2026-05-04 19:32:38,805 - [ERROR] - IDS_V2 - [IPS] Level 2: Đã áp dụng DROP cho IP 10.0.1.2 (confidence: 9987.2%) qua ONOS.
+2026-05-04 19:32:38,839 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-05-04 19:32:38,839 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-05-04 19:32:38,840 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-05-04 19:33:50,760 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-04 21:00:22,218 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 21:00:22,219 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-04 21:00:22,219 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 21:00:22,219 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-04 21:00:22,219 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-04 21:00:22,219 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-04 21:00:22,219 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-04 21:00:22,220 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-04 21:00:23,493 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-04 21:00:23,493 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-04 21:00:23,493 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-04 21:04:22,111 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-04 21:19:57,246 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 21:19:57,247 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-04 21:19:57,247 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 21:19:57,247 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-04 21:19:57,247 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-04 21:19:57,247 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-04 21:19:57,247 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-04 21:19:57,247 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-04 21:19:58,722 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-04 21:19:58,722 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-04 21:19:58,723 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-04 21:32:59,928 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 21:32:59,928 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-04 21:32:59,928 - [INFO] - IDS_V2 - ======================================================================
+2026-05-04 21:32:59,929 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-04 21:32:59,929 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-04 21:32:59,929 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-04 21:32:59,929 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-04 21:32:59,929 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-04 21:33:01,298 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-04 21:33:01,298 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-04 21:33:01,298 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-04 21:33:49,555 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-07 17:24:28,262 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 17:24:28,262 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-07 17:24:28,262 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 17:24:28,263 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-07 17:24:28,263 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-07 17:24:28,263 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-07 17:24:28,263 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-07 17:24:28,263 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-07 17:24:31,780 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-07 17:24:31,780 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-07 17:24:31,780 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-07 17:33:50,721 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-07 17:39:39,506 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 17:39:39,506 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-07 17:39:39,506 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 17:39:39,507 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-07 17:39:39,507 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-07 17:39:39,507 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-07 17:39:39,507 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-07 17:39:39,507 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-07 17:39:40,675 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-07 17:39:40,675 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-07 17:39:40,675 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-07 17:49:32,783 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-07 17:51:03,988 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 17:51:03,988 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-07 17:51:03,988 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 17:51:03,988 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-07 17:51:03,989 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-07 17:51:03,989 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-07 17:51:03,989 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-07 17:51:03,989 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-07 17:51:05,232 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-07 17:51:05,233 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-07 17:51:05,233 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-07 17:51:17,354 - [ERROR] - IDS_V2 - [IPS] Level 2: Đã áp dụng DROP cho IP 10.0.1.2 (confidence: 9983.6%) qua ONOS.
+2026-05-07 17:51:17,452 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.2 tại of:0000000000000001
+2026-05-07 17:51:18,296 - [ERROR] - IDS_V2 - [IPS] Level 2: Đã áp dụng DROP cho IP 10.0.1.1 (confidence: 9981.3%) qua ONOS.
+2026-05-07 17:51:18,301 - [INFO] - IDS_V2 - [SDN] Thành công: Luật DROP đã cắm cho IP 10.0.1.1 tại of:0000000000000001
+2026-05-07 17:51:51,070 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-05-07 17:52:21,787 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-05-07 17:52:42,411 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-07 18:05:14,392 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:05:14,392 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-07 18:05:14,392 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:05:14,392 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-07 18:05:14,392 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-07 18:05:14,392 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-07 18:05:14,392 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-07 18:05:14,392 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-07 18:05:15,536 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-07 18:05:15,536 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-07 18:05:15,536 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-07 18:06:07,217 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-07 18:17:23,972 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:17:23,972 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-07 18:17:23,972 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:17:23,972 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-07 18:17:23,972 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-07 18:17:23,972 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-07 18:17:23,972 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-07 18:17:23,973 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-07 18:17:25,873 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-07 18:17:25,873 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-07 18:17:25,873 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-07 18:22:16,805 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-07 18:23:50,510 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:23:50,511 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-07 18:23:50,511 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:23:50,511 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-07 18:23:50,511 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-07 18:23:50,511 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-07 18:23:50,511 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-07 18:23:50,511 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-07 18:23:51,548 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-07 18:23:51,548 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-07 18:23:51,548 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-07 18:24:00,602 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-05-07 18:24:34,335 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-05-07 18:29:05,348 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-07 18:43:15,677 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:43:15,678 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-07 18:43:15,678 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:43:15,678 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-07 18:43:15,678 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-07 18:43:15,678 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-07 18:43:15,679 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-07 18:43:15,679 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-07 18:43:17,042 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-07 18:43:17,042 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-07 18:43:17,042 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-07 18:43:17,121 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,122 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,122 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,122 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,122 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,123 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,123 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 0.07s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,124 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.62] Warm-up phase 1/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,124 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 0.07s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,124 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 0.07s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,125 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.64] Warm-up phase 1/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,125 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.65] Warm-up phase 1/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,125 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,125 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.61] Warm-up phase 1/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,125 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,126 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,126 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.60] Warm-up phase 1/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,126 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,126 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,126 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,126 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,127 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,127 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.63] Warm-up phase 1/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,127 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,128 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,128 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.65] Warm-up phase 2/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,128 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,128 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.62] Warm-up phase 2/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,128 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,129 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,129 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,129 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.61] Warm-up phase 2/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,129 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,129 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.63] Warm-up phase 2/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,129 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,129 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,130 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,130 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.64] Warm-up phase 2/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,130 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,130 - [INFO] - IDS_V2 - [WARMUP] [10.0.2.60] Warm-up phase 2/2 - Bỏ qua phân tích (tích lũy baseline)
+2026-05-07 18:43:17,130 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,130 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,131 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,131 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=3)
+2026-05-07 18:43:17,131 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,133 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=3)
+2026-05-07 18:43:17,133 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 0.08s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,135 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=3)
+2026-05-07 18:43:17,135 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,136 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 0.09s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,136 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=3)
+2026-05-07 18:43:17,136 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 0.09s - Bắt đầu phân tích AI
+2026-05-07 18:43:17,138 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=3)
+2026-05-07 18:43:17,138 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:17,213 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (86.0%) | Kiểm tra định kỳ
+2026-05-07 18:43:17,213 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (97.4%) | Thu thập: 0.09s | Phân tích: 76.2ms | Tổng: 162.3ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:43:17,213 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-05-07 18:43:17,215 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (86.5%) | Kiểm tra định kỳ
+2026-05-07 18:43:17,217 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (87.7%) | Kiểm tra định kỳ
+2026-05-07 18:43:17,217 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (93.9%) | Kiểm tra định kỳ
+2026-05-07 18:43:18,354 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.30s - Bắt đầu phân tích AI
+2026-05-07 18:43:18,354 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=3)
+2026-05-07 18:43:18,354 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:18,359 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (83.8%) | Kiểm tra định kỳ
+2026-05-07 18:43:24,498 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 7.45s - Bắt đầu phân tích AI
+2026-05-07 18:43:24,498 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=4)
+2026-05-07 18:43:24,498 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 7.45s - Bắt đầu phân tích AI
+2026-05-07 18:43:24,499 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=4)
+2026-05-07 18:43:25,521 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 8.47s - Bắt đầu phân tích AI
+2026-05-07 18:43:25,522 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=4)
+2026-05-07 18:43:26,547 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:27,569 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:27,569 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:27,569 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 10.52s - Bắt đầu phân tích AI
+2026-05-07 18:43:27,570 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=4)
+2026-05-07 18:43:27,570 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 10.52s - Bắt đầu phân tích AI
+2026-05-07 18:43:27,571 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=4)
+2026-05-07 18:43:27,586 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (98.0%) | Thu thập: 10.52s | Phân tích: 15.8ms | Tổng: 10535.6ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:43:28,593 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:30,641 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:31,665 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 14.62s - Bắt đầu phân tích AI
+2026-05-07 18:43:31,665 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=4)
+2026-05-07 18:43:31,666 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:37,810 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 20.76s - Bắt đầu phân tích AI
+2026-05-07 18:43:37,810 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=5)
+2026-05-07 18:43:37,810 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 20.76s - Bắt đầu phân tích AI
+2026-05-07 18:43:37,811 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=5)
+2026-05-07 18:43:37,812 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:39,858 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:40,881 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 23.83s - Bắt đầu phân tích AI
+2026-05-07 18:43:40,882 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=5)
+2026-05-07 18:43:40,882 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:40,883 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 23.83s - Bắt đầu phân tích AI
+2026-05-07 18:43:40,883 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=5)
+2026-05-07 18:43:40,883 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:40,884 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 23.83s - Bắt đầu phân tích AI
+2026-05-07 18:43:40,884 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=5)
+2026-05-07 18:43:40,897 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (95.6%) | Thu thập: 23.83s | Phân tích: 15.0ms | Tổng: 23846.8ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:43:40,898 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (97.9%) | Thu thập: 23.83s | Phân tích: 13.5ms | Tổng: 23847.9ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:43:41,905 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:41,905 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 24.86s - Bắt đầu phân tích AI
+2026-05-07 18:43:41,906 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=5)
+2026-05-07 18:43:42,930 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:50,098 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 33.05s - Bắt đầu phân tích AI
+2026-05-07 18:43:50,098 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=6)
+2026-05-07 18:43:50,099 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:50,099 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 33.05s - Bắt đầu phân tích AI
+2026-05-07 18:43:50,100 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=6)
+2026-05-07 18:43:50,107 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-05-07 18:43:51,121 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 34.07s - Bắt đầu phân tích AI
+2026-05-07 18:43:51,122 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=6)
+2026-05-07 18:43:52,145 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 35.10s - Bắt đầu phân tích AI
+2026-05-07 18:43:52,146 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=6)
+2026-05-07 18:43:52,146 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:52,146 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:54,194 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:54,194 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 37.14s - Bắt đầu phân tích AI
+2026-05-07 18:43:54,194 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=6)
+2026-05-07 18:43:55,218 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 38.17s - Bắt đầu phân tích AI
+2026-05-07 18:43:55,218 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=6)
+2026-05-07 18:43:56,241 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:43:57,265 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:01,362 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 44.31s - Bắt đầu phân tích AI
+2026-05-07 18:44:01,363 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=7)
+2026-05-07 18:44:03,410 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:05,459 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 48.41s - Bắt đầu phân tích AI
+2026-05-07 18:44:05,459 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=7)
+2026-05-07 18:44:05,459 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 48.41s - Bắt đầu phân tích AI
+2026-05-07 18:44:05,460 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=7)
+2026-05-07 18:44:06,481 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:06,482 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:07,505 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 50.46s - Bắt đầu phân tích AI
+2026-05-07 18:44:07,506 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=7)
+2026-05-07 18:44:07,506 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:08,529 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 51.48s - Bắt đầu phân tích AI
+2026-05-07 18:44:08,530 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=7)
+2026-05-07 18:44:09,553 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:10,577 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 53.53s - Bắt đầu phân tích AI
+2026-05-07 18:44:10,578 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=7)
+2026-05-07 18:44:11,601 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:14,673 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 57.62s - Bắt đầu phân tích AI
+2026-05-07 18:44:14,674 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=8)
+2026-05-07 18:44:16,721 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:18,770 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 61.72s - Bắt đầu phân tích AI
+2026-05-07 18:44:18,770 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=8)
+2026-05-07 18:44:18,774 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (89.5%) | Kiểm tra định kỳ
+2026-05-07 18:44:19,794 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 62.74s - Bắt đầu phân tích AI
+2026-05-07 18:44:19,794 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=8)
+2026-05-07 18:44:19,795 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:19,795 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:19,800 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (97.1%) | Thu thập: 62.74s | Phân tích: 4.4ms | Tổng: 62748.6ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:44:20,817 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 63.77s - Bắt đầu phân tích AI
+2026-05-07 18:44:20,818 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=8)
+2026-05-07 18:44:20,818 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:20,818 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 63.77s - Bắt đầu phân tích AI
+2026-05-07 18:44:20,819 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=8)
+2026-05-07 18:44:21,842 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:24,913 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 67.86s - Bắt đầu phân tích AI
+2026-05-07 18:44:24,914 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=8)
+2026-05-07 18:44:26,961 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:27,985 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 70.94s - Bắt đầu phân tích AI
+2026-05-07 18:44:27,985 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=9)
+2026-05-07 18:44:27,985 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:27,990 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (81.2%) | Kiểm tra định kỳ
+2026-05-07 18:44:30,034 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 72.98s - Bắt đầu phân tích AI
+2026-05-07 18:44:30,035 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=9)
+2026-05-07 18:44:31,057 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:32,081 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 75.03s - Bắt đầu phân tích AI
+2026-05-07 18:44:32,082 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=9)
+2026-05-07 18:44:32,082 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 75.03s - Bắt đầu phân tích AI
+2026-05-07 18:44:32,083 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=9)
+2026-05-07 18:44:33,105 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:33,105 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:35,153 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 78.10s - Bắt đầu phân tích AI
+2026-05-07 18:44:35,153 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=9)
+2026-05-07 18:44:36,177 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:39,249 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 82.20s - Bắt đầu phân tích AI
+2026-05-07 18:44:39,249 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=10)
+2026-05-07 18:44:41,297 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:42,321 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 85.27s - Bắt đầu phân tích AI
+2026-05-07 18:44:42,321 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=9)
+2026-05-07 18:44:42,321 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:42,328 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (85.2%) | Kiểm tra định kỳ
+2026-05-07 18:44:45,393 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 88.34s - Bắt đầu phân tích AI
+2026-05-07 18:44:45,393 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=10)
+2026-05-07 18:44:45,394 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 88.34s - Bắt đầu phân tích AI
+2026-05-07 18:44:45,394 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=10)
+2026-05-07 18:44:45,395 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:45,403 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (89.3%) | Kiểm tra định kỳ
+2026-05-07 18:44:46,417 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:47,442 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 90.39s - Bắt đầu phân tích AI
+2026-05-07 18:44:47,442 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=10)
+2026-05-07 18:44:48,465 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 91.42s - Bắt đầu phân tích AI
+2026-05-07 18:44:48,465 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=10)
+2026-05-07 18:44:48,470 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (98.2%) | Kiểm tra định kỳ
+2026-05-07 18:44:49,489 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:50,513 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:50,513 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 93.46s - Bắt đầu phân tích AI
+2026-05-07 18:44:50,514 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=11)
+2026-05-07 18:44:52,561 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:55,634 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 98.58s - Bắt đầu phân tích AI
+2026-05-07 18:44:55,635 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=10)
+2026-05-07 18:44:56,657 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:44:57,681 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 100.63s - Bắt đầu phân tích AI
+2026-05-07 18:44:57,682 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=11)
+2026-05-07 18:44:59,730 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 102.68s - Bắt đầu phân tích AI
+2026-05-07 18:44:59,731 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=11)
+2026-05-07 18:44:59,731 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:00,754 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 103.70s - Bắt đầu phân tích AI
+2026-05-07 18:45:00,755 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=11)
+2026-05-07 18:45:01,777 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 104.73s - Bắt đầu phân tích AI
+2026-05-07 18:45:01,777 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=11)
+2026-05-07 18:45:01,777 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:01,778 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:04,849 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:04,849 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 107.80s - Bắt đầu phân tích AI
+2026-05-07 18:45:04,850 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=12)
+2026-05-07 18:45:04,850 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:07,921 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 110.87s - Bắt đầu phân tích AI
+2026-05-07 18:45:07,922 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=11)
+2026-05-07 18:45:08,945 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:08,945 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 111.90s - Bắt đầu phân tích AI
+2026-05-07 18:45:08,946 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=12)
+2026-05-07 18:45:10,993 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:12,023 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 114.97s - Bắt đầu phân tích AI
+2026-05-07 18:45:12,026 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=12)
+2026-05-07 18:45:13,041 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:14,066 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 117.02s - Bắt đầu phân tích AI
+2026-05-07 18:45:14,066 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=12)
+2026-05-07 18:45:15,089 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:16,113 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 119.06s - Bắt đầu phân tích AI
+2026-05-07 18:45:16,113 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=12)
+2026-05-07 18:45:17,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:17,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 120.09s - Bắt đầu phân tích AI
+2026-05-07 18:45:17,138 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=13)
+2026-05-07 18:45:19,185 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:23,281 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 126.23s - Bắt đầu phân tích AI
+2026-05-07 18:45:23,281 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=12)
+2026-05-07 18:45:23,282 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 126.23s - Bắt đầu phân tích AI
+2026-05-07 18:45:23,283 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=13)
+2026-05-07 18:45:25,330 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:25,330 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 128.28s - Bắt đầu phân tích AI
+2026-05-07 18:45:25,331 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=13)
+2026-05-07 18:45:25,331 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:25,337 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (80.5%) | Kiểm tra định kỳ
+2026-05-07 18:45:26,353 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:27,377 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 130.33s - Bắt đầu phân tích AI
+2026-05-07 18:45:27,377 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=13)
+2026-05-07 18:45:27,382 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (79.7%) | Kiểm tra định kỳ
+2026-05-07 18:45:28,402 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:28,403 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 131.35s - Bắt đầu phân tích AI
+2026-05-07 18:45:28,403 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=13)
+2026-05-07 18:45:30,449 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:31,474 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 134.42s - Bắt đầu phân tích AI
+2026-05-07 18:45:31,474 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=14)
+2026-05-07 18:45:31,478 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (86.0%) | Kiểm tra định kỳ
+2026-05-07 18:45:32,497 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:36,593 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 139.54s - Bắt đầu phân tích AI
+2026-05-07 18:45:36,594 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=14)
+2026-05-07 18:45:37,617 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:38,641 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 141.59s - Bắt đầu phân tích AI
+2026-05-07 18:45:38,641 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=14)
+2026-05-07 18:45:38,641 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 141.59s - Bắt đầu phân tích AI
+2026-05-07 18:45:38,643 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=14)
+2026-05-07 18:45:38,643 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:38,643 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 141.59s - Bắt đầu phân tích AI
+2026-05-07 18:45:38,644 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=13)
+2026-05-07 18:45:40,689 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:40,689 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:42,737 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 145.69s - Bắt đầu phân tích AI
+2026-05-07 18:45:42,738 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=14)
+2026-05-07 18:45:43,761 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 146.71s - Bắt đầu phân tích AI
+2026-05-07 18:45:43,762 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=15)
+2026-05-07 18:45:43,762 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:44,785 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:48,881 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 151.83s - Bắt đầu phân tích AI
+2026-05-07 18:45:48,881 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=15)
+2026-05-07 18:45:49,905 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 152.86s - Bắt đầu phân tích AI
+2026-05-07 18:45:49,905 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=15)
+2026-05-07 18:45:49,906 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 152.86s - Bắt đầu phân tích AI
+2026-05-07 18:45:49,907 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=14)
+2026-05-07 18:45:49,914 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (85.2%) | Kiểm tra định kỳ
+2026-05-07 18:45:50,929 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:51,954 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:51,954 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 154.90s - Bắt đầu phân tích AI
+2026-05-07 18:45:51,955 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=15)
+2026-05-07 18:45:51,959 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (96.0%) | Kiểm tra định kỳ
+2026-05-07 18:45:54,001 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:54,001 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:45:59,121 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 162.07s - Bắt đầu phân tích AI
+2026-05-07 18:45:59,121 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=15)
+2026-05-07 18:45:59,125 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (94.4%) | Kiểm tra định kỳ
+2026-05-07 18:46:00,145 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 163.10s - Bắt đầu phân tích AI
+2026-05-07 18:46:00,145 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=16)
+2026-05-07 18:46:00,146 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:01,170 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:02,193 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 165.14s - Bắt đầu phân tích AI
+2026-05-07 18:46:02,193 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=16)
+2026-05-07 18:46:02,194 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 165.14s - Bắt đầu phân tích AI
+2026-05-07 18:46:02,195 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=16)
+2026-05-07 18:46:02,203 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (97.5%) | Thu thập: 165.14s | Phân tích: 9.0ms | Tổng: 165152.2ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:46:03,217 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:03,217 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:04,241 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 167.19s - Bắt đầu phân tích AI
+2026-05-07 18:46:04,242 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=15)
+2026-05-07 18:46:05,265 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 168.22s - Bắt đầu phân tích AI
+2026-05-07 18:46:05,266 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=16)
+2026-05-07 18:46:06,291 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:09,362 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:10,385 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 173.34s - Bắt đầu phân tích AI
+2026-05-07 18:46:10,385 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=17)
+2026-05-07 18:46:10,385 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 173.34s - Bắt đầu phân tích AI
+2026-05-07 18:46:10,386 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=16)
+2026-05-07 18:46:11,409 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:11,410 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 174.36s - Bắt đầu phân tích AI
+2026-05-07 18:46:11,410 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=17)
+2026-05-07 18:46:12,433 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:12,434 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:16,529 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 179.48s - Bắt đầu phân tích AI
+2026-05-07 18:46:16,530 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=16)
+2026-05-07 18:46:16,530 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 179.48s - Bắt đầu phân tích AI
+2026-05-07 18:46:16,531 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=17)
+2026-05-07 18:46:16,531 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:16,531 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:20,625 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 183.58s - Bắt đầu phân tích AI
+2026-05-07 18:46:20,626 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=17)
+2026-05-07 18:46:21,650 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:22,673 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 185.62s - Bắt đầu phân tích AI
+2026-05-07 18:46:22,673 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=18)
+2026-05-07 18:46:22,673 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 185.62s - Bắt đầu phân tích AI
+2026-05-07 18:46:22,674 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=18)
+2026-05-07 18:46:24,721 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:25,746 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 188.70s - Bắt đầu phân tích AI
+2026-05-07 18:46:25,746 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=17)
+2026-05-07 18:46:26,769 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:26,769 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:29,842 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 192.79s - Bắt đầu phân tích AI
+2026-05-07 18:46:29,842 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=17)
+2026-05-07 18:46:29,842 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:30,865 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 193.82s - Bắt đầu phân tích AI
+2026-05-07 18:46:30,865 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 193.82s - Bắt đầu phân tích AI
+2026-05-07 18:46:30,866 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=18)
+2026-05-07 18:46:30,866 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=18)
+2026-05-07 18:46:32,913 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:32,913 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:37,009 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 199.96s - Bắt đầu phân tích AI
+2026-05-07 18:46:37,010 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=19)
+2026-05-07 18:46:37,014 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (90.7%) | Kiểm tra định kỳ
+2026-05-07 18:46:39,057 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 202.01s - Bắt đầu phân tích AI
+2026-05-07 18:46:39,058 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=19)
+2026-05-07 18:46:39,058 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 202.01s - Bắt đầu phân tích AI
+2026-05-07 18:46:39,059 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=18)
+2026-05-07 18:46:39,059 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:39,066 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (91.2%) | Kiểm tra định kỳ
+2026-05-07 18:46:40,082 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:40,083 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:41,106 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 204.06s - Bắt đầu phân tích AI
+2026-05-07 18:46:41,107 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=18)
+2026-05-07 18:46:42,130 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:43,153 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 206.10s - Bắt đầu phân tích AI
+2026-05-07 18:46:43,153 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=19)
+2026-05-07 18:46:46,225 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:47,249 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 210.20s - Bắt đầu phân tích AI
+2026-05-07 18:46:47,250 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=19)
+2026-05-07 18:46:47,250 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:49,297 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 212.25s - Bắt đầu phân tích AI
+2026-05-07 18:46:49,298 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=20)
+2026-05-07 18:46:50,321 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:51,345 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 214.30s - Bắt đầu phân tích AI
+2026-05-07 18:46:51,345 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=19)
+2026-05-07 18:46:52,370 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 215.32s - Bắt đầu phân tích AI
+2026-05-07 18:46:52,370 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=20)
+2026-05-07 18:46:52,370 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:53,393 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:46:55,441 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 218.39s - Bắt đầu phân tích AI
+2026-05-07 18:46:55,442 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=19)
+2026-05-07 18:46:55,446 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (93.6%) | Kiểm tra định kỳ
+2026-05-07 18:46:57,489 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:00,561 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 223.51s - Bắt đầu phân tích AI
+2026-05-07 18:47:00,562 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 223.51s - Bắt đầu phân tích AI
+2026-05-07 18:47:00,562 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=20)
+2026-05-07 18:47:00,562 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=20)
+2026-05-07 18:47:00,563 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:00,575 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (93.6%) | Kiểm tra định kỳ
+2026-05-07 18:47:01,585 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 224.54s - Bắt đầu phân tích AI
+2026-05-07 18:47:01,585 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=21)
+2026-05-07 18:47:02,610 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:02,610 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 225.56s - Bắt đầu phân tích AI
+2026-05-07 18:47:02,610 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=20)
+2026-05-07 18:47:02,615 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (81.8%) | Kiểm tra định kỳ
+2026-05-07 18:47:03,633 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:03,633 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:06,705 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 229.66s - Bắt đầu phân tích AI
+2026-05-07 18:47:06,705 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=21)
+2026-05-07 18:47:06,705 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 229.66s - Bắt đầu phân tích AI
+2026-05-07 18:47:06,707 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=20)
+2026-05-07 18:47:08,753 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:08,753 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:12,849 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 235.80s - Bắt đầu phân tích AI
+2026-05-07 18:47:12,850 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=21)
+2026-05-07 18:47:12,851 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:13,873 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 236.82s - Bắt đầu phân tích AI
+2026-05-07 18:47:13,874 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=21)
+2026-05-07 18:47:13,878 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (89.4%) | Kiểm tra định kỳ
+2026-05-07 18:47:15,921 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 238.87s - Bắt đầu phân tích AI
+2026-05-07 18:47:15,921 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=22)
+2026-05-07 18:47:15,922 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:15,922 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 238.87s - Bắt đầu phân tích AI
+2026-05-07 18:47:15,923 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=21)
+2026-05-07 18:47:16,945 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:16,946 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:21,041 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 243.99s - Bắt đầu phân tích AI
+2026-05-07 18:47:21,041 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=22)
+2026-05-07 18:47:23,089 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:23,089 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 246.04s - Bắt đầu phân tích AI
+2026-05-07 18:47:23,090 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=21)
+2026-05-07 18:47:23,090 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:25,138 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 248.09s - Bắt đầu phân tích AI
+2026-05-07 18:47:25,139 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=22)
+2026-05-07 18:47:25,139 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:28,210 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 251.16s - Bắt đầu phân tích AI
+2026-05-07 18:47:28,211 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=23)
+2026-05-07 18:47:30,260 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:30,261 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 253.21s - Bắt đầu phân tích AI
+2026-05-07 18:47:30,261 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=22)
+2026-05-07 18:47:30,261 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 253.21s - Bắt đầu phân tích AI
+2026-05-07 18:47:30,262 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=22)
+2026-05-07 18:47:30,263 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:31,281 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:33,329 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 256.28s - Bắt đầu phân tích AI
+2026-05-07 18:47:33,329 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=22)
+2026-05-07 18:47:34,353 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:35,378 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 258.33s - Bắt đầu phân tích AI
+2026-05-07 18:47:35,378 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=23)
+2026-05-07 18:47:37,425 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:40,498 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 263.45s - Bắt đầu phân tích AI
+2026-05-07 18:47:40,499 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=23)
+2026-05-07 18:47:41,521 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:42,545 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 265.50s - Bắt đầu phân tích AI
+2026-05-07 18:47:42,545 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=24)
+2026-05-07 18:47:42,545 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 265.50s - Bắt đầu phân tích AI
+2026-05-07 18:47:42,546 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 265.50s - Bắt đầu phân tích AI
+2026-05-07 18:47:42,547 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=23)
+2026-05-07 18:47:42,547 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=23)
+2026-05-07 18:47:42,557 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (88.6%) | Kiểm tra định kỳ
+2026-05-07 18:47:43,569 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:43,569 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:43,569 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:47,665 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 270.62s - Bắt đầu phân tích AI
+2026-05-07 18:47:47,666 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=24)
+2026-05-07 18:47:47,666 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:47,670 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (73.5%) | Kiểm tra định kỳ
+2026-05-07 18:47:48,689 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 271.64s - Bắt đầu phân tích AI
+2026-05-07 18:47:48,690 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=23)
+2026-05-07 18:47:49,713 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:53,810 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 276.76s - Bắt đầu phân tích AI
+2026-05-07 18:47:53,810 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=24)
+2026-05-07 18:47:54,833 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 277.78s - Bắt đầu phân tích AI
+2026-05-07 18:47:54,833 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=24)
+2026-05-07 18:47:54,834 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:54,834 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:55,857 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 278.81s - Bắt đầu phân tích AI
+2026-05-07 18:47:55,858 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=24)
+2026-05-07 18:47:55,858 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 278.81s - Bắt đầu phân tích AI
+2026-05-07 18:47:55,859 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=25)
+2026-05-07 18:47:55,859 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:56,881 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:58,930 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 281.88s - Bắt đầu phân tích AI
+2026-05-07 18:47:58,930 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=25)
+2026-05-07 18:47:59,953 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:47:59,953 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 282.90s - Bắt đầu phân tích AI
+2026-05-07 18:47:59,953 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=24)
+2026-05-07 18:47:59,958 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (81.4%) | Kiểm tra định kỳ
+2026-05-07 18:48:03,025 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:06,097 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 289.05s - Bắt đầu phân tích AI
+2026-05-07 18:48:06,097 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=25)
+2026-05-07 18:48:06,097 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:06,098 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 289.05s - Bắt đầu phân tích AI
+2026-05-07 18:48:06,099 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=25)
+2026-05-07 18:48:06,107 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (97.6%) | Kiểm tra định kỳ
+2026-05-07 18:48:06,108 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (97.7%) | Kiểm tra định kỳ
+2026-05-07 18:48:07,121 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:07,121 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 290.07s - Bắt đầu phân tích AI
+2026-05-07 18:48:07,121 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 290.07s - Bắt đầu phân tích AI
+2026-05-07 18:48:07,122 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=26)
+2026-05-07 18:48:07,122 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=25)
+2026-05-07 18:48:08,146 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:10,194 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:11,217 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 294.17s - Bắt đầu phân tích AI
+2026-05-07 18:48:11,218 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=26)
+2026-05-07 18:48:12,242 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:16,338 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 299.29s - Bắt đầu phân tích AI
+2026-05-07 18:48:16,339 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=25)
+2026-05-07 18:48:16,339 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:17,361 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 300.31s - Bắt đầu phân tích AI
+2026-05-07 18:48:17,361 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=26)
+2026-05-07 18:48:18,385 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:19,410 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 302.36s - Bắt đầu phân tích AI
+2026-05-07 18:48:19,410 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=26)
+2026-05-07 18:48:20,434 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:20,434 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 303.38s - Bắt đầu phân tích AI
+2026-05-07 18:48:20,435 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=26)
+2026-05-07 18:48:20,435 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 303.39s - Bắt đầu phân tích AI
+2026-05-07 18:48:20,435 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:20,436 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=27)
+2026-05-07 18:48:20,445 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (93.6%) | Kiểm tra định kỳ
+2026-05-07 18:48:21,457 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:23,505 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 306.46s - Bắt đầu phân tích AI
+2026-05-07 18:48:23,506 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=27)
+2026-05-07 18:48:25,553 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:27,601 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 310.55s - Bắt đầu phân tích AI
+2026-05-07 18:48:27,602 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=26)
+2026-05-07 18:48:28,625 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 311.58s - Bắt đầu phân tích AI
+2026-05-07 18:48:28,625 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=27)
+2026-05-07 18:48:29,649 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:29,649 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:29,649 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 312.60s - Bắt đầu phân tích AI
+2026-05-07 18:48:29,650 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=27)
+2026-05-07 18:48:31,697 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 314.65s - Bắt đầu phân tích AI
+2026-05-07 18:48:31,698 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=28)
+2026-05-07 18:48:31,698 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 314.65s - Bắt đầu phân tích AI
+2026-05-07 18:48:31,699 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=27)
+2026-05-07 18:48:32,721 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:33,746 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:34,769 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:40,913 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 323.86s - Bắt đầu phân tích AI
+2026-05-07 18:48:40,914 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=28)
+2026-05-07 18:48:40,914 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 323.86s - Bắt đầu phân tích AI
+2026-05-07 18:48:40,915 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=27)
+2026-05-07 18:48:40,915 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:41,937 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 324.89s - Bắt đầu phân tích AI
+2026-05-07 18:48:41,937 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=28)
+2026-05-07 18:48:43,985 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:43,985 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 326.94s - Bắt đầu phân tích AI
+2026-05-07 18:48:43,986 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=28)
+2026-05-07 18:48:43,986 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:43,986 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:46,034 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 328.98s - Bắt đầu phân tích AI
+2026-05-07 18:48:46,034 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=28)
+2026-05-07 18:48:47,058 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 330.01s - Bắt đầu phân tích AI
+2026-05-07 18:48:47,059 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=29)
+2026-05-07 18:48:47,059 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:47,064 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (93.4%) | Kiểm tra định kỳ
+2026-05-07 18:48:48,081 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:51,153 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 334.10s - Bắt đầu phân tích AI
+2026-05-07 18:48:51,154 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=29)
+2026-05-07 18:48:51,158 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (86.5%) | Kiểm tra định kỳ
+2026-05-07 18:48:52,177 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:55,250 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 338.20s - Bắt đầu phân tích AI
+2026-05-07 18:48:55,251 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=28)
+2026-05-07 18:48:55,251 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:56,274 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 339.22s - Bắt đầu phân tích AI
+2026-05-07 18:48:56,274 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 339.22s - Bắt đầu phân tích AI
+2026-05-07 18:48:56,275 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=29)
+2026-05-07 18:48:56,275 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=29)
+2026-05-07 18:48:57,298 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:57,298 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:58,321 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 341.27s - Bắt đầu phân tích AI
+2026-05-07 18:48:58,321 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=30)
+2026-05-07 18:48:59,345 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:48:59,345 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 342.30s - Bắt đầu phân tích AI
+2026-05-07 18:48:59,346 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=29)
+2026-05-07 18:49:01,394 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:05,489 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 348.44s - Bắt đầu phân tích AI
+2026-05-07 18:49:05,490 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=30)
+2026-05-07 18:49:06,513 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:07,537 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 350.49s - Bắt đầu phân tích AI
+2026-05-07 18:49:07,538 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 350.49s - Bắt đầu phân tích AI
+2026-05-07 18:49:07,538 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=30)
+2026-05-07 18:49:07,538 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=29)
+2026-05-07 18:49:07,546 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (60.5%) | Kiểm tra định kỳ
+2026-05-07 18:49:07,547 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (94.8%) | Kiểm tra định kỳ
+2026-05-07 18:49:08,561 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 351.51s - Bắt đầu phân tích AI
+2026-05-07 18:49:08,562 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=30)
+2026-05-07 18:49:08,566 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (96.9%) | Kiểm tra định kỳ
+2026-05-07 18:49:09,586 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 352.54s - Bắt đầu phân tích AI
+2026-05-07 18:49:09,586 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:09,586 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=31)
+2026-05-07 18:49:10,609 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:10,609 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:11,633 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 354.58s - Bắt đầu phân tích AI
+2026-05-07 18:49:11,633 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=30)
+2026-05-07 18:49:11,634 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:11,634 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:18,801 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 361.75s - Bắt đầu phân tích AI
+2026-05-07 18:49:18,802 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=31)
+2026-05-07 18:49:19,825 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:19,825 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 362.78s - Bắt đầu phân tích AI
+2026-05-07 18:49:19,826 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=31)
+2026-05-07 18:49:20,849 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:20,849 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 363.80s - Bắt đầu phân tích AI
+2026-05-07 18:49:20,850 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=30)
+2026-05-07 18:49:21,874 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 364.82s - Bắt đầu phân tích AI
+2026-05-07 18:49:21,874 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=31)
+2026-05-07 18:49:22,897 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:23,921 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 366.87s - Bắt đầu phân tích AI
+2026-05-07 18:49:23,921 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=32)
+2026-05-07 18:49:23,921 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 366.87s - Bắt đầu phân tích AI
+2026-05-07 18:49:23,922 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=31)
+2026-05-07 18:49:23,922 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:23,923 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:23,931 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (82.4%) | Kiểm tra định kỳ
+2026-05-07 18:49:25,970 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:33,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 376.09s - Bắt đầu phân tích AI
+2026-05-07 18:49:33,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:33,137 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=32)
+2026-05-07 18:49:33,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 376.09s - Bắt đầu phân tích AI
+2026-05-07 18:49:33,139 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=32)
+2026-05-07 18:49:34,161 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:35,185 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 378.14s - Bắt đầu phân tích AI
+2026-05-07 18:49:35,186 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=32)
+2026-05-07 18:49:36,209 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 379.16s - Bắt đầu phân tích AI
+2026-05-07 18:49:36,209 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=33)
+2026-05-07 18:49:36,209 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:36,210 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 379.16s - Bắt đầu phân tích AI
+2026-05-07 18:49:36,211 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=32)
+2026-05-07 18:49:36,211 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 379.16s - Bắt đầu phân tích AI
+2026-05-07 18:49:36,212 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=31)
+2026-05-07 18:49:36,212 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:37,233 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:37,233 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:47,473 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 390.42s - Bắt đầu phân tích AI
+2026-05-07 18:49:47,474 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 390.42s - Bắt đầu phân tích AI
+2026-05-07 18:49:47,474 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=33)
+2026-05-07 18:49:47,474 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=33)
+2026-05-07 18:49:47,475 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:48,497 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 391.45s - Bắt đầu phân tích AI
+2026-05-07 18:49:48,498 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=34)
+2026-05-07 18:49:48,503 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (95.4%) | Kiểm tra định kỳ
+2026-05-07 18:49:49,521 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 392.47s - Bắt đầu phân tích AI
+2026-05-07 18:49:49,522 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=33)
+2026-05-07 18:49:49,522 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:50,547 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:50,547 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 393.50s - Bắt đầu phân tích AI
+2026-05-07 18:49:50,547 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:50,547 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=33)
+2026-05-07 18:49:50,547 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 393.50s - Bắt đầu phân tích AI
+2026-05-07 18:49:50,548 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=32)
+2026-05-07 18:49:50,549 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:51,570 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:49:58,737 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 401.69s - Bắt đầu phân tích AI
+2026-05-07 18:49:58,738 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=34)
+2026-05-07 18:49:59,761 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 402.71s - Bắt đầu phân tích AI
+2026-05-07 18:49:59,762 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=34)
+2026-05-07 18:49:59,768 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (82.5%) | Kiểm tra định kỳ
+2026-05-07 18:50:00,785 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 403.74s - Bắt đầu phân tích AI
+2026-05-07 18:50:00,786 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=34)
+2026-05-07 18:50:01,809 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:01,809 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 404.76s - Bắt đầu phân tích AI
+2026-05-07 18:50:01,809 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=35)
+2026-05-07 18:50:01,809 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:01,810 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:02,833 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:03,857 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 406.81s - Bắt đầu phân tích AI
+2026-05-07 18:50:03,858 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=34)
+2026-05-07 18:50:03,858 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:04,881 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 407.83s - Bắt đầu phân tích AI
+2026-05-07 18:50:04,882 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=33)
+2026-05-07 18:50:04,882 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:10,001 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 412.95s - Bắt đầu phân tích AI
+2026-05-07 18:50:10,002 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=35)
+2026-05-07 18:50:10,007 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (96.4%) | Kiểm tra định kỳ
+2026-05-07 18:50:13,074 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 416.02s - Bắt đầu phân tích AI
+2026-05-07 18:50:13,074 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:13,074 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=35)
+2026-05-07 18:50:13,075 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 416.03s - Bắt đầu phân tích AI
+2026-05-07 18:50:13,075 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=36)
+2026-05-07 18:50:13,076 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:15,121 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:16,146 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 419.10s - Bắt đầu phân tích AI
+2026-05-07 18:50:16,146 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=35)
+2026-05-07 18:50:16,147 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:16,147 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 419.10s - Bắt đầu phân tích AI
+2026-05-07 18:50:16,147 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=35)
+2026-05-07 18:50:16,162 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (93.7%) | Kiểm tra định kỳ
+2026-05-07 18:50:18,193 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 421.14s - Bắt đầu phân tích AI
+2026-05-07 18:50:18,194 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=34)
+2026-05-07 18:50:18,194 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:18,200 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (92.6%) | Kiểm tra định kỳ
+2026-05-07 18:50:19,217 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:24,338 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 427.29s - Bắt đầu phân tích AI
+2026-05-07 18:50:24,338 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=36)
+2026-05-07 18:50:26,385 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 429.34s - Bắt đầu phân tích AI
+2026-05-07 18:50:26,386 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=36)
+2026-05-07 18:50:26,386 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:26,386 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:26,387 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 429.34s - Bắt đầu phân tích AI
+2026-05-07 18:50:26,387 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=36)
+2026-05-07 18:50:26,388 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:26,388 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 429.34s - Bắt đầu phân tích AI
+2026-05-07 18:50:26,389 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=37)
+2026-05-07 18:50:26,400 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (94.5%) | Kiểm tra định kỳ
+2026-05-07 18:50:28,433 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:28,433 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 431.38s - Bắt đầu phân tích AI
+2026-05-07 18:50:28,433 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=36)
+2026-05-07 18:50:30,481 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:30,481 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 433.43s - Bắt đầu phân tích AI
+2026-05-07 18:50:30,482 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=35)
+2026-05-07 18:50:33,553 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:38,673 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 441.62s - Bắt đầu phân tích AI
+2026-05-07 18:50:38,673 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=37)
+2026-05-07 18:50:39,697 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:39,697 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 442.65s - Bắt đầu phân tích AI
+2026-05-07 18:50:39,698 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=37)
+2026-05-07 18:50:39,698 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:39,699 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 442.65s - Bắt đầu phân tích AI
+2026-05-07 18:50:39,699 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=37)
+2026-05-07 18:50:39,699 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 442.65s - Bắt đầu phân tích AI
+2026-05-07 18:50:39,700 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=38)
+2026-05-07 18:50:40,721 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 443.67s - Bắt đầu phân tích AI
+2026-05-07 18:50:40,722 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=37)
+2026-05-07 18:50:42,769 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:42,770 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:43,793 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:43,793 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 446.74s - Bắt đầu phân tích AI
+2026-05-07 18:50:43,794 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=36)
+2026-05-07 18:50:46,865 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:51,986 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 454.94s - Bắt đầu phân tích AI
+2026-05-07 18:50:51,987 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=38)
+2026-05-07 18:50:51,987 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 454.94s - Bắt đầu phân tích AI
+2026-05-07 18:50:51,995 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=39)
+2026-05-07 18:50:51,996 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:51,997 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:50:51,997 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 454.95s - Bắt đầu phân tích AI
+2026-05-07 18:50:51,998 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=38)
+2026-05-07 18:50:52,016 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (90.6%) | Kiểm tra định kỳ
+2026-05-07 18:50:53,009 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 455.96s - Bắt đầu phân tích AI
+2026-05-07 18:50:54,578 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=38)
+2026-05-07 18:51:12,146 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:17,152 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 480.10s - Bắt đầu phân tích AI
+2026-05-07 18:51:17,153 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:17,153 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:17,153 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=38)
+2026-05-07 18:51:17,160 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 480.11s - Bắt đầu phân tích AI
+2026-05-07 18:51:17,163 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:17,163 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 480.11s - Bắt đầu phân tích AI
+2026-05-07 18:51:17,164 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (77.5%) | Kiểm tra định kỳ
+2026-05-07 18:51:17,167 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=39)
+2026-05-07 18:51:17,168 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=37)
+2026-05-07 18:51:17,168 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:17,169 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 480.12s - Bắt đầu phân tích AI
+2026-05-07 18:51:17,169 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 480.12s - Bắt đầu phân tích AI
+2026-05-07 18:51:17,170 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:17,171 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=39)
+2026-05-07 18:51:17,171 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:17,172 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=39)
+2026-05-07 18:51:17,172 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 480.12s - Bắt đầu phân tích AI
+2026-05-07 18:51:17,174 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=39)
+2026-05-07 18:51:17,174 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 480.12s - Bắt đầu phân tích AI
+2026-05-07 18:51:17,175 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:17,177 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=40)
+2026-05-07 18:51:17,193 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (90.3%) | Kiểm tra định kỳ
+2026-05-07 18:51:17,205 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (97.3%) | Kiểm tra định kỳ
+2026-05-07 18:51:23,729 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:29,874 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 492.82s - Bắt đầu phân tích AI
+2026-05-07 18:51:29,874 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=40)
+2026-05-07 18:51:29,875 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:32,617 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 495.57s - Bắt đầu phân tích AI
+2026-05-07 18:51:32,620 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=40)
+2026-05-07 18:51:38,066 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 501.02s - Bắt đầu phân tích AI
+2026-05-07 18:51:38,067 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:38,067 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=38)
+2026-05-07 18:51:38,067 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:38,069 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 501.02s - Bắt đầu phân tích AI
+2026-05-07 18:51:38,071 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=40)
+2026-05-07 18:51:38,078 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (98.2%) | Kiểm tra định kỳ
+2026-05-07 18:51:38,090 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (51.0%) | Kiểm tra định kỳ
+2026-05-07 18:51:40,118 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:41,137 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 504.09s - Bắt đầu phân tích AI
+2026-05-07 18:51:41,138 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:41,138 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=40)
+2026-05-07 18:51:43,187 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 506.14s - Bắt đầu phân tích AI
+2026-05-07 18:51:43,188 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=41)
+2026-05-07 18:51:44,210 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 507.16s - Bắt đầu phân tích AI
+2026-05-07 18:51:44,211 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=41)
+2026-05-07 18:51:46,258 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:50,355 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:51:58,545 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 521.50s - Bắt đầu phân tích AI
+2026-05-07 18:51:58,546 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Bắt đầu phân tích AI (warmup=41)
+2026-05-07 18:51:59,569 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 522.52s - Bắt đầu phân tích AI
+2026-05-07 18:51:59,570 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=41)
+2026-05-07 18:51:59,570 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:52:00,594 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 523.54s - Bắt đầu phân tích AI
+2026-05-07 18:52:00,595 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=41)
+2026-05-07 18:52:01,617 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:52:03,666 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:52:03,666 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 526.62s - Bắt đầu phân tích AI
+2026-05-07 18:52:03,667 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 526.62s - Bắt đầu phân tích AI
+2026-05-07 18:52:03,668 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Bắt đầu phân tích AI (warmup=39)
+2026-05-07 18:52:03,668 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Bắt đầu phân tích AI (warmup=42)
+2026-05-07 18:52:04,690 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 527.64s - Bắt đầu phân tích AI
+2026-05-07 18:52:04,690 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Bắt đầu phân tích AI (warmup=42)
+2026-05-07 18:52:04,696 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (55.0%) | Kiểm tra định kỳ
+2026-05-07 18:52:05,713 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:52:05,713 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:52:05,713 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng dữ liệu (0/10)
+2026-05-07 18:52:09,809 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 532.76s - Bắt đầu phân tích AI
+2026-05-07 18:52:09,809 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Bắt đầu phân tích AI (warmup=42)
+2026-05-07 18:52:10,833 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 533.78s - Bắt đầu phân tích AI
+2026-05-07 18:52:10,834 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Bắt đầu phân tích AI (warmup=42)
+2026-05-07 18:52:11,261 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-07 18:54:16,754 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:54:16,754 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-07 18:54:16,754 - [INFO] - IDS_V2 - ======================================================================
+2026-05-07 18:54:16,754 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-07 18:54:16,754 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-07 18:54:16,755 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-07 18:54:16,755 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-07 18:54:16,755 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-07 18:54:18,009 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-07 18:54:18,009 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-07 18:54:18,010 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-07 18:54:19,903 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-07 18:54:19,904 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-07 18:54:19,904 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-07 18:54:19,904 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-07 18:54:19,904 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-07 18:54:19,904 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-07 18:54:19,905 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,905 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,905 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,906 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,906 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,907 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,907 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,907 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,908 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,908 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,908 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,909 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,909 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,910 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:54:19,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.89s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,911 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Phân tích AI
+2026-05-07 18:54:19,911 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.90s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,913 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Phân tích AI
+2026-05-07 18:54:19,913 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.90s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,914 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:54:19,914 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.90s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,916 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Phân tích AI
+2026-05-07 18:54:19,916 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.90s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,918 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:54:19,918 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.90s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,922 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,924 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,925 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,926 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,927 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,929 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,930 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,933 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.92s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,936 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.92s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,938 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.92s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,939 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.92s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,942 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.92s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,943 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.93s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,945 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.93s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,946 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.93s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,947 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.93s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,948 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.93s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,950 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.93s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,951 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (98.7%) | Thu thập: 1.89s | Phân tích: 38.7ms | Tổng: 1932.2ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:54:19,951 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (94.7%) | Kiểm tra định kỳ
+2026-05-07 18:54:19,951 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (91.9%) | Kiểm tra định kỳ
+2026-05-07 18:54:19,952 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-05-07 18:54:19,955 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (95.1%) | Thu thập: 1.90s | Phân tích: 39.0ms | Tổng: 1934.1ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:54:19,957 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (91.1%) | Kiểm tra định kỳ
+2026-05-07 18:54:19,960 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (92.0%) | Kiểm tra định kỳ
+2026-05-07 18:54:19,962 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.95s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,963 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.95s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,963 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Phân tích AI
+2026-05-07 18:54:19,963 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.95s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,964 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:54:19,964 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.95s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,965 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.95s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,966 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:54:19,966 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:54:19,968 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.95s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,970 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.95s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,972 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,974 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,975 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,975 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,976 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,978 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,978 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,980 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,981 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 1.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,982 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 1.97s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,983 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 1.97s - Bắt đầu phân tích AI
+2026-05-07 18:54:19,993 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (95.1%) | Thu thập: 1.95s | Phân tích: 27.8ms | Tổng: 1974.0ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:54:22,929 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 4.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:22,929 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:54:22,930 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 4.91s - Bắt đầu phân tích AI
+2026-05-07 18:54:24,977 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 6.96s - Bắt đầu phân tích AI
+2026-05-07 18:54:24,977 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:54:24,983 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (95.4%) | Thu thập: 6.96s | Phân tích: 5.4ms | Tổng: 6965.7ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:54:26,001 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 7.98s - Bắt đầu phân tích AI
+2026-05-07 18:54:27,025 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 9.01s - Bắt đầu phân tích AI
+2026-05-07 18:54:27,025 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:54:27,031 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (96.1%) | Thu thập: 9.01s | Phân tích: 4.6ms | Tổng: 9013.0ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:54:30,097 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 12.08s - Bắt đầu phân tích AI
+2026-05-07 18:54:30,097 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Phân tích AI
+2026-05-07 18:54:34,193 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 16.18s - Bắt đầu phân tích AI
+2026-05-07 18:54:34,194 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Phân tích AI
+2026-05-07 18:54:36,241 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 18.22s - Bắt đầu phân tích AI
+2026-05-07 18:54:36,242 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:54:37,265 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 19.25s - Bắt đầu phân tích AI
+2026-05-07 18:54:37,265 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Phân tích AI
+2026-05-07 18:54:37,265 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 19.25s - Bắt đầu phân tích AI
+2026-05-07 18:54:37,267 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:54:39,313 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 21.30s - Bắt đầu phân tích AI
+2026-05-07 18:54:39,314 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:54:42,387 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 24.37s - Bắt đầu phân tích AI
+2026-05-07 18:54:42,387 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Phân tích AI
+2026-05-07 18:54:45,457 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 27.44s - Bắt đầu phân tích AI
+2026-05-07 18:54:45,457 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Phân tích AI
+2026-05-07 18:54:50,577 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 32.56s - Bắt đầu phân tích AI
+2026-05-07 18:54:50,577 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Phân tích AI
+2026-05-07 18:54:50,578 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 32.56s - Bắt đầu phân tích AI
+2026-05-07 18:54:50,579 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:54:50,579 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 32.56s - Bắt đầu phân tích AI
+2026-05-07 18:54:50,580 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:54:50,592 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-05-07 18:54:52,626 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 34.61s - Bắt đầu phân tích AI
+2026-05-07 18:54:52,626 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:54:52,631 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (97.0%) | Thu thập: 34.61s | Phân tích: 4.5ms | Tổng: 34613.8ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-07 18:54:56,721 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 38.70s - Bắt đầu phân tích AI
+2026-05-07 18:54:56,721 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Phân tích AI
+2026-05-07 18:54:58,770 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 40.75s - Bắt đầu phân tích AI
+2026-05-07 18:54:58,770 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Phân tích AI
+2026-05-07 18:55:02,865 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 44.85s - Bắt đầu phân tích AI
+2026-05-07 18:55:02,866 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Phân tích AI
+2026-05-07 18:55:02,867 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 44.85s - Bắt đầu phân tích AI
+2026-05-07 18:55:02,867 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:55:03,889 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 45.87s - Bắt đầu phân tích AI
+2026-05-07 18:55:03,890 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:55:03,890 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 45.87s - Bắt đầu phân tích AI
+2026-05-07 18:55:03,891 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:55:11,057 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 53.04s - Bắt đầu phân tích AI
+2026-05-07 18:55:11,058 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Phân tích AI
+2026-05-07 18:55:11,058 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 53.04s - Bắt đầu phân tích AI
+2026-05-07 18:55:11,059 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Phân tích AI
+2026-05-07 18:55:14,130 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 56.11s - Bắt đầu phân tích AI
+2026-05-07 18:55:14,130 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:55:15,153 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 57.14s - Bắt đầu phân tích AI
+2026-05-07 18:55:15,153 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Phân tích AI
+2026-05-07 18:55:15,153 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 57.14s - Bắt đầu phân tích AI
+2026-05-07 18:55:15,155 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:55:18,226 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 60.21s - Bắt đầu phân tích AI
+2026-05-07 18:55:18,226 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:55:23,345 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 65.33s - Bắt đầu phân tích AI
+2026-05-07 18:55:23,346 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Phân tích AI
+2026-05-07 18:55:23,353 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (83.2%) | Kiểm tra định kỳ
+2026-05-07 18:55:25,393 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 67.38s - Bắt đầu phân tích AI
+2026-05-07 18:55:25,393 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Phân tích AI
+2026-05-07 18:55:25,394 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 67.38s - Bắt đầu phân tích AI
+2026-05-07 18:55:25,395 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Phân tích AI
+2026-05-07 18:55:25,402 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (81.0%) | Kiểm tra định kỳ
+2026-05-07 18:55:25,402 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (94.0%) | Kiểm tra định kỳ
+2026-05-07 18:55:27,441 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 69.42s - Bắt đầu phân tích AI
+2026-05-07 18:55:27,441 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:55:27,446 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (94.5%) | Kiểm tra định kỳ
+2026-05-07 18:55:28,466 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 70.45s - Bắt đầu phân tích AI
+2026-05-07 18:55:28,467 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:55:28,472 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (92.8%) | Kiểm tra định kỳ
+2026-05-07 18:55:29,489 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 71.47s - Bắt đầu phân tích AI
+2026-05-07 18:55:29,489 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:55:36,657 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đã thu thập đủ 10 mẫu trong 78.64s - Bắt đầu phân tích AI
+2026-05-07 18:55:36,658 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] 🔬 Phân tích AI
+2026-05-07 18:55:37,681 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đã thu thập đủ 10 mẫu trong 79.66s - Bắt đầu phân tích AI
+2026-05-07 18:55:37,682 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] 🔬 Phân tích AI
+2026-05-07 18:55:37,682 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đã thu thập đủ 10 mẫu trong 79.67s - Bắt đầu phân tích AI
+2026-05-07 18:55:37,683 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] 🔬 Phân tích AI
+2026-05-07 18:55:38,705 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đã thu thập đủ 10 mẫu trong 80.69s - Bắt đầu phân tích AI
+2026-05-07 18:55:38,706 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] 🔬 Phân tích AI
+2026-05-07 18:55:39,729 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đã thu thập đủ 10 mẫu trong 81.71s - Bắt đầu phân tích AI
+2026-05-07 18:55:39,729 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] 🔬 Phân tích AI
+2026-05-07 18:55:42,801 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 84.78s - Bắt đầu phân tích AI
+2026-05-07 18:55:42,802 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
+2026-05-07 18:55:46,253 - [INFO] - IDS_V2 - [EXIT] Interrupted by user

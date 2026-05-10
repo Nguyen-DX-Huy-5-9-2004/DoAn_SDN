@@ -11,8 +11,12 @@ import requests
 
 ROOT = Path(__file__).resolve().parent
 RUNTIME = ROOT.parent / "monitor" / "runtime"
+# [UNIFIED] Use batPack_v2 unified metrics instead of separate collector
+UNIFIED_METRICS_FILE = RUNTIME / "unified_metrics.json"
+# Fallback to old file for backward compatibility during transition
 ONOS_FILE = RUNTIME / "onos_metrics.json"
 HTTP_LOG_FILE = RUNTIME / "http_requests.csv"
+IDS_ALERTS_FILE = RUNTIME / "ids_alerts.json"
 WEB1_STATUS_URL = os.environ.get("WEB1_STATUS_URL", "http://127.0.0.1:8000/api/system_status")
 
 # Cache configuration
@@ -20,7 +24,8 @@ CACHE_EXPIRY = 1.5  # seconds
 _cache = {
     "onos": {"data": {"ports": []}, "ts": 0, "status": "offline"},
     "system": {"data": {"cpu_percent": 0, "ram_percent": 0, "connections": 0}, "ts": 0, "status": "offline"},
-    "logs": {"data": {"rows": []}, "ts": 0}
+    "logs": {"data": {"rows": []}, "ts": 0},
+    "ids_alerts": {"data": {"alerts": []}, "ts": 0}
 }
 
 class Handler(BaseHTTPRequestHandler):
@@ -89,16 +94,27 @@ class Handler(BaseHTTPRequestHandler):
                 self._send_json({**_cache["onos"]["data"], "status": _cache["onos"]["status"]})
                 return
             
-            data = {"ports": []}
+            data = {"ports": [], "raw_incoming_mbps": 0, "effective_mbps": 0, 
+                    "mitigated_mbps": 0, "protection_ratio_percent": 0, 
+                    "active_blocks": 0, "drop_ips": [], "rate_limit_ips": []}
             status = "offline"
-            if ONOS_FILE.exists():
+            
+            # [UNIFIED ONLY] Only read from batPack_v2 unified metrics
+            if UNIFIED_METRICS_FILE.exists():
                 try:
-                    # Check if file is recent (less than 10s old)
-                    if now - ONOS_FILE.stat().st_mtime < 10:
-                        data = json.loads(ONOS_FILE.read_text(encoding="utf-8"))
+                    mtime = UNIFIED_METRICS_FILE.stat().st_mtime
+                    if now - mtime < 10:
+                        data = json.loads(UNIFIED_METRICS_FILE.read_text(encoding="utf-8"))
                         status = "online"
-                except Exception:
-                    pass
+                        print(f"[DASHBOARD] Unified metrics: {data.get('active_blocks', 0)} blocks, "
+                              f"{data.get('protection_ratio_percent', 0):.1f}% protection")
+                    else:
+                        print(f"[DASHBOARD] Unified metrics stale ({now - mtime:.1f}s old)")
+                except Exception as e:
+                    print(f"[DASHBOARD] Error reading unified metrics: {e}")
+            else:
+                print("[DASHBOARD] Waiting for unified_metrics.json from batPack_v2...")
+            
             _cache["onos"] = {"data": data, "ts": now, "status": status}
             self._send_json({**data, "status": status})
             return
@@ -138,6 +154,27 @@ class Handler(BaseHTTPRequestHandler):
                     pass
             data = {"rows": rows}
             _cache["logs"] = {"data": data, "ts": now}
+            self._send_json(data)
+            return
+
+        if path == "/api/ids_alerts":
+            # [PRO] Real-time IDS alerts feed
+            if now - _cache["ids_alerts"]["ts"] < CACHE_EXPIRY:
+                self._send_json(_cache["ids_alerts"]["data"])
+                return
+            
+            alerts = []
+            if IDS_ALERTS_FILE.exists():
+                try:
+                    # Check if file is recent (less than 5s old)
+                    if now - IDS_ALERTS_FILE.stat().st_mtime < 5:
+                        alerts = json.loads(IDS_ALERTS_FILE.read_text(encoding="utf-8"))
+                        if not isinstance(alerts, list):
+                            alerts = [alerts]
+                except Exception:
+                    pass
+            data = {"alerts": alerts[-20:]}  # Last 20 alerts
+            _cache["ids_alerts"] = {"data": data, "ts": now}
             self._send_json(data)
             return
         

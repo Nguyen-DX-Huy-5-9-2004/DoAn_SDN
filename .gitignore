@@ -27,11 +27,9 @@ monitor/runtime/*.csv
 .project
 .settings/
 
-# Hình ảnh kết quả (Vẽ biểu đồ huấn luyện)
 *.png
 *.jpg
 
-# NHƯNG cho phép ảnh trong thư mục anhQuaTrinhLam (minh chứng quá trình làm)
 !anhQuaTrinhLam/*.png
 !anhQuaTrinhLam/*.jpg
 

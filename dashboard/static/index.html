@@ -6,13 +6,16 @@
   <title>SDN DDoS Monitor Dashboard</title>
   <script src="/chart.js"></script>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 16px; background: #f0f2f5; color: #333; }
-    h2 { color: #1a73e8; text-align: center; margin-bottom: 24px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .card { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    h3 { margin-top: 0; font-size: 16px; color: #5f6368; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
-    th, td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
+    * { box-sizing: border-box; }
+    html, body { height: 100vh; overflow: hidden; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 12px; background: #f0f2f5; color: #333; }
+    .container { max-height: 100vh; overflow-y: auto; padding-right: 8px; }
+    h2 { color: #1a73e8; text-align: center; margin: 0 0 16px 0; font-size: 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .card { background: white; padding: 14px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h3 { margin: 0 0 10px 0; font-size: 14px; color: #5f6368; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    th, td { padding: 6px; text-align: left; border-bottom: 1px solid #eee; }
     th { background: #f8f9fa; font-weight: 600; color: #5f6368; }
     tr:hover { background: #f1f3f4; }
     .status-2xx { color: #28a745; font-weight: bold; }
@@ -20,11 +23,26 @@
     .status-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
     .online { background-color: #28a745; box-shadow: 0 0 5px #28a745; }
     .offline { background-color: #d93025; box-shadow: 0 0 5px #d93025; }
-    .header-info { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; font-size: 14px; }
+    .header-info { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; font-size: 13px; }
     .header-info span { display: flex; align-items: center; background: white; padding: 4px 12px; border-radius: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+    /* [FIX] Height constraints to prevent endless scrolling */
+    .grid .card { height: 400px; overflow: hidden; display: flex; flex-direction: column; }
+    .grid .card canvas { flex: 1; min-height: 0; max-height: calc(100% - 40px) !important; }
+    .grid .card h3 { flex-shrink: 0; }
+
+    /* [FIX] Table containers with scroll */
+    .table-container { max-height: 120px; overflow-y: auto; overflow-x: auto; }
+
+    /* IDS Alert styles */
+    .ids-alert-panel { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-left: 4px solid #ff9800; }
+    .alert-critical { background: #ffebee; border-left: 4px solid #f44336; }
+    .alert-warning { background: #fff8e1; border-left: 4px solid #ffc107; }
+    .alert-info { background: #e3f2fd; border-left: 4px solid #2196f3; }
   </style>
 </head>
 <body>
+<div class="container">
   <h2>SDN Network & Security Monitor</h2>
   <div class="header-info">
     <span><div id="onos-status" class="status-indicator offline"></div> ONOS Controller</span>
@@ -41,25 +59,208 @@
       <canvas id="systemChart"></canvas>
     </div>
   </div>
-  <div class="card" style="margin-top: 20px;">
-    <h3>HTTP Traffic Inspector (Mirrored from Web1)</h3>
-    <div style="overflow-x: auto;">
-      <table>
+  <!-- [3-TIER] Traffic Flow Analysis -->
+  <div class="card" style="margin-top: 15px; background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%); color: white; max-height: 140px; overflow: hidden;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+      <h3 style="color: #90cdf4; margin: 0; font-size: 13px;">
+        3-Tier Traffic Flow: Raw → Mitigated → Effective
+      </h3>
+      <div style="font-size: 10px; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 10px;">
+        Protection Ratio: <span id="protectionRatio" style="color: #68d391; font-weight: bold;">0%</span>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center;">
+      <!-- Raw Incoming -->
+      <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; border-left: 3px solid #fc8181;">
+        <div style="font-size: 11px; color: #fc8181; text-transform: uppercase; margin-bottom: 4px;">Raw Incoming</div>
+        <div style="font-size: 22px; font-weight: bold;" id="rawTrafficMbps">0.0</div>
+        <div style="font-size: 10px; color: #a0aec0;">Mbps (all hosts)</div>
+        <div style="font-size: 10px; color: #e2e8f0; margin-top: 4px;" id="rawTrafficPps">0 pps</div>
+      </div>
+      <!-- Mitigated -->
+      <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; border-left: 3px solid #f6ad55;">
+        <div style="font-size: 11px; color: #f6ad55; text-transform: uppercase; margin-bottom: 4px;">Mitigated</div>
+        <div style="font-size: 22px; font-weight: bold;" id="mitigatedTrafficMbps">0.0</div>
+        <div style="font-size: 10px; color: #a0aec0;">Mbps (blocked/throttled)</div>
+        <div style="font-size: 10px; color: #e2e8f0; margin-top: 4px;" id="mitigatedTrafficPps">0 pps</div>
+      </div>
+      <!-- Effective -->
+      <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; border-left: 3px solid #68d391;">
+        <div style="font-size: 11px; color: #68d391; text-transform: uppercase; margin-bottom: 4px;">Effective</div>
+        <div style="font-size: 22px; font-weight: bold;" id="effectiveTrafficMbps">0.0</div>
+        <div style="font-size: 10px; color: #a0aec0;">Mbps (reached web1)</div>
+        <div style="font-size: 10px; color: #e2e8f0; margin-top: 4px;" id="effectiveTrafficPps">0 pps</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTTP Traffic Inspector with Comparison Stats -->
+  <div class="card" style="margin-top: 15px; background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%); max-height: 220px; overflow: hidden;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+      <h3 style="color: #2e7d32; margin: 0; display: flex; align-items: center; gap: 8px;">
+        HTTP Traffic Inspector (Web1 Server)
+      </h3>
+      <div style="display: flex; gap: 15px; font-size: 12px;">
+        <div style="background: #c8e6c9; padding: 4px 12px; border-radius: 20px; color: #1b5e20;">
+          <strong>Allowed:</strong> <span id="httpAllowed">0</span> req/s
+        </div>
+        <div style="background: #ffcdd2; padding: 4px 12px; border-radius: 20px; color: #b71c1c;">
+          <strong>Blocked:</strong> <span id="httpBlocked">0</span> req/s
+        </div>
+        <div style="background: #bbdefb; padding: 4px 12px; border-radius: 20px; color: #0d47a1;">
+          <strong>Block Rate:</strong> <span id="httpBlockRate">0%</span>
+        </div>
+      </div>
+    </div>
+    <p style="margin: 0 0 10px 0; font-size: 12px; color: #666;">
+       <em>Chỉ hiển thị request đến được Web1 server. Nếu thấy traffic vào port cao nhưng HTTP thấp → Tấn công đang bị chặn hiệu quả!</em>
+    </p>
+    <div style="overflow-x: auto; max-height: 200px; overflow-y: auto;">
+      <table style="font-size: 12px;">
         <thead>
-          <tr>
-            <th>Timestamp</th>
-            <th>Source IP</th>
-            <th>Method</th>
-            <th>URL</th>
-            <th>Payload</th>
-            <th>Status</th>
-            <th>User-Agent</th>
+          <tr style="background: #a5d6a7;">
+            <th style="padding: 8px;">Timestamp</th>
+            <th style="padding: 8px;">Source IP</th>
+            <th style="padding: 8px;">Method</th>
+            <th style="padding: 8px;">URL</th>
+            <th style="padding: 8px;">Payload</th>
+            <th style="padding: 8px;">Status</th>
+            <th style="padding: 8px;">User-Agent</th>
           </tr>
         </thead>
         <tbody id="logBody"></tbody>
       </table>
     </div>
   </div>
+
+  <!-- [PRO] Security Operations Center (SOC) Dashboard -->
+  <div class="card" style="margin-top: 15px; background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%); color: white; max-height: 320px; overflow: hidden;">
+    <h3 style="color: #ffeb3b; margin: 0 0 10px 0; display: flex; align-items: center; gap: 10px; font-size: 15px;">
+      <span>Security Operations Center (SOC)</span>
+      <span style="margin-left: auto; font-size: 11px; background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 20px;">Real-time</span>
+    </h3>
+
+    <!-- Statistics Row -->
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 10px 0;">
+      <!-- Total Blocks -->
+      <div style="text-align: center; padding: 8px; background: rgba(255,255,255,0.15); border-radius: 8px;">
+        <div style="font-size: 22px; font-weight: bold; color: #ffeb3b;" id="activeBlocks">0</div>
+        <div style="font-size: 9px; color: #b3e5fc; text-transform: uppercase;">Total</div>
+      </div>
+
+      <!-- DROP Count -->
+      <div style="text-align: center; padding: 8px; background: rgba(239,83,80,0.3); border-radius: 8px; border: 1px solid #ef5350;">
+        <div style="font-size: 22px; font-weight: bold; color: #ff5252;" id="dropCount">0</div>
+        <div style="font-size: 9px; color: #ffcdd2; text-transform: uppercase;">DROP</div>
+        <div style="font-size: 11px; color: #ff8a80;" id="dropPercentage">0%</div>
+      </div>
+
+      <!-- RATE_LIMIT Count -->
+      <div style="text-align: center; padding: 8px; background: rgba(255,167,38,0.3); border-radius: 8px; border: 1px solid #ffa726;">
+        <div style="font-size: 22px; font-weight: bold; color: #ffab40;" id="rateLimitCount">0</div>
+        <div style="font-size: 9px; color: #ffe0b2; text-transform: uppercase;">RATE LMT</div>
+        <div style="font-size: 11px; color: #ffcc80;" id="rateLimitPercentage">0%</div>
+      </div>
+
+      <!-- Dropped Packets -->
+      <div style="text-align: center; padding: 8px; background: rgba(236,64,122,0.3); border-radius: 8px; border: 1px solid #ec407a;">
+        <div style="font-size: 20px; font-weight: bold; color: #f48fb1;" id="droppedPackets">0</div>
+        <div style="font-size: 9px; color: #f8bbd0; text-transform: uppercase;">Pkts</div>
+        <div style="font-size: 10px; color: #f06292;" id="rateLimitedPackets">+0 RL</div>
+      </div>
+
+      <!-- Traffic Volume -->
+      <div style="text-align: center; padding: 8px; background: rgba(77,208,225,0.3); border-radius: 8px; border: 1px solid #4dd0e1;">
+        <div style="font-size: 20px; font-weight: bold; color: #80deea;" id="droppedBytes">0</div>
+        <div style="font-size: 9px; color: #b2ebf2; text-transform: uppercase;">MB</div>
+        <div style="font-size: 10px; color: #26c6da;" id="rateLimitedBytes">+0 RL</div>
+      </div>
+    </div>
+
+    <!-- Attack Classification Chart & Tables -->
+    <div style="display: grid; grid-template-columns: 160px 1fr; gap: 12px; height: 140px;">
+      <!-- Attack Type Distribution -->
+      <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 8px; display: flex; flex-direction: column;">
+        <h4 style="margin: 0 0 4px 0; color: #80cbc4; font-size: 10px; text-align: center;">Attack Types</h4>
+        <div style="flex: 1; position: relative;">
+          <canvas id="attackChart" style="max-height: 100px !important;"></canvas>
+        </div>
+      </div>
+
+      <!-- Tables Container -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 140px;">
+        <!-- DROP Table -->
+        <div style="background: rgba(239,83,80,0.15); border-radius: 8px; padding: 8px; border: 1px solid rgba(239,83,80,0.4); display: flex; flex-direction: column;">
+          <h4 style="margin: 0 0 4px 0; color: #ff5252; font-size: 11px;">DROP</h4>
+          <div style="flex: 1; overflow-x: auto; overflow-y: auto; font-size: 10px;">
+            <table style="width: 100%; color: white;">
+              <thead>
+                <tr style="background: rgba(239,83,80,0.4);">
+                  <th style="padding: 3px; text-align: left; font-size: 9px;">IP</th>
+                  <th style="padding: 3px; font-size: 9px;">Type</th>
+                  <th style="padding: 3px; font-size: 9px;">Conf</th>
+                </tr>
+              </thead>
+              <tbody id="dropTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RATE_LIMIT Table -->
+        <div style="background: rgba(255,167,38,0.15); border-radius: 8px; padding: 8px; border: 1px solid rgba(255,167,38,0.4); display: flex; flex-direction: column;">
+          <h4 style="margin: 0 0 4px 0; color: #ffab40; font-size: 11px;">RATE LIMIT</h4>
+          <div style="flex: 1; overflow-x: auto; overflow-y: auto; font-size: 10px;">
+            <table style="width: 100%; color: white;">
+              <thead>
+                <tr style="background: rgba(255,167,38,0.4);">
+                  <th style="padding: 3px; text-align: left; font-size: 9px;">IP</th>
+                  <th style="padding: 3px; font-size: 9px;">Type</th>
+                  <th style="padding: 3px; font-size: 9px;">Conf</th>
+                </tr>
+              </thead>
+              <tbody id="rateLimitTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [PRO] IDS Real-time Alert Feed -->
+  <div class="card ids-alert-panel" style="margin-top: 15px; max-height: 160px; overflow: hidden;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+      <h3 style="color: #e65100; margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px;">
+        IDS Real-time Alert Feed
+      </h3>
+      <div style="display: flex; gap: 8px; font-size: 10px;">
+        <div style="background: #ffccbc; padding: 2px 8px; border-radius: 12px; color: #bf360c;">
+          <strong>Total:</strong> <span id="idsTotalAlerts">0</span>
+        </div>
+        <div style="background: #ffcdd2; padding: 2px 8px; border-radius: 12px; color: #b71c1c;">
+          <strong>DROP:</strong> <span id="idsDropAlerts">0</span>
+        </div>
+        <div style="background: #ffecb3; padding: 2px 8px; border-radius: 12px; color: #ff6f00;">
+          <strong>RL:</strong> <span id="idsRLAlerts">0</span>
+        </div>
+      </div>
+    </div>
+    <div style="overflow-y: auto; max-height: 110px; font-size: 10px;">
+      <table style="width: 100%;">
+        <thead>
+          <tr style="background: #ffe0b2;">
+            <th style="padding: 4px; font-size: 9px;">Time</th>
+            <th style="padding: 4px; font-size: 9px;">IP</th>
+            <th style="padding: 4px; font-size: 9px;">Type</th>
+            <th style="padding: 4px; font-size: 9px;">Conf</th>
+            <th style="padding: 4px; font-size: 9px;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="idsAlertBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
 
   <script>
     const trafficChart = new Chart(document.getElementById("trafficChart"), {
@@ -90,9 +291,11 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: true, labels: { font: { size: 10 } } } },
         scales: {
-          y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'KB/s' }, beginAtZero: true },
-          y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'pps' }, grid: { drawOnChartArea: false }, beginAtZero: true }
+          y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'KB/s', font: { size: 10 } }, beginAtZero: true, ticks: { font: { size: 9 } } },
+          y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'pps', font: { size: 10 } }, grid: { drawOnChartArea: false }, beginAtZero: true, ticks: { font: { size: 9 } } }
         }
       }
     });
@@ -109,21 +312,24 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: true, labels: { font: { size: 10 }, boxWidth: 10 } } },
         scales: {
           y: { 
             min: 0, 
             max: 100, 
             display: true, 
             position: 'left',
-            title: { display: true, text: 'Usage %' },
-            ticks: { padding: 10 }
+            title: { display: true, text: 'Usage %', font: { size: 10 } },
+            ticks: { font: { size: 9 } }
           },
           y1: { 
             beginAtZero: true,
             display: true, 
             position: 'right',
-            title: { display: true, text: 'Connections' },
-            grid: { drawOnChartArea: false }
+            title: { display: true, text: 'Conns', font: { size: 10 } },
+            grid: { drawOnChartArea: false },
+            ticks: { font: { size: 9 } }
           }
         }
       }
@@ -133,7 +339,7 @@
       try {
         const r = await fetch("/api/onos");
         const data = await r.json();
-        
+
         const statusEl = document.getElementById("onos-status");
         if (data.status === "online") {
           statusEl.classList.remove("offline");
@@ -151,13 +357,154 @@
           byteMap[key] = (byteMap[key] || 0) + (p.byte_rate || 0);
           pktMap[key] = (pktMap[key] || 0) + (p.packet_rate || 0);
         });
-        
+
         const labels = Object.keys(byteMap);
         trafficChart.data.labels = labels;
         trafficChart.data.datasets[0].data = labels.map(l => (byteMap[l] / 1024).toFixed(2));
         trafficChart.data.datasets[1].data = labels.map(l => pktMap[l].toFixed(1));
         trafficChart.update('none');
+
+        // [PRO] Update SOC Dashboard Statistics
+        document.getElementById("activeBlocks").textContent = data.active_blocks || 0;
+        document.getElementById("dropCount").textContent = data.drop_count || 0;
+        document.getElementById("rateLimitCount").textContent = data.rate_limit_count || 0;
+        document.getElementById("dropPercentage").textContent = (data.drop_percentage || 0) + "%";
+        document.getElementById("rateLimitPercentage").textContent = (data.rate_limit_percentage || 0) + "%";
+
+        // Traffic statistics
+        const droppedPkt = (data.dropped_packets_total || 0).toLocaleString();
+        const rateLimitedPkt = (data.rate_limited_packets_total || 0).toLocaleString();
+        document.getElementById("droppedPackets").textContent = droppedPkt;
+        document.getElementById("rateLimitedPackets").textContent = "+" + rateLimitedPkt + " RL";
+
+        const droppedMB = ((data.dropped_bytes_total || 0) / (1024 * 1024)).toFixed(1);
+        const rateLimitedMB = ((data.rate_limited_bytes_total || 0) / (1024 * 1024)).toFixed(1);
+        document.getElementById("droppedBytes").textContent = droppedMB;
+        document.getElementById("rateLimitedBytes").textContent = "+" + rateLimitedMB + " RL";
+
+        // [PRO] Update Attack Distribution Chart
+        updateAttackChart(data.drop_ips || [], data.rate_limit_ips || []);
+
+        // [PRO] Store total traffic for HTTP comparison
+        window.totalPacketRate = (data.ports || []).reduce((sum, p) => sum + (p.packet_rate || 0), 0);
+        window.blockedPacketRate = (data.dropped_packets_total || 0) + (data.rate_limited_packets_total || 0);
+
+        // [3-TIER] Update Traffic Flow Analysis Panel
+        const rawMbps = data.raw_incoming_mbps || 0;
+        const rawPps = data.raw_incoming_packets_per_sec || 0;
+        const mitigatedMbps = data.mitigated_mbps || 0;
+        const mitigatedPps = data.mitigated_packets_per_sec || 0;
+        const effectiveMbps = data.effective_mbps || 0;
+        const effectivePps = data.effective_packets_per_sec || 0;
+        const protectionRatio = data.protection_ratio_percent || 0;
+
+        document.getElementById("rawTrafficMbps").textContent = rawMbps.toFixed(2);
+        document.getElementById("rawTrafficPps").textContent = rawPps.toFixed(0) + " pps";
+        document.getElementById("mitigatedTrafficMbps").textContent = mitigatedMbps.toFixed(2);
+        document.getElementById("mitigatedTrafficPps").textContent = mitigatedPps.toFixed(0) + " pps";
+        document.getElementById("effectiveTrafficMbps").textContent = effectiveMbps.toFixed(2);
+        document.getElementById("effectiveTrafficPps").textContent = effectivePps.toFixed(0) + " pps";
+        document.getElementById("protectionRatio").textContent = protectionRatio.toFixed(1) + "%";
+
+        // Color-code based on protection effectiveness
+        const ratioEl = document.getElementById("protectionRatio");
+        if (protectionRatio >= 80) {
+          ratioEl.style.color = "#68d391";  // Green - excellent
+        } else if (protectionRatio >= 50) {
+          ratioEl.style.color = "#f6ad55";  // Orange - moderate
+        } else if (protectionRatio > 0) {
+          ratioEl.style.color = "#fc8181";  // Red - poor
+        } else {
+          ratioEl.style.color = "#a0aec0";  // Gray - no attack
+        }
+
+        // [PRO] Update DROP Table (compact - no Pkt column)
+        const dropBody = document.getElementById("dropTableBody");
+        dropBody.innerHTML = "";
+        (data.drop_ips || []).forEach((ip) => {
+          const tr = document.createElement("tr");
+          const confColor = ip.confidence >= 95 ? "#ff5252" : "#ff8a80";
+          tr.innerHTML = `
+            <td style="padding: 2px 3px; font-family: monospace; font-size: 10px;">${ip.ip}</td>
+            <td style="padding: 2px 3px; text-align: center;"><span style="background: rgba(239,83,80,0.5); padding: 1px 4px; border-radius: 3px; font-size: 9px;">${ip.attack_type || "UNK"}</span></td>
+            <td style="padding: 2px 3px; text-align: center; color: ${confColor}; font-weight: bold; font-size: 10px;">${ip.confidence || 0}%</td>
+          `;
+          dropBody.appendChild(tr);
+        });
+
+        // [PRO] Update RATE_LIMIT Table (compact - no Pkt column)
+        const rateLimitBody = document.getElementById("rateLimitTableBody");
+        rateLimitBody.innerHTML = "";
+        (data.rate_limit_ips || []).forEach((ip) => {
+          const tr = document.createElement("tr");
+          const confColor = ip.confidence >= 90 ? "#ffa726" : "#ffcc80";
+          tr.innerHTML = `
+            <td style="padding: 2px 3px; font-family: monospace; font-size: 10px;">${ip.ip}</td>
+            <td style="padding: 2px 3px; text-align: center;"><span style="background: rgba(255,167,38,0.5); padding: 1px 4px; border-radius: 3px; font-size: 9px;">${ip.attack_type || "UNK"}</span></td>
+            <td style="padding: 2px 3px; text-align: center; color: ${confColor}; font-weight: bold; font-size: 10px;">${ip.confidence || 0}%</td>
+          `;
+          rateLimitBody.appendChild(tr);
+        });
       } catch (e) { console.error(e); }
+    }
+
+    // [PRO] Attack Distribution Chart
+    let attackChart = null;
+    function updateAttackChart(dropIPs, rateLimitIPs) {
+      const ctx = document.getElementById("attackChart");
+      if (!ctx) return;
+
+      // Count attack types
+      const attackCounts = {};
+      [...dropIPs, ...rateLimitIPs].forEach(ip => {
+        const type = ip.attack_type || "UNKNOWN";
+        attackCounts[type] = (attackCounts[type] || 0) + 1;
+      });
+
+      const labels = Object.keys(attackCounts);
+      const data = Object.values(attackCounts);
+
+      // Color palette
+      const colors = [
+        "#ef5350", "#ffa726", "#ffca28", "#66bb6a",
+        "#42a5f5", "#ab47bc", "#ec407a", "#26c6da"
+      ];
+
+      if (attackChart) {
+        attackChart.data.labels = labels;
+        attackChart.data.datasets[0].data = data;
+        attackChart.update();
+      } else {
+        attackChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              backgroundColor: colors,
+              borderColor: "rgba(255,255,255,0.2)",
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return context.label + ': ' + context.raw;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
     }
 
     async function refreshSystem() {
@@ -197,19 +544,34 @@
         const data = await r.json();
         const body = document.getElementById("logBody");
         body.innerHTML = "";
+
+        // Count HTTP requests per second (estimate based on last 15 logs in 2s window)
+        const httpRequestRate = Math.min((data.rows || []).length / 2, 999); // Cap at 999
+
+        // Calculate comparison with total traffic
+        const totalTraffic = window.totalPacketRate || 0;
+        const blockedTraffic = window.blockedPacketRate || 0;
+        const allowedTraffic = Math.max(totalTraffic - blockedTraffic, httpRequestRate);
+        const blockRate = totalTraffic > 0 ? ((blockedTraffic / totalTraffic) * 100).toFixed(1) : 0;
+
+        // Update HTTP comparison stats
+        document.getElementById("httpAllowed").textContent = allowedTraffic.toFixed(0);
+        document.getElementById("httpBlocked").textContent = blockedTraffic.toFixed(0);
+        document.getElementById("httpBlockRate").textContent = blockRate + "%";
+
         (data.rows || []).slice(-15).reverse().forEach((row) => {
           const tr = document.createElement("tr");
           const statusClass = row.status_code?.startsWith('2') ? 'status-2xx' : (row.status_code?.startsWith('4') || row.status_code?.startsWith('5') ? 'status-4xx' : '');
           const shortUA = row.user_agent?.length > 30 ? row.user_agent.substring(0, 30) + '...' : row.user_agent;
-          
+
           tr.innerHTML = `
-            <td>${row.timestamp?.split('T')[1].split('.')[0] || ""}</td>
-            <td>${row.src_ip || ""}</td>
-            <td>${row.method || ""}</td>
-            <td title="${row.url}">${row.url?.substring(0, 20) || ""}</td>
-            <td>${row.payload_len || "0"} B</td>
-            <td class="${statusClass}">${row.status_code || "-"}</td>
-            <td title="${row.user_agent}">${shortUA || "unknown"}</td>
+            <td style="padding: 6px;">${row.timestamp?.split('T')[1].split('.')[0] || ""}</td>
+            <td style="padding: 6px; font-family: monospace;">${row.src_ip || ""}</td>
+            <td style="padding: 6px;"><span style="background: #e3f2fd; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${row.method || ""}</span></td>
+            <td style="padding: 6px;" title="${row.url}">${row.url?.substring(0, 20) || ""}</td>
+            <td style="padding: 6px; text-align: right;">${row.payload_len || "0"} B</td>
+            <td style="padding: 6px; text-align: center;" class="${statusClass}">${row.status_code || "-"}</td>
+            <td style="padding: 6px; font-size: 10px;" title="${row.user_agent}">${shortUA || "unknown"}</td>
           `;
           body.appendChild(tr);
         });
@@ -217,10 +579,44 @@
     }
 
     async function tick() {
-      await Promise.all([refreshTraffic(), refreshSystem(), refreshLogs()]);
+      await Promise.all([refreshTraffic(), refreshSystem(), refreshLogs(), refreshIDSAlerts()]);
     }
     tick();
     setInterval(tick, 2000);
+
+    // [PRO] IDS Real-time Alert Feed
+    async function refreshIDSAlerts() {
+      try {
+        const r = await fetch("/api/ids_alerts");
+        const data = await r.json();
+        const alerts = data.alerts || [];
+
+        // Update counters
+        const dropCount = alerts.filter(a => a.action === "DROP").length;
+        const rlCount = alerts.filter(a => a.action === "RATE_LIMIT").length;
+        document.getElementById("idsTotalAlerts").textContent = alerts.length;
+        document.getElementById("idsDropAlerts").textContent = dropCount;
+        document.getElementById("idsRLAlerts").textContent = rlCount;
+
+        // Update table (compact - no Details column)
+        const body = document.getElementById("idsAlertBody");
+        body.innerHTML = "";
+        alerts.slice(-8).reverse().forEach((alert) => {
+          const tr = document.createElement("tr");
+          const timeStr = alert.timestamp ? new Date(alert.timestamp * 1000).toLocaleTimeString('en-US', {hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'}) : "-";
+          const isZeroDay = alert.is_zero_day ? ' [ZD]' : '';
+
+          tr.innerHTML = `
+            <td style="padding: 3px; font-size: 10px;">${timeStr}</td>
+            <td style="padding: 3px; font-family: monospace; font-weight: bold; font-size: 10px;">${alert.src_ip || "-"}</td>
+            <td style="padding: 3px; font-size: 10px;"><span style="background: #fff3e0; padding: 1px 4px; border-radius: 3px; font-size: 9px; color: #e65100;">${alert.attack_type || "UNK"}${isZeroDay}</span></td>
+            <td style="padding: 3px; text-align: center; font-weight: bold; color: ${alert.confidence >= 95 ? '#d32f2f' : '#f57c00'}; font-size: 10px;">${alert.confidence || 0}%</td>
+            <td style="padding: 3px; text-align: center;"><span style="background: ${alert.action === 'DROP' ? '#ffcdd2' : '#ffecb3'}; color: ${alert.action === 'DROP' ? '#b71c1c' : '#ff6f00'}; padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: bold;">${alert.action === 'RATE_LIMIT' ? 'RL' : alert.action || "-"}</span></td>
+          `;
+          body.appendChild(tr);
+        });
+      } catch (e) { console.error(e); }
+    }
   </script>
 </body>
 </html>

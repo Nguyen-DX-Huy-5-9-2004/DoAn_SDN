@@ -298,12 +298,14 @@ import ctypes.util
 import inspect
 import logging
 import logging.handlers
+import os
 import threading
 from dataclasses import dataclass
 from functools import reduce
 from urllib.parse import urlparse
 
 from pyroute2.common import basestring
+from pyroute2.netns import getnsfd
 
 ##
 # NDB stuff
@@ -503,9 +505,12 @@ class NDB:
         for vname, view in self._create_views():
             setattr(self, vname, view)
         self.db = SyncDB(self.task_manager.event_loop, self)
+        self.localns = -1
         for spec in self._nl:
             spec['event'] = None
             self.sources.add(**spec)
+            if spec.get('target') == self.localhost:
+                self.localns = getnsfd(spec.get('netns', '/proc/self/ns/net'))
         if self._dbm_error is not None:
             raise self._dbm_error
 
@@ -589,6 +594,9 @@ class NDB:
         self._dbm_thread.join()
         # shutdown the logger -- free the resources
         self.log.close()
+        # close the netns
+        if self.localns > 0:
+            os.close(self.localns)
 
     def backup(self, spec):
         return self.db.backup(spec)

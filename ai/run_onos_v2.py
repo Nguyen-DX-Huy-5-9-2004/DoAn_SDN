@@ -231,6 +231,11 @@ class IDSEngineV2:
             "blocked_ips": {}  # Đổi từ set sang dict để lưu timestamp {ip: timestamp}
         }
         self.lock = threading.Lock()
+        self.processing_ips = set()  # [FIX] Track IPs currently being processed to avoid duplicates
+        self.ip_collection_start = {}  # Track when we start collecting for each IP
+        self.last_normal_log = {}  # [DEDUP] Track last normal log time per IP
+        self.trusted_normal_ips = {}  # [OPT] IPs confirmed as normal with high confidence - skip logging
+        self.last_collect_log = {}  # [OPT] Track last collection log time per IP
 
         # 2. Bật lại luồng chạy ngầm để lưu trạng thái (Save Worker)
         threading.Thread(target=self._save_threshold_worker, daemon=True).start()
@@ -321,24 +326,109 @@ class IDSEngineV2:
                 self._last_adapt_log_time = current_time
     
     def execute_mitigation(self, src_ip, attack_name, confidence, is_zero_day=False):
-        """Level 2 Mitigation: Chặn hoàn toàn (DROP) via ONOS REST API"""
-        if src_ip in self.stats["blocked_ips"]:
+        """
+        Graduated Response Mitigation:
+        - Confidence 80-95%: RATE_LIMIT (Level 1 - giới hạn băng thông)
+        - Confidence >95%: DROP (Level 2 - chặn hoàn toàn)
+        - is_zero_day: Force DROP ngay lập tức
+        """
+        # [FIX] Check if IP is currently being processed by another flow
+        with self.lock:
+            if src_ip in self.processing_ips:
+                return  # Skip duplicate processing
+            if src_ip in self.stats["blocked_ips"]:
+                current_action = self.stats["blocked_ips"].get(f"{src_ip}_action", "UNKNOWN")
+                # Nếu đang RATE_LIMIT mà confidence tăng cao → nâng lên DROP
+                if current_action == "RATE_LIMIT" and (confidence > 0.95 or is_zero_day):
+                    logger.warning(f"[MITIGATION] Nâng cấp {src_ip} từ RATE_LIMIT → DROP (confidence: {confidence:.1%})")
+                    SDNControllerV2.push_flow_rule(src_ip, treatment_type="DROP")
+                    self.stats["blocked_ips"][f"{src_ip}_action"] = "DROP"
+                    self.stats["blocked_ips"][src_ip] = time.time()
+                    self.log_attack_panel(src_ip, attack_name, confidence, "DROP (UPGRADED)", "red")
+                # [FIX] Remove from processing set before return
+                self.processing_ips.discard(src_ip)
+                return
+            # Mark IP as being processed
+            self.processing_ips.add(src_ip)
+
+        # Graduated Response dựa trên confidence
+        if confidence > 0.95 or is_zero_day:
+            # Level 2: DROP hoàn toàn cho attack chắc chắn
+            treatment = "DROP"
+            color = "red"
+            level = 2
+        elif confidence > 0.80:
+            # Level 1: RATE_LIMIT cho attack nghi ngờ (cho phép traffic chậm)
+            treatment = "RATE_LIMIT"
+            color = "yellow"
+            level = 1
+        else:
+            # Không đủ confidence → không chặn
+            logger.info(f"[MITIGATION] Bỏ qua {src_ip} - Confidence {confidence:.1%} quá thấp (<80%)")
+            with self.lock:
+                self.processing_ips.discard(src_ip)  # [FIX] Remove from processing
             return
 
-        # [FIX] Dùng ONOS REST API thay vì ovs-ofctl trực tiếp
-        SDNControllerV2.push_flow_rule(src_ip, treatment_type="DROP")
+        # Thực thi biện pháp với timing
+        mitigation_start = time.time()
         
+        if treatment == "RATE_LIMIT":
+            SDNControllerV2.push_flow_rule(src_ip, treatment_type="RATE_LIMIT")
+            self.stats["blocked_ips"][f"{src_ip}_action"] = "RATE_LIMIT"
+            action_str = "RATE_LIMIT"
+            log_level = logger.warning
+        else:
+            SDNControllerV2.push_flow_rule(src_ip, treatment_type="DROP")
+            self.stats["blocked_ips"][f"{src_ip}_action"] = "DROP"
+            self.stats["blocked"] += 1
+            if is_zero_day: self.stats["zero_day"] += 1
+            action_str = "DROP"
+            log_level = logger.error
+        
+        mitigation_time_ms = (time.time() - mitigation_start) * 1000
+
+        # Log kết quả có timing
         self.stats["blocked_ips"][src_ip] = time.time()
-        self.stats["blocked"] += 1
-        if is_zero_day: self.stats["zero_day"] += 1
+        self.log_attack_panel(src_ip, attack_name, confidence, f"Lv{level}-{action_str}", color)
+        log_level(f"[MITIGATE] [{src_ip}] ⚡ Đã áp dụng {action_str} trong {mitigation_time_ms:.1f}ms "
+                 f"(confidence: {confidence:.1%}) qua ONOS")
+
+        # [PRO] Write to dashboard real-time feed
+        self.write_dashboard_alert(src_ip, attack_name, confidence, action_str, level, is_zero_day)
         
-        self.log_attack_panel(src_ip, attack_name, confidence, "DROP", "red")
-        logger.error(f"[IPS] 🛡️ Đã thực thi lệnh DROP cho IP {src_ip} qua ONOS.")
+        # [FIX] Remove from processing set after done
+        with self.lock:
+            self.processing_ips.discard(src_ip)
+        
+        # Save to attack registry for dashboard
+        try:
+            registry_file = "monitor/runtime/attack_registry.json"
+            os.makedirs(os.path.dirname(registry_file), exist_ok=True)
+            
+            attack_registry = {}
+            if os.path.exists(registry_file):
+                with open(registry_file, 'r') as f:
+                    attack_registry = json.load(f)
+            
+            attack_registry[src_ip] = {
+                "attack_type": attack_name,
+                "confidence": round(confidence * 100, 1),
+                "action": action_str,
+                "level": level,
+                "timestamp": time.time(),
+                "is_zero_day": is_zero_day
+            }
+            
+            with open(registry_file, 'w') as f:
+                json.dump(attack_registry, f)
+        except Exception as e:
+            logger.debug(f"[REGISTRY] Không thể ghi registry: {e}")
     def apply_rate_limit(self, src_ip):
-        """[LEVEL 1 MITIGATION] Giới hạn băng thông (1Mbps) via ONOS"""
-        # [FIX] Dùng ONOS REST API thay vì ovs-ofctl
-        SDNControllerV2.push_flow_rule(src_ip, treatment_type="RATE_LIMIT")
-        logger.warning(f"[MITIGATION] Level 1: Đã áp dụng Rate Limit cho {src_ip} qua ONOS")
+        """
+        [LEVEL 1 MITIGATION] Giới hạn băng thông via ONOS
+        Đã tích hợp vào execute_mitigation() - không cần gọi riêng
+        """
+        pass
         
     def apply_honeypot_redirect(self, src_ip):
         """
@@ -356,16 +446,52 @@ class IDSEngineV2:
         msg += f"[bold]Type:[/bold] {attack_name}\n"
         msg += f"[bold]Confidence:[/bold] {confidence:.1f}%\n"
         msg += f"[bold]Action:[/bold] [{color_str}]{action_str}[/{color_str}]"
-        console.print(Panel(msg, title="🚨 [bold red]IDS ALERT[/bold red]", expand=False))
+        console.print(Panel(msg, title="[bold red]IDS ALERT[/bold red]", expand=False))
+
+    def write_dashboard_alert(self, src_ip, attack_name, confidence, action, level, is_zero_day=False):
+        """[PRO] Write alert to dashboard real-time feed"""
+        try:
+            alert_file = "monitor/runtime/ids_alerts.json"
+            os.makedirs(os.path.dirname(alert_file), exist_ok=True)
+
+            alerts = []
+            if os.path.exists(alert_file):
+                try:
+                    with open(alert_file, 'r') as f:
+                        alerts = json.load(f)
+                    if not isinstance(alerts, list):
+                        alerts = [alerts]
+                except:
+                    alerts = []
+
+            # Add new alert
+            alert = {
+                "timestamp": time.time(),
+                "src_ip": src_ip,
+                "attack_type": attack_name,
+                "confidence": round(confidence * 100, 1),
+                "action": action,
+                "level": level,
+                "is_zero_day": is_zero_day
+            }
+            alerts.append(alert)
+
+            # Keep only last 50 alerts
+            alerts = alerts[-50:]
+
+            with open(alert_file, 'w') as f:
+                json.dump(alerts, f)
+        except Exception as e:
+            logger.debug(f"[DASHBOARD ALERT] Không thể ghi alert: {e}")
         
-    def log_normal_panel(self, src_ip, normal_prob, mse, threshold):
-        """[NEW] Hiển thị thông báo Normal chi tiết 2 khiên"""
+    def log_normal_panel(self, src_ip, normal_prob, mse, threshold, latency_ms=0, collection_time=0):
         msg = f"[bold]IP:[/bold] {src_ip}\n"
         msg += f"[bold]Classification:[/bold] [green]BENIGN[/green] ({normal_prob:.1f}%)\n"
-        msg += f"[bold]Shield 1 (AE):[/bold] MSE={mse:.4f} | Threshold={threshold:.4f} | Status={'✅ Normal' if mse < threshold else '⚠️ Anomaly (Ignored)'}\n"
-        msg += f"[bold]Shield 2 (CLS):[/bold] Normal={normal_prob:.1f}% | Status={'✅ Confident' if normal_prob > 80 else '⚠️ Uncertain'}\n"
+        msg += f"[bold]Shield 1 (AE):[/bold] MSE={mse:.4f} | Threshold={threshold:.4f} | Status={'Normal' if mse < threshold else 'Anomaly (Ignored)'}\n"
+        msg += f"[bold]Shield 2 (CLS):[/bold] Normal={normal_prob:.1f}% | Status={'Confident' if normal_prob > 80 else 'Uncertain'}\n"
+        msg += f"[bold]Timing:[/bold] Thu thập={collection_time:.2f}s | Phân tích={latency_ms:.1f}ms\n"
         msg += f"[bold]Action:[/bold] [green]ALLOW[/green]"
-        console.print(Panel(msg, title="✅ [bold green]NORMAL TRAFFIC[/bold green]", expand=False))
+        console.print(Panel(msg, title="[bold green]NORMAL TRAFFIC[/bold green]", expand=False))
             
     def save_to_feedback_loop(self, src_ip, sequence_data, metadata):
         """Lưu lại các mẫu bị Veto để tái huấn luyện (Active Learning)"""
@@ -388,21 +514,48 @@ class IDSEngineV2:
         os.system(cmd)
         logger.warning(f"[MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho {src_ip}")
 
-    def process_sequence(self, src_ip, sequence):
-        """Process a single sequence (10 flows)"""
-        start_time = time.time()
+    def process_sequence(self, src_ip, sequence, collection_time=None):
+        """Process a single sequence (10 flows) with detailed timing logs"""
+        analysis_start = time.time()
+        collection_time = collection_time or 0
         
-        # Bỏ qua nếu là 2 chuỗi đầu tiên của mỗi IP (Warm-up phase)
-        # Điều này giúp tránh bắt nhầm traffic lỗi lúc server đang khởi động
+        # Bỏ qua nếu là 2 chuỗi đầu tiên của mỗi IP (Warm-up phase) - silently skip
         if not hasattr(self, 'ip_warmup_count'):
             self.ip_warmup_count = {}
         
-        with self.lock:
-            self.ip_warmup_count[src_ip] = self.ip_warmup_count.get(src_ip, 0) + 1
-            if self.ip_warmup_count[src_ip] <= 2:
-                logger.debug(f"[WARMUP] Skipping sequence for {src_ip} (Attempt {self.ip_warmup_count[src_ip]}/5)")
+        self.ip_warmup_count[src_ip] = self.ip_warmup_count.get(src_ip, 0) + 1
+        if self.ip_warmup_count[src_ip] <= 2:
+            with self.lock:
+                if hasattr(self, '_processing_sequence') and src_ip in self._processing_sequence:
+                    self._processing_sequence.discard(src_ip)
+            return
+        
+        # Check if trusted normal - skip frequent analysis
+        if src_ip in self.trusted_normal_ips:
+            last_analysis = getattr(self, '_last_analysis_time', {}).get(src_ip, 0)
+            if time.time() - last_analysis < 10:  # Only analyze every 10s for trusted IPs
+                with self.lock:
+                    if hasattr(self, '_processing_sequence') and src_ip in self._processing_sequence:
+                        self._processing_sequence.discard(src_ip)
                 return
         
+        with self.lock:
+            if not hasattr(self, '_last_analysis_time'):
+                self._last_analysis_time = {}
+            self._last_analysis_time[src_ip] = time.time()
+        
+        try:
+            self._do_analysis(src_ip, sequence, collection_time, analysis_start)
+        except Exception as e:
+            logger.error(f"[ANALYSIS ERROR] [{src_ip}] {e}")
+        finally:
+            # Always cleanup processing flag
+            with self.lock:
+                if hasattr(self, '_processing_sequence') and src_ip in self._processing_sequence:
+                    self._processing_sequence.discard(src_ip)
+    
+    def _do_analysis(self, src_ip, sequence, collection_time, analysis_start):
+        """Internal analysis logic"""
         # Feature engineering: 13 → 26 (add differential)
         diff = np.zeros_like(sequence)  # [SEQ_LEN, 13]
         diff[1:, :] = sequence[1:, :] - sequence[:-1, :]
@@ -455,12 +608,14 @@ class IDSEngineV2:
             pred_idx = torch.argmax(probs, dim=1).item()
             confidence = probs[0][pred_idx].item() * 100
         
-        latency_ms = (time.time() - start_time) * 1000
+        latency_ms = (time.time() - analysis_start) * 1000
+        total_time_ms = (time.time() - analysis_start + collection_time) * 1000
         self.stats["avg_latency_ms"] = (self.stats["avg_latency_ms"] * 0.9) + (latency_ms * 0.1)
         
-        # =====================================================================
-        # [V7 UPDATE] Decision logic - 2 Shield Strategy (Bảo vệ Normal tuyệt đối)
-        # =====================================================================
+        # Log gộp sau khi phân tích xong
+        logger.info(f"[ANALYZE] [{src_ip}] ✅ Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms")
+        
+        # [V7 UPDATE] Decision logic - 2 Shield Strategy (Bảo vệ Normal)
         self.stats["processed"] += 1
         is_attack = False
         is_zero_day = False
@@ -481,7 +636,7 @@ class IDSEngineV2:
             is_zero_day = False
             # [FIX] Hiển thị panel chi tiết 2 khiên cho Normal (mỗi 5 lần để tránh spam)
             if self.stats["processed"] % 5 == 0:
-                self.log_normal_panel(src_ip, normal_prob, mse, self.dynamic_threshold)
+                self.log_normal_panel(src_ip, normal_prob, mse, self.dynamic_threshold, latency_ms, collection_time)
         elif is_anomaly:
             # Shield 1 thấy bất thường, kiểm tra Shield 2
             if pred_idx != 0 and confidence > 85.0:
@@ -527,7 +682,7 @@ class IDSEngineV2:
             try:
                 # Cập nhật logic XAI để hiểu được Zero-day
                 if is_zero_day:
-                    explanation_text = f"⚠️ CẢNH BÁO ZERO-DAY: Luồng dữ liệu có cấu trúc dị thường (MSE={mse:.4f}). AI không tìm thấy mẫu tương tự trong quá khứ."
+                    explanation_text = f"! CẢNH BÁO ZERO-DAY: Luồng dữ liệu có cấu trúc dị thường (MSE={mse:.4f}). AI không tìm thấy mẫu tương tự trong quá khứ."
                 else:
                     # Lấy dictionary từ hàm explain_attack
                     xai_result = self.explainer.explain_attack(
@@ -539,21 +694,49 @@ class IDSEngineV2:
                     else:
                         explanation_text = str(xai_result)
                 
-                # Truyền chuỗi văn bản vào Panel
-                console.print(Panel(explanation_text, title="📋 [bold cyan]XAI EXPLANATION[/bold cyan]", expand=False))
+                # Truyền chuỗi văn bản vào Panel với IP rõ ràng
+                ip_display = f"[bold yellow]{src_ip}[/bold yellow]"
+                attack_type_display = f"[red]{attack_name}[/red]" if decision != "ALLOW" else f"[green]{attack_name}[/green]"
+                console.print(Panel(explanation_text, title=f"[bold cyan]XAI: {ip_display} | {attack_type_display}[/bold cyan]", expand=False))
             except Exception as e:
                 logger.error(f"[XAI ERROR] {e}")
-        else:
+        # [DEDUP] Chỉ log normal traffic 1 lần mỗi IP mỗi 30 giây
+        now = time.time()
+        if not is_attack:
+            # [OPT] Chỉ log normal nếu: (1) Chưa được xác nhận là trusted, hoặc (2) Đã lâu không thấy
+            is_trusted = src_ip in self.trusted_normal_ips
+            last_log = self.last_normal_log.get(src_ip, 0)
+            
+            if not is_trusted and confidence > 95.0:
+                # Lần đầu xác nhận normal với độ tin cậy cao
+                self.trusted_normal_ips[src_ip] = now
+                self.last_normal_log[src_ip] = now
+                logger.info(f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | "
+                          f"Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms | "
+                          f"[Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]")
+            elif now - last_log > 60:  # 1 phút mới log nhắc lại 1 lần
+                self.last_normal_log[src_ip] = now
+                logger.info(f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | Kiểm tra định kỳ")
+            
             # Update threshold on benign
             if pred_idx == 0:
                 self.dynamic_threshold_update(mse)
+        else:
+            # Nếu IP đang là trusted normal mà chuyển thành attack -> xóa khỏi trusted và log
+            if src_ip in self.trusted_normal_ips:
+                del self.trusted_normal_ips[src_ip]
+                logger.warning(f"[ALERT] [{src_ip}]IP BÌNH THƯỜNG đã CHUYỂN THÀNH TẤN CÔNG!")
+            
+            # Log attack với đầy đủ timing
+            logger.warning(f"[RESULT] [{src_ip}] 🚨 TẤN CÔNG: {attack_name} ({confidence:.1f}%) | "
+                         f"Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Quyết định: {decision}")
         
         self.stats["processed"] += 1
     
     def run(self):
         """Main detection loop"""
-        console.print(f"[bold green]🚀 IDS Engine v2.1 Ready on {self.pipeline['device']}[/bold green]")
-        console.print("[bold cyan]📡 Dual FIFO Mode: zeek_stream.json + zeek_stream_slowloris.json[/bold cyan]")
+        console.print(f"[bold green]<<>> IDS Engine v2.1 Ready on {self.pipeline['device']}[/bold green]")
+        console.print("[bold cyan]<<>> Dual FIFO Mode: zeek_stream.json + zeek_stream_slowloris.json[/bold cyan]")
         
         last_fifo_check = 0
         current_fifo = SDNConfigV2.FIFO_PATH_NORMAL
@@ -596,7 +779,7 @@ class IDSEngineV2:
                 if now - last_fifo_check > 1.0:
                     new_fifo = SDNConfigV2.detect_current_fifo()
                     if new_fifo != current_fifo:
-                        console.print(f"[bold yellow]🔄 FIFO Switch: {current_fifo} → {new_fifo}[/bold yellow]")
+                        console.print(f"[bold yellow]<<>> FIFO Switch: {current_fifo} → {new_fifo}[/bold yellow]")
                         current_fifo = new_fifo
                     last_fifo_check = now
                 
@@ -610,7 +793,7 @@ class IDSEngineV2:
                         f"Processed: {self.stats['processed']:,} | Blocked: {self.stats['blocked']:,} | "
                         f"Zero-day: {self.stats['zero_day']} | Latency: {self.stats['avg_latency_ms']:.1f}ms | "
                         f"Threshold: {self.dynamic_threshold:.4f}",
-                        title="📊 [bold cyan]IDS STATS[/bold cyan]"
+                        title="![bold cyan]IDS STATS[/bold cyan]"
                     ))
                     last_stats_print = now
                 
@@ -645,17 +828,36 @@ class IDSEngineV2:
                             
                             if src_ip not in self.ip_buffers:
                                 self.ip_buffers[src_ip] = {"data": [], "last": now}
+                                self.ip_collection_start[src_ip] = now
+                                # Only log collection start every 30s per IP (avoid spam)
+                                last_log = self.last_collect_log.get(src_ip, 0)
+                                if now - last_log > 30:
+                                    self.last_collect_log[src_ip] = now
+                                    logger.info(f"[COLLECT] [{src_ip}] 📝 Bắt đầu thu thập luồng (0/{SEQ_LEN})")
                             
                             self.ip_buffers[src_ip]["data"].append(features)
                             self.ip_buffers[src_ip]["last"] = now
+                            collected = len(self.ip_buffers[src_ip]["data"])
                             
                             # Process when we have 10 flows
-                            if len(self.ip_buffers[src_ip]["data"]) == SEQ_LEN:
+                            if collected == SEQ_LEN:
+                                elapsed = time.time() - self.ip_collection_start[src_ip]
                                 seq = np.array(self.ip_buffers[src_ip]["data"])
                                 del self.ip_buffers[src_ip]
+                                del self.ip_collection_start[src_ip]
+                                
+                                # Check if already processing this IP (prevent duplicate threads)
+                                with self.lock:
+                                    if not hasattr(self, '_processing_sequence'):
+                                        self._processing_sequence = set()
+                                    if src_ip in self._processing_sequence:
+                                        # Skip creating new thread if already processing
+                                        continue
+                                    self._processing_sequence.add(src_ip)
+                                
                                 threading.Thread(
                                     target=self.process_sequence,
-                                    args=(src_ip, seq),
+                                    args=(src_ip, seq, elapsed),
                                     daemon=True
                                 ).start()
             
@@ -670,7 +872,7 @@ class IDSEngineV2:
 def main():
     """Main function"""
     logger.info("=" * 70)
-    logger.info("🚀 IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation")
+    logger.info("IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation")
     logger.info("=" * 70)
     
     # Validate config

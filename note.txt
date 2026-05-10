@@ -17,8 +17,16 @@ onosproject/onos:latest
 sleep 5
 sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-packages ./sdn_env/bin/python3 system.py
 
-cd ~/Documents/DoAn_SDN
-web1 sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 &'
+Kiểm tra trạng thái trước
+web1 ps aux | grep python
+
+web1 pkill -f "manage.py runserver"
+proxy1 pkill -f nginx
+proxy1 nginx -g 'daemon off;' > /tmp/nginx_proxy.log 2>&1 &
+sleep 2
+web1 sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &'
+h60 curl -I -m 3 http://10.0.0.10:8000
+
 check lệnh drop: sh ovs-ofctl dump-flows s1 -O OpenFlow13
 h1 wget --no-check-certificate https://10.0.0.10
 h1 wget -qO- http://10.0.0.11 > /dev/null
@@ -127,7 +135,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "Bổ sung tom tắt quá trình làm vào readme"
+git commit -m "Đã điều chỉnh 2 luồng thu data và logic chọn dữ liệu cho ai reader"
 git branch -M main
 git push origin main
 
@@ -355,14 +363,89 @@ Khuyến nghị: Áp dụng Dynamic Threshold (Ngưỡng thích nghi).
 
 Hành động: Thay vì dùng con số cố định, hệ thống sẽ tính trung bình sai số (MSE) của 1000 luồng mạng gần nhất trong 5 phút vừa qua, cộng thêm độ lệch chuẩn (Standard Deviation). Khi mạng đông đúc lên một cách tự nhiên, ngưỡng cảnh báo Zero-Day cũng tự động được nới lỏng ra một chút để tránh báo động giả (False Positive).
 
-🛡️ 4. Đa dạng hóa Chiến thuật Mitigation (Phòng thủ đa tầng)
 
-Hiện tại, ONOS đang dùng lệnh cực đoan nhất: DROP (Hủy mọi gói tin từ IP nghi ngờ). Đối với một hệ thống cấp doanh nghiệp, đôi khi việc này gây rủi ro nếu chặn nhầm IP của một đối tác quan trọng.
 
-Khuyến nghị: Nâng cấp hàm block_attacker_via_onos theo mức độ tự tin của AI.
+1. Real-time WebSocket (Thay thế polling)
+Hiện tại dashboard poll mỗi 2s → WebSocket cho cập nhật tức thì:
 
-Nếu độ tin cậy > 95%: Bắn lệnh DROP ngay lập tức.
+┌─────────┐    WebSocket     ┌─────────┐
+│   IDS   │◄────────────────►│Dashboard│
+│run_onos │   Push alerts    │ (Real-  │
+│  _v2.py │◄────────────────►│  time)  │
+└─────────┘   Latency <100ms  └─────────┘
+Lợi ích: Phát hiện tấn công hiển thị ngay lập tức, không chờ 2s.
 
-Nếu độ tin cậy từ 80% đến 95%: Không DROP hẳn, mà bắn lệnh yêu cầu Switch giảm băng thông (Rate Limiting / Metering) của IP đó xuống mức tối thiểu (ví dụ: 10Kbps) để ép kẻ tấn công chậm lại nhưng không làm đứt hẳn kết nối.
 
-Nếu là Zero-Day (Autoencoder báo động): Ra lệnh cho Switch đổi hướng (Redirect) toàn bộ gói tin của IP đó chui vào một máy chủ giả lập (Honeypot) để ghi log và theo dõi thêm hành vi của hacker.
+
+2. Historical Analytics & Time-series Database
+Dashboard có thêm tab "Lịch sử 24h":
+- Biểu đồ attack theo giờ
+- Top 10 attacker IP
+- Trend mitigation effectiveness
+Tech: InfluxDB + Grafana-style charts
+
+🎯 3. Auto-unblock & Quarantine Management
+Hiện tại: Flow tự timeout sau 300s
+
+Nâng cấp:
+
+┌────────────────────────────────────────┐
+│ ⏰ Smart Quarantine                     │
+│ • Auto-release sau 5 phút nếu traffic  │
+│   trở lại normal                       │
+│ • Progressive penalty:                 │
+│   Lần 1: Rate Limit 5 phút             │
+│   Lần 2: Rate Limit 15 phút            │
+│   Lần 3: DROP 1 giờ                    │
+│   Lần 4+: DROP 24 giờ (Blacklist)      │
+└────────────────────────────────────────┘
+🎯 4. Threat Intelligence Integration
+python
+# Check IP reputation trước khi block
+if src_ip in threat_intel_db:
+    confidence += 20%  # Boost confidence
+    alert_level = "HIGH"
+Nguồn: AbuseIPDB, Shodan, AlienVault OTX
+
+🎯 5. Multi-Channel Alerting
+Khi phát hiện tấn công:
+├─ Dashboard: Real-time panel (đã có)
+├─ Console: Rich panel (đã có)
+├─ Telegram Bot: Push notification
+├─ Email: Alert to admin
+└─ Webhook: PagerDuty/Slack integration
+🎯 6. ML Model Performance Monitor
+Dashboard thêm tab "AI Health":
+├─ Accuracy: 99.2% (last 1000 flows)
+├─ False Positive Rate: 0.3%
+├─ Zero-day detection: 12 attacks caught
+├─ Model drift: Stable (MSE trend)
+└─ Retraining trigger: Auto @ 1000 samples
+🎯 7. Geolocation Visualization
+Thêm bản đồ thế giới hiển thị:
+- Vị trí attacker IP (GeoIP)
+- Heatmap mật độ tấn công
+- Đường truyền traffic đến server
+🎯 8. Honeypot Integration (Thực sự hoạt động)
+Nếu attacker bị redirect đến honeypot:
+- Ghi lại mọi hành vi
+- Phân tích TTP (Tactics, Techniques, Procedures)
+- Cập nhật threat intel DB
+🎯 9. Rate Limiting Dashboard Control
+Thêm nút "Emergency Override":
+├─ [STOP ALL TRAFFIC] - Panic button
+├─ [WHITELIST IP] - Add exception
+├─ [ADJUST THRESHOLD] - Real-time tuning
+└─ [EXPORT PCAP] - Capture traffic
+🎯 10. Distributed IDS (Multi-node)
+Architecture mở rộng:
+┌─────────┐  ┌─────────┐  ┌─────────┐
+│IDS Node1│  │IDS Node2│  │IDS Node3│  (Zeek + AI)
+│ Switch1 │  │ Switch2 │  │ Switch3 │
+└────┬────┘  └────┬────┘  └────┬────┘
+     └─────────────┼─────────────┘
+                   ▼
+          ┌─────────────┐
+          │Central Admin│  (Aggregated dashboard)
+          │   Server    │
+          └─────────────┘

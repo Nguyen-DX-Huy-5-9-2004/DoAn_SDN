@@ -44,10 +44,14 @@
     "00:00:00:00:00:11/-1": { "basic": { "name": "proxy1", "latitude": 20.0, "longitude": 76.0, "ips": ["10.0.0.10"], "uiType": "router" }},
     "00:00:00:00:00:20/-1": { "basic": { "name": "db1", "latitude": 4.0, "longitude": 105.0, "ips": ["10.0.0.20"], "uiType": "router" }}
   },
-  "layout": {
-    "region": {
-      "locType": "geo",
-      "bg": "asia"
+  "apps": {
+    "org.onosproject.fwd": {
+      "layout": {
+        "region": {
+          "locType": "geo", 
+          "bg": "asia"
+        }
+      }
     }
   }
 }

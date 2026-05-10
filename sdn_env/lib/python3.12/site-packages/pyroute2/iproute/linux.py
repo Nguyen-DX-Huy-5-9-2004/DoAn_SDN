@@ -40,6 +40,7 @@ from pyroute2.netlink.rtnl import (
     RTM_GETSTATS,
     RTM_GETTCLASS,
     RTM_GETTFILTER,
+    RTM_GETVLAN,
     RTM_NEWADDR,
     RTM_NEWLINK,
     RTM_NEWLINKPROP,
@@ -52,6 +53,7 @@ from pyroute2.netlink.rtnl import (
     RTM_NEWRULE,
     RTM_NEWTCLASS,
     RTM_NEWTFILTER,
+    RTM_NEWVLAN,
     RTM_SETLINK,
     RTMGRP_DEFAULTS,
     RTMGRP_IPV4_IFADDR,
@@ -65,6 +67,7 @@ from pyroute2.netlink.rtnl import (
     RTMGRP_NEIGH,
     ndmsg,
 )
+from pyroute2.netlink.rtnl.br_vlan import br_vlan_msg, br_vlan_query
 from pyroute2.netlink.rtnl.fibmsg import fibmsg
 from pyroute2.netlink.rtnl.ifaddrmsg import ifaddrmsg
 from pyroute2.netlink.rtnl.ifinfmsg import ifinfmsg
@@ -93,6 +96,7 @@ from pyroute2.requests.probe import ProbeFieldFilter
 from pyroute2.requests.route import RouteFieldFilter, RouteIPRouteFilter
 from pyroute2.requests.rule import RuleFieldFilter, RuleIPRouteFilter
 from pyroute2.requests.tc import TcIPRouteFilter, TcRequestFilter
+from pyroute2.requests.vlan import VlanFieldFilter, VlanIPRouteFilter
 
 from .parsers import default_routes, export_routes
 
@@ -112,6 +116,7 @@ def get_default_request_filters(mode, command):
         ],
         'rule': [RuleFieldFilter(), RuleIPRouteFilter(command)],
         'tc': [TcRequestFilter(), TcIPRouteFilter(command)],
+        'vlan': [VlanFieldFilter(), VlanIPRouteFilter(command)],
         'brport': [BridgePortFieldFilter(command)],
         'vlan_filter': [BridgeFieldFilter(), BridgeIPRouteFilter(command)],
         'probe': [ProbeFieldFilter()],
@@ -130,6 +135,8 @@ def get_dump_filter(mode, command, query, parameters=None):
         new_query['family'] = query.pop('family')
     if 'ext_mask' in query:
         new_query['ext_mask'] = query.pop('ext_mask')
+    if 'dump_flags' in query:
+        new_query['dump_flags'] = query.pop('dump_flags')
     if 'match' in query:
         query = query['match']
     if callable(query):
@@ -1000,7 +1007,7 @@ class RTNL_API:
 
         return ret()
 
-    def set_netnsid(self, nsid=None, pid=None, fd=None):
+    async def set_netnsid(self, nsid=None, pid=None, fd=None):
         '''Assigns an id to a peer netns using RTM_NEWNSID query.
         The kernel chooses an unique id if nsid is omitted.
         This corresponds to the "ip netns set" command.
@@ -1019,7 +1026,14 @@ class RTNL_API:
         if fd is not None:
             msg['attrs'].append(('NETNSA_FD', fd))
 
-        return self.nlm_request(msg, RTM_NEWNSID, NLM_F_REQUEST | NLM_F_ACK)
+        request = NetlinkRequest(
+            self,
+            msg,
+            msg_type=RTM_NEWNSID,
+            msg_flags=NLM_F_REQUEST | NLM_F_ACK,
+        )
+        await request.send()
+        return [x async for x in request.response()]
 
     # 8<---------------------------------------------------------------
 
@@ -1374,6 +1388,36 @@ class RTNL_API:
             'vlan_filter', command, kwarg
         )
         return await self.link(command, **kwarg)
+
+    async def vlandb(self, command, **kwarg):
+        '''
+        Perform RTM vlan DB operations.
+
+        **dump**
+
+        Dump VLAN database:
+
+        * dump_flags = 1 -- dump VLANDB database entries
+        * dump_flags = 2 -- dump VLANDB global options
+        '''
+        command_map = {
+            'set': (RTM_NEWVLAN, 'req'),
+            'dump': (RTM_GETVLAN, 'dump'),
+        }
+        dump_filter, kwarg = get_dump_filter('vlan', command, kwarg)
+        arguments = get_arguments_processor('vlan', command, kwarg)
+        request = NetlinkRequest(
+            self,
+            br_vlan_query() if command == 'dump' else br_vlan_msg(),
+            command,
+            command_map,
+            dump_filter,
+            arguments,
+        )
+        await request.send()
+        if command == 'dump':
+            return request.response()
+        return [x async for x in request.response()]
 
     async def fdb(self, command, **kwarg):
         '''
@@ -2767,12 +2811,14 @@ class IPRoute(NetlinkSocket):
                 'brport',
                 'probe',
                 'stats',
+                'vlandb',
                 'link_lookup',
                 'vlan_filter',
                 'flush_addr',
                 'flush_rules',
                 'flush_routes',
                 'get_netnsid',
+                'set_netnsid',
                 'route_dump',
                 'route_dumps',
                 'route_load',
@@ -2788,7 +2834,6 @@ class IPRoute(NetlinkSocket):
                 'close_file',
                 'open_file',
                 'filter_messages',
-                'set_netnsid',
             )
         )
 

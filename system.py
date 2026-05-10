@@ -797,7 +797,7 @@ def start_normal_traffic(net):
 
         client = net.get(f"h{i}")
 
-        client.cmd("python3 traffic/normal.py https://10.0.0.10 &")
+        client.cmd("python3 traffic/normal.py http://10.0.0.11:8000 &")
 
 
 # -------------------------------------------------
@@ -950,7 +950,7 @@ def main():
     time.sleep(5)
 
     # Tạo lưu lượng nền (Normal Traffic)
-    #start_normal_traffic(net)
+    start_normal_traffic(net)
     
     # Initialize database (redirect output to file)
     print("*** Initializing Database...")
@@ -996,7 +996,7 @@ def main():
         if r.status_code == 200:
             hosts = r.json()['hosts']
             num_hosts = len(hosts)
-            print(f"[ONOS] Số Host: {num_hosts}/33")
+            print(f"[ONOS] Số Host: {num_hosts}/35")
     except:
         pass
     print("="*60 + "\n")
