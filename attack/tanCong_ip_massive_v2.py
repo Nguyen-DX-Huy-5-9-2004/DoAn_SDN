@@ -614,7 +614,7 @@ async def main():
     await asyncio.sleep(0.5)
     METRICS.display()
     
-    print("\n🏁 Massive v2.0 Attack Finished")
+    print("\n Massive v2.0 Attack Finished")
     print(f"   Final batch size: {METRICS.current_batch_size}")
     print(f"   Total recycled TCP: {METRICS.tcp_recycled:,}")
     print(f"   Bursts completed: {METRICS.bursts_completed}")

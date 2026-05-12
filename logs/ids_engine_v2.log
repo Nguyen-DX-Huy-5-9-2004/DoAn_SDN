@@ -1,0 +1,17 @@
+2026-05-12 10:19:22,199 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 10:19:22,199 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-12 10:19:22,199 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 10:19:22,199 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-12 10:19:22,200 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-12 10:19:22,200 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-12 10:19:22,200 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-12 10:19:22,200 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-12 10:19:22,251 - [CRITICAL] - IDS_V2 - [IDS] Failed to load AI pipeline!
+2026-05-12 10:19:22,252 - [CRITICAL] - IDS_V2 - [FATAL] Pipeline load failed
+Traceback (most recent call last):
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 883, in main
+    engine = IDSEngineV2()
+             ^^^^^^^^^^^^^
+  File "/home/tgf/Documents/DoAn_SDN/ai/run_onos_v2.py", line 194, in __init__
+    raise RuntimeError("Pipeline load failed")
+RuntimeError: Pipeline load failed

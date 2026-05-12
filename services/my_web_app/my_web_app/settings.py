@@ -58,6 +58,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'my_web_app.wsgi.application'
 
+# --- CẤU HÌNH PASSWORD HASHING ---
+# Tăng số vòng lặp PBKDF2 để đăng nhập tốn CPU hơn (demo tấn công)
+# Mặc định Django là 600,000, tăng lên 2,000,000 để hash mất ~0.5-1s
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+]
+# Tăng iterations từ 600k mặc định lên 2 triệu để đăng nhập tốn CPU hơn
+PBKDF2_ITERATIONS = 2000000
+
 # --- CẤU HÌNH DATABASE (Đúng như bạn yêu cầu) ---
 DATABASES = {
     'default': {

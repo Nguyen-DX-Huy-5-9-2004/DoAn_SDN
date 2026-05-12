@@ -25,8 +25,12 @@ proxy1 pkill -f nginx
 proxy1 nginx -g 'daemon off;' > /tmp/nginx_proxy.log 2>&1 &
 sleep 2
 web1 sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &'
-h60 curl -I -m 3 http://10.0.0.10:8000
 
+sudo python3 attack/icmp_flood.py 10.0.0.10 1400
+
+web1 sh -c "cat /tmp/django.pid 2>/dev/null | xargs kill -9 2>/dev/null; sleep 2; cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 & echo \$! > /tmp/django.pid"
+
+web1 sh -c "cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &"
 check lệnh drop: sh ovs-ofctl dump-flows s1 -O OpenFlow13
 h1 wget --no-check-certificate https://10.0.0.10
 h1 wget -qO- http://10.0.0.11 > /dev/null
@@ -39,17 +43,22 @@ py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]
 py [net.get(f'h{i}').cmd('pkill -f attack/ &') for i in range(1, 21)]
 
 ter1: ./start.sh
+UDP flood: Byte Rate / Packet Rate
+py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 5)]
 
-py [net.get(f'h{i}').cmd('python3 attack/udp_flood.py 10.0.0.10 &') for i in range(1, 4)]
+SYN flood: Packet Rate tăng vọt nhưng Byte Rate thấp hơn (gói SYN nhỏ)
 py [net.get(f'h{i}').cmd('python3 attack/syn_flood.py 10.0.0.10 &') for i in range(5, 8)]
-# h11-h12 đánh vào xử lý Hash (CPU 100%)
+
+HTTP flood (Hash): đánh vào xử lý Hash (CPU 100%)
 py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 hash &') for i in range(9, 12)]
-# h13-h14 đánh vào xử lý JSON (Tràn RAM)
+
+HTTP flood (JSON): đánh vào xử lý JSON (Tràn RAM)
 py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 json &') for i in range(13, 16)]
-# Botnet h16-h20 ngâm kết nối
+
+Slowloris: Botnet h16-h20 ngâm kết nối
 py [net.get(f'h{i}').cmd('python3 attack/slowloris.py http://10.0.0.11:8000 &') for i in range(16, 19)]
 ter2: cd ai
-sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python run_onos_v2.py
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python ai/run_onos_v2.py
 
 ter3: cd ai
 sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python batPack_v2.py
@@ -66,7 +75,7 @@ docker run -t -d --name onos \
   onosproject/onos:latest
 
 sudo python3 ai/auto_dataset_generator.py
-
+sudo python3 attack/icmp_flood.py 10.0.0.10 1400
 -m 2g (Giới hạn RAM phần cứng): Lệnh này "trói" container ONOS lại, không cho phép nó chạm tới quá 2GB RAM vật lý của máy.
 --cpus="2.0" (Giới hạn CPU): Thay vì để ONOS dùng toàn bộ 8 luồng CPU (góp phần làm máy chạy lên 97% như bạn thấy trước đó), cờ này giới hạn ONOS chỉ được sử dụng tối đa sức mạnh tương đương 2 luồng CPU. Phần CPU còn lại sẽ được nhường cho Mininet, các container Web/DB và script Python của bạn.
 -e "JAVA_OPTS=-Xms1G -Xmx1.5G" (Chặn đứng sự tham lam của Java):
@@ -135,7 +144,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "Đã điều chỉnh 2 luồng thu data và logic chọn dữ liệu cho ai reader"
+git commit -m "Đã điều chỉnh 2 luồng thu data và logic chọn dữ liệu cho ai"
 git branch -M main
 git push origin main
 

@@ -1,8 +1,8 @@
 FROM python:3.9-slim
 
-# Cài đặt các công cụ mạng cơ bản
+# Cài đặt các công cụ mạng và system cơ bản
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    iputils-ping net-tools iproute2 curl \
+    iputils-ping net-tools iproute2 curl procps \
     && rm -rf /var/lib/apt/lists/*
 
 # Cài sẵn dependency để runtime không phụ thuộc Internet.

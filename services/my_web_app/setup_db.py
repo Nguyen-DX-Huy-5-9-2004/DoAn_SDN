@@ -52,9 +52,6 @@ def main():
         if not User.objects.filter(username=username).exists():
             User.objects.create_user(username=username, password='password123')
             print(f"   + Tạo thành công: {username}")
-    
-    # [TùY CHỌN]: Nếu bạn có các model tự tạo (như Log tấn công, Thông số mạng)
-    # bạn có thể import model đó vào đây và dùng hàm .create() để tạo hàng trăm bản ghi.
 
     print("HOÀN TẤT KHỞI TẠO CƠ SỞ DỮ LIỆU!")
 

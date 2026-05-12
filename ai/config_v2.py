@@ -87,6 +87,11 @@ class AIModelManager:
     def load_full_pipeline(base_path="ai/"):
         import gc
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
+        # Nếu base_path rỗng hoặc là relative path, dùng đường dẫn tuyệt đối
+        if not base_path or base_path == "ai/":
+            base_path = os.path.dirname(os.path.abspath(__file__))
+        
         try:
             # Clear cache to avoid zip container confusion
             gc.collect()

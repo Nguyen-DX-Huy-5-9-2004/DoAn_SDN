@@ -582,7 +582,7 @@
       await Promise.all([refreshTraffic(), refreshSystem(), refreshLogs(), refreshIDSAlerts()]);
     }
     tick();
-    setInterval(tick, 2000);
+    setInterval(tick, 1000);  // Giảm xuống 1s để thấy chính xác thời điểm web service sập
 
     // [PRO] IDS Real-time Alert Feed
     async function refreshIDSAlerts() {
