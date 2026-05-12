@@ -27,6 +27,9 @@ import logging
 import warnings
 from pathlib import Path
 
+# Thư mục trạng thái dùng chung với dashboard (DoAn_SDN/monitor/runtime), không phụ thuộc cwd
+_RUNTIME_STATE_DIR = Path(__file__).resolve().parent.parent / "monitor" / "runtime"
+
 try:
     import matplotlib.pyplot as plt
 except ImportError:
@@ -102,6 +105,10 @@ class SDNConfigV2:
     COOLDOWN_TIME = int(os.environ.get("COOLDOWN_TIME", "300"))      # 5 min
     BUFFER_TIMEOUT = int(os.environ.get("BUFFER_TIMEOUT", "60"))     # 1 min
     MAX_CONCURRENT_IPS = int(os.environ.get("MAX_IPS", "1000"))      # Max IPs
+    # IP đã tin cậy (normal): khoảng cách tối thiểu giữa hai lần kiểm tra ngầm (ưu tiên sau luồng chưa phân loại)
+    TRUSTED_SEQUENCE_INTERVAL_SEC = float(os.environ.get("TRUSTED_SEQUENCE_INTERVAL_SEC", "45"))
+    # IP đã xử lý tấn công: kiểm tra ngầm định kỳ (chỉ in/log khi đổi trạng thái)
+    ATTACK_RECHECK_INTERVAL_SEC = float(os.environ.get("ATTACK_RECHECK_INTERVAL_SEC", "45"))
     
     # AI Model paths
     MODEL_BASE_PATH = os.environ.get("AI_MODEL_PATH", "")
@@ -126,6 +133,13 @@ class SDNConfigV2:
         logger.info(f"[CONFIG] Model Path: {cls.MODEL_BASE_PATH}")
         logger.info(f"[CONFIG] EMA Alpha: {cls.EMA_ALPHA}")
         logger.info(f"[CONFIG] Cooldown: {cls.COOLDOWN_TIME}s")
+        logger.info(
+            f"[CONFIG] Trusted silent recheck interval: {cls.TRUSTED_SEQUENCE_INTERVAL_SEC}s "
+            f"(whitelist benign — chỉ phân tích ngầm khi hết luồng ưu tiên)"
+        )
+        logger.info(
+            f"[CONFIG] Attack watchlist recheck interval: {cls.ATTACK_RECHECK_INTERVAL_SEC}s"
+        )
 
 # =====================================================================
 # SDN CONTROLLER MODULE
@@ -236,6 +250,9 @@ class IDSEngineV2:
         self.last_normal_log = {}  # [DEDUP] Track last normal log time per IP
         self.trusted_normal_ips = {}  # [OPT] IPs confirmed as normal with high confidence - skip logging
         self.last_collect_log = {}  # [OPT] Track last collection log time per IP
+        self.ip_warmup_count = {}   # 2 chuỗi đầu / IP: đốt trong collector, không gọi AI
+        self.last_sequence_analysis_at = {}  # wall time sau mỗi lần phân tích (whitelist / watchlist)
+        self.ai_attack_track = {}  # IP đã mitigated: {last_analysis, attack_name, action, since}
 
         # 2. Bật lại luồng chạy ngầm để lưu trạng thái (Save Worker)
         threading.Thread(target=self._save_threshold_worker, daemon=True).start()
@@ -402,7 +419,7 @@ class IDSEngineV2:
         
         # Save to attack registry for dashboard
         try:
-            registry_file = "monitor/runtime/attack_registry.json"
+            registry_file = str(_RUNTIME_STATE_DIR / "attack_registry.json")
             os.makedirs(os.path.dirname(registry_file), exist_ok=True)
             
             attack_registry = {}
@@ -423,13 +440,7 @@ class IDSEngineV2:
                 json.dump(attack_registry, f)
         except Exception as e:
             logger.debug(f"[REGISTRY] Không thể ghi registry: {e}")
-    def apply_rate_limit(self, src_ip):
-        """
-        [LEVEL 1 MITIGATION] Giới hạn băng thông via ONOS
-        Đã tích hợp vào execute_mitigation() - không cần gọi riêng
-        """
-        pass
-        
+
     def apply_honeypot_redirect(self, src_ip):
         """
         [PHƯƠNG ÁN CŨ] Chuyển hướng sang Honeypot
@@ -451,7 +462,7 @@ class IDSEngineV2:
     def write_dashboard_alert(self, src_ip, attack_name, confidence, action, level, is_zero_day=False):
         """[PRO] Write alert to dashboard real-time feed"""
         try:
-            alert_file = "monitor/runtime/ids_alerts.json"
+            alert_file = str(_RUNTIME_STATE_DIR / "ids_alerts.json")
             os.makedirs(os.path.dirname(alert_file), exist_ok=True)
 
             alerts = []
@@ -483,15 +494,91 @@ class IDSEngineV2:
                 json.dump(alerts, f)
         except Exception as e:
             logger.debug(f"[DASHBOARD ALERT] Không thể ghi alert: {e}")
-        
+
+    def write_dashboard_ip_status(self):
+        """Ghi trạng thái whitelist benign / watchlist tấn công cho dashboard."""
+        try:
+            path = _RUNTIME_STATE_DIR / "ids_ip_status.json"
+            os.makedirs(path.parent, exist_ok=True)
+            now = time.time()
+            benign = []
+            with self.lock:
+                for ip, ts in list(self.trusted_normal_ips.items()):
+                    benign.append({
+                        "ip": ip,
+                        "listed_since": ts,
+                        "last_analysis": self.last_sequence_analysis_at.get(ip),
+                    })
+                attacks = []
+                for ip, meta in list(self.ai_attack_track.items()):
+                    attacks.append({"ip": ip, **meta})
+            payload = {
+                "updated_at": now,
+                "benign_whitelist": sorted(benign, key=lambda x: x["ip"]),
+                "attack_watchlist": sorted(attacks, key=lambda x: x["ip"]),
+                "stats_snapshot": {
+                    "whitelist_count": len(benign),
+                    "watchlist_count": len(attacks),
+                    "processed": self.stats.get("processed", 0),
+                },
+            }
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2)
+        except Exception as e:
+            logger.debug(f"[DASHBOARD IP STATUS] {e}")
+
+    def _has_priority_traffic_pending(self, exclude_ip=None):
+        """True nếu còn IP chưa whitelist/watchlist đang có dữ liệu trong buffer (ưu tiên xử lý)."""
+        with self.lock:
+            for ip, buf in self.ip_buffers.items():
+                if exclude_ip is not None and ip == exclude_ip:
+                    continue
+                if ip in self.trusted_normal_ips or ip in self.ai_attack_track:
+                    continue
+                if len(buf.get("data", [])) > 0:
+                    return True
+            return False
+
     def log_normal_panel(self, src_ip, normal_prob, mse, threshold, latency_ms=0, collection_time=0):
+        """
+        Panel BENIGN — tiêu đề ghi khiên chính; gợi ý giải thích đặt sau Action.
+        \"Hai khiên không đồng thuận rõ\": CLS không >80%, AE không báo Normal rõ — code vẫn có thể kết luận BENIGN thận trọng (nhánh elif / conservative).
+        """
+        th = max(float(threshold), 1e-9)
+        ae_normal_trust_pct = max(0.0, min(100.0, (1.0 - (mse / th)) * 100.0))
+
+        if normal_prob > 80.0:
+            mode_label = "Khiên 2 (CLS)"
+            mode_hint = "CLS Normal > 80% → quyết định theo Khiên 2; AE chỉ tham chiếu."
+        elif mse < threshold:
+            mode_label = "Khiên 1 (AE)"
+            mode_hint = "MSE < ngưỡng AE → không coi là bất thường ở Khiên 1; vẫn đọc CLS."
+        else:
+            mode_label = "Hai khiên không đồng thuận rõ"
+            mode_hint = (
+                "CLS không khẳng định Normal >80%, AE có thể báo anomaly — "
+                "kết luận BENIGN theo luật thận trọng trong code (không đủ tin tấn công)."
+            )
+
         msg = f"[bold]IP:[/bold] {src_ip}\n"
-        msg += f"[bold]Classification:[/bold] [green]BENIGN[/green] ({normal_prob:.1f}%)\n"
-        msg += f"[bold]Shield 1 (AE):[/bold] MSE={mse:.4f} | Threshold={threshold:.4f} | Status={'Normal' if mse < threshold else 'Anomaly (Ignored)'}\n"
-        msg += f"[bold]Shield 2 (CLS):[/bold] Normal={normal_prob:.1f}% | Status={'Confident' if normal_prob > 80 else 'Uncertain'}\n"
+        msg += f"[bold]Loại luồng:[/bold] [green]{mode_label}[/green] — [green]NORMAL · BENIGN[/green] (CLS Normal={normal_prob:.1f}%)\n"
+        msg += f"[bold]Khiên 1 (AE):[/bold] MSE={mse:.4f} | Ngưỡng={threshold:.4f} | "
+        msg += f"Trạng thái={'Normal' if mse < threshold else 'Anomaly (xem CLS)'} | "
+        msg += f"Tin Normal (AE)≈{ae_normal_trust_pct:.0f}%\n"
+        msg += f"[bold]Khiên 2 (CLS):[/bold] Normal={normal_prob:.1f}% | "
+        msg += f"{'Confident' if normal_prob > 80 else 'Uncertain'}\n"
         msg += f"[bold]Timing:[/bold] Thu thập={collection_time:.2f}s | Phân tích={latency_ms:.1f}ms\n"
         msg += f"[bold]Action:[/bold] [green]ALLOW[/green]"
-        console.print(Panel(msg, title="[bold green]NORMAL TRAFFIC[/bold green]", expand=False))
+        msg += f"\n\n[dim]{mode_hint}[/dim]"
+
+        if ae_normal_trust_pct > 80.0:
+            msg += (
+                "\n[bold red]Độ tin cậy Normal từ Khiên 1 (AE) cao — bỏ qua đánh giá Khiên 2 (CLS)."
+                "[/bold red]"
+            )
+
+        panel_title = f"[bold green]{mode_label} · NORMAL TRAFFIC[/bold green]"
+        console.print(Panel(msg, title=panel_title, expand=False))
             
     def save_to_feedback_loop(self, src_ip, sequence_data, metadata):
         """Lưu lại các mẫu bị Veto để tái huấn luyện (Active Learning)"""
@@ -514,30 +601,10 @@ class IDSEngineV2:
         os.system(cmd)
         logger.warning(f"[MITIGATION] Level 1: Đã áp dụng Rate Limit (1Mbps) cho {src_ip}")
 
-    def process_sequence(self, src_ip, sequence, collection_time=None):
-        """Process a single sequence (10 flows) with detailed timing logs"""
+    def process_sequence(self, src_ip, sequence, collection_time=None, silent=False):
+        """Process a single sequence (10 flows). silent=True: whitelist/watchlist kiểm tra ngầm (ít log)."""
         analysis_start = time.time()
         collection_time = collection_time or 0
-        
-        # Bỏ qua nếu là 2 chuỗi đầu tiên của mỗi IP (Warm-up phase) - silently skip
-        if not hasattr(self, 'ip_warmup_count'):
-            self.ip_warmup_count = {}
-        
-        self.ip_warmup_count[src_ip] = self.ip_warmup_count.get(src_ip, 0) + 1
-        if self.ip_warmup_count[src_ip] <= 2:
-            with self.lock:
-                if hasattr(self, '_processing_sequence') and src_ip in self._processing_sequence:
-                    self._processing_sequence.discard(src_ip)
-            return
-        
-        # Check if trusted normal - skip frequent analysis
-        if src_ip in self.trusted_normal_ips:
-            last_analysis = getattr(self, '_last_analysis_time', {}).get(src_ip, 0)
-            if time.time() - last_analysis < 10:  # Only analyze every 10s for trusted IPs
-                with self.lock:
-                    if hasattr(self, '_processing_sequence') and src_ip in self._processing_sequence:
-                        self._processing_sequence.discard(src_ip)
-                return
         
         with self.lock:
             if not hasattr(self, '_last_analysis_time'):
@@ -545,16 +612,17 @@ class IDSEngineV2:
             self._last_analysis_time[src_ip] = time.time()
         
         try:
-            self._do_analysis(src_ip, sequence, collection_time, analysis_start)
+            self._do_analysis(src_ip, sequence, collection_time, analysis_start, silent=silent)
         except Exception as e:
             logger.error(f"[ANALYSIS ERROR] [{src_ip}] {e}")
         finally:
-            # Always cleanup processing flag
             with self.lock:
                 if hasattr(self, '_processing_sequence') and src_ip in self._processing_sequence:
                     self._processing_sequence.discard(src_ip)
+                self.last_sequence_analysis_at[src_ip] = time.time()
+            self.write_dashboard_ip_status()
     
-    def _do_analysis(self, src_ip, sequence, collection_time, analysis_start):
+    def _do_analysis(self, src_ip, sequence, collection_time, analysis_start, silent=False):
         """Internal analysis logic"""
         # Feature engineering: 13 → 26 (add differential)
         diff = np.zeros_like(sequence)  # [SEQ_LEN, 13]
@@ -609,14 +677,13 @@ class IDSEngineV2:
             confidence = probs[0][pred_idx].item() * 100
         
         latency_ms = (time.time() - analysis_start) * 1000
-        total_time_ms = (time.time() - analysis_start + collection_time) * 1000
+        total_time_ms = collection_time * 1000 + latency_ms
         self.stats["avg_latency_ms"] = (self.stats["avg_latency_ms"] * 0.9) + (latency_ms * 0.1)
         
-        # Log gộp sau khi phân tích xong
-        logger.info(f"[ANALYZE] [{src_ip}] ✅ Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms")
+        if not silent:
+            logger.info(f"[ANALYZE] [{src_ip}] ✅ Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms")
         
         # [V7 UPDATE] Decision logic - 2 Shield Strategy (Bảo vệ Normal)
-        self.stats["processed"] += 1
         is_attack = False
         is_zero_day = False
         
@@ -634,9 +701,6 @@ class IDSEngineV2:
             # Shield 2 đã chắc chắn là Normal, bất chấp Shield 1 nói gì
             is_attack = False
             is_zero_day = False
-            # [FIX] Hiển thị panel chi tiết 2 khiên cho Normal (mỗi 5 lần để tránh spam)
-            if self.stats["processed"] % 5 == 0:
-                self.log_normal_panel(src_ip, normal_prob, mse, self.dynamic_threshold, latency_ms, collection_time)
         elif is_anomaly:
             # Shield 1 thấy bất thường, kiểm tra Shield 2
             if pred_idx != 0 and confidence > 85.0:
@@ -663,6 +727,17 @@ class IDSEngineV2:
                 # Bình thường
                 is_attack = False
         
+        now = time.time()
+        # Whitelist / watchlist — kiểm tra ngầm: benign → chỉ cập nhật dashboard & ngưỡng, không spam log/panel
+        if silent and not is_attack:
+            if pred_idx == 0:
+                self.dynamic_threshold_update(mse)
+            if src_ip in self.ai_attack_track:
+                del self.ai_attack_track[src_ip]
+                logger.warning(f"[IDS] [{src_ip}] Kiểm tra ngầm: không còn dấu hiệu tấn công — gỡ khỏi watchlist.")
+            self.stats["processed"] += 1
+            return
+        
         if is_attack:
             # Phân tích mức độ nghiêm trọng
             # Level 2: Chặn hoàn toàn (Drop) nếu Confidence cực cao hoặc Zero-day rõ rệt
@@ -677,6 +752,18 @@ class IDSEngineV2:
                 self.execute_mitigation(src_ip, attack_name, confidence, is_zero_day)
             elif decision == "RATE_LIMIT":
                 self.apply_rate_limit(src_ip)
+            
+            prev_tr = self.ai_attack_track.get(src_ip, {})
+            self.ai_attack_track[src_ip] = {
+                "since": prev_tr.get("since", now),
+                "last_analysis": now,
+                "attack_name": attack_name,
+                "action": decision,
+            }
+            if silent:
+                logger.warning(
+                    f"[IDS] ⚠ Kiểm tra ngầm phát hiện TẤN CÔNG: {src_ip} | {attack_name} ({confidence:.1f}%) | {decision}"
+                )
             
             # XAI explanation
             try:
@@ -700,22 +787,27 @@ class IDSEngineV2:
                 console.print(Panel(explanation_text, title=f"[bold cyan]XAI: {ip_display} | {attack_type_display}[/bold cyan]", expand=False))
             except Exception as e:
                 logger.error(f"[XAI ERROR] {e}")
-        # [DEDUP] Chỉ log normal traffic 1 lần mỗi IP mỗi 30 giây
-        now = time.time()
+        # [DEDUP] Log/panel chỉ cho luồng không phải kiểm tra ngầm; IP whitelist chỉ xem trên dashboard
         if not is_attack:
-            # [OPT] Chỉ log normal nếu: (1) Chưa được xác nhận là trusted, hoặc (2) Đã lâu không thấy
             is_trusted = src_ip in self.trusted_normal_ips
             last_log = self.last_normal_log.get(src_ip, 0)
             
-            if not is_trusted and confidence > 95.0:
-                # Lần đầu xác nhận normal với độ tin cậy cao
+            if not silent and not is_trusted and confidence > 95.0:
                 self.trusted_normal_ips[src_ip] = now
                 self.last_normal_log[src_ip] = now
+                if src_ip in self.ai_attack_track:
+                    del self.ai_attack_track[src_ip]
+                self.log_normal_panel(
+                    src_ip, normal_prob, mse, self.dynamic_threshold, latency_ms, collection_time
+                )
                 logger.info(f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | "
                           f"Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms | "
-                          f"[Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]")
-            elif now - last_log > 60:  # 1 phút mới log nhắc lại 1 lần
+                          f"[Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]")
+            elif not silent and not is_trusted and now - last_log > 60:
                 self.last_normal_log[src_ip] = now
+                self.log_normal_panel(
+                    src_ip, normal_prob, mse, self.dynamic_threshold, latency_ms, collection_time
+                )
                 logger.info(f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | Kiểm tra định kỳ")
             
             # Update threshold on benign
@@ -727,9 +819,9 @@ class IDSEngineV2:
                 del self.trusted_normal_ips[src_ip]
                 logger.warning(f"[ALERT] [{src_ip}]IP BÌNH THƯỜNG đã CHUYỂN THÀNH TẤN CÔNG!")
             
-            # Log attack với đầy đủ timing
-            logger.warning(f"[RESULT] [{src_ip}] 🚨 TẤN CÔNG: {attack_name} ({confidence:.1f}%) | "
-                         f"Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Quyết định: {decision}")
+            if not silent:
+                logger.warning(f"[RESULT] [{src_ip}] 🚨 TẤN CÔNG: {attack_name} ({confidence:.1f}%) | "
+                             f"Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Quyết định: {decision}")
         
         self.stats["processed"] += 1
     
@@ -755,8 +847,9 @@ class IDSEngineV2:
                         if stale_ips:
                             for ip in stale_ips:
                                 del self.ip_buffers[ip]
-                                if hasattr(self, 'ip_warmup_count') and ip in self.ip_warmup_count:
+                                if ip in self.ip_warmup_count:
                                     del self.ip_warmup_count[ip]
+                                self.last_sequence_analysis_at.pop(ip, None)
                             logger.info(f"[GC] Đã dọn dẹp {len(stale_ips)} IP nhàn rỗi.")
 
                         # 2. Xử lý Spike Traffic: Nếu số lượng IP vượt 80% sức chứa, dọn dẹp khẩn cấp
@@ -769,8 +862,8 @@ class IDSEngineV2:
                             for i in range(clear_count):
                                 ip_to_del = sorted_ips[i][0]
                                 del self.ip_buffers[ip_to_del]
-                                if hasattr(self, 'ip_warmup_count') and ip_to_del in self.ip_warmup_count:
-                                    del self.ip_warmup_count[ip_to_del]
+                                self.ip_warmup_count.pop(ip_to_del, None)
+                                self.last_sequence_analysis_at.pop(ip_to_del, None)
                             logger.info(f"[GC] Đã xóa khẩn cấp {clear_count} IP cũ nhất để tránh tràn RAM.")
 
                     last_cleanup = now
@@ -811,8 +904,8 @@ class IDSEngineV2:
                         if src_ip in SDNConfigV2.WHITELIST or src_ip.startswith(SDNConfigV2.INFRA_PREFIX):
                             continue
                         
-                        # Cooldown check
                         now_check = time.time()
+                        # Cooldown check
                         if src_ip in self.stats["blocked_ips"]:
                             if now_check - self.stats["blocked_ips"][src_ip] < SDNConfigV2.COOLDOWN_TIME:
                                 continue
@@ -820,44 +913,90 @@ class IDSEngineV2:
                                 del self.stats["blocked_ips"][src_ip]
                                 self.stats["blocked"] = max(0, self.stats["blocked"] - 1)
                         
+                        # AI whitelist (benign): chỉ kiểm tra ngầm đủ chu kỳ và khi không còn luồng ưu tiên
+                        silent_buf = False
+                        if src_ip in self.trusted_normal_ips:
+                            gap = now_check - self.last_sequence_analysis_at.get(src_ip, 0)
+                            if gap < SDNConfigV2.TRUSTED_SEQUENCE_INTERVAL_SEC:
+                                continue
+                            if self._has_priority_traffic_pending(src_ip):
+                                continue
+                            silent_buf = True
+                        elif src_ip in self.ai_attack_track:
+                            gap = now_check - self.ai_attack_track[src_ip].get("last_analysis", 0)
+                            if gap < SDNConfigV2.ATTACK_RECHECK_INTERVAL_SEC:
+                                continue
+                            if self._has_priority_traffic_pending(src_ip):
+                                continue
+                            silent_buf = True
+                        
+                        flow_key = data.get("flow_key")
+                        
                         # Buffer management
                         with self.lock:
                             if len(self.ip_buffers) > SDNConfigV2.MAX_CONCURRENT_IPS:
                                 self.ip_buffers.clear()
+                                self.ip_warmup_count.clear()
+                                self.last_sequence_analysis_at.clear()
                                 logger.warning("[BUFFER] Cleared due to too many IPs (spoofing?)")
                             
                             if src_ip not in self.ip_buffers:
-                                self.ip_buffers[src_ip] = {"data": [], "last": now}
+                                self.ip_buffers[src_ip] = {
+                                    "data": [],
+                                    "flow_keys": [],
+                                    "seen_key_set": set(),
+                                    "last": now,
+                                    "silent": silent_buf,
+                                }
                                 self.ip_collection_start[src_ip] = now
-                                # Only log collection start every 30s per IP (avoid spam)
                                 last_log = self.last_collect_log.get(src_ip, 0)
-                                if now - last_log > 30:
+                                if now - last_log > 30 and not silent_buf:
                                     self.last_collect_log[src_ip] = now
                                     logger.info(f"[COLLECT] [{src_ip}] 📝 Bắt đầu thu thập luồng (0/{SEQ_LEN})")
                             
-                            self.ip_buffers[src_ip]["data"].append(features)
-                            self.ip_buffers[src_ip]["last"] = now
-                            collected = len(self.ip_buffers[src_ip]["data"])
+                            buf = self.ip_buffers[src_ip]
+                            if flow_key is not None and flow_key in buf["seen_key_set"]:
+                                continue
                             
-                            # Process when we have 10 flows
+                            buf["data"].append(features)
+                            buf["flow_keys"].append(flow_key)
+                            if flow_key is not None:
+                                buf["seen_key_set"].add(flow_key)
+                            buf["last"] = now
+                            collected = len(buf["data"])
+                            
                             if collected == SEQ_LEN:
+                                if not hasattr(self, '_processing_sequence'):
+                                    self._processing_sequence = set()
+                                if src_ip in self._processing_sequence:
+                                    buf["data"].pop()
+                                    fk = buf["flow_keys"].pop()
+                                    if fk is not None:
+                                        buf["seen_key_set"].discard(fk)
+                                    continue
+                                
                                 elapsed = time.time() - self.ip_collection_start[src_ip]
-                                seq = np.array(self.ip_buffers[src_ip]["data"])
+                                seq = np.array(buf["data"])
+                                run_silent = buf.get("silent", False)
+                                
+                                self.ip_warmup_count[src_ip] = self.ip_warmup_count.get(src_ip, 0) + 1
+                                wc = self.ip_warmup_count[src_ip]
+                                
                                 del self.ip_buffers[src_ip]
                                 del self.ip_collection_start[src_ip]
                                 
-                                # Check if already processing this IP (prevent duplicate threads)
-                                with self.lock:
-                                    if not hasattr(self, '_processing_sequence'):
-                                        self._processing_sequence = set()
-                                    if src_ip in self._processing_sequence:
-                                        # Skip creating new thread if already processing
-                                        continue
-                                    self._processing_sequence.add(src_ip)
+                                if wc <= 2 and src_ip not in self.trusted_normal_ips and src_ip not in self.ai_attack_track:
+                                    continue
                                 
+                                self._processing_sequence.add(src_ip)
+                                
+                                if not run_silent:
+                                    logger.info(
+                                        f"[COLLECT] [{src_ip}] ✅ Đủ {SEQ_LEN} mẫu ({elapsed:.2f}s) → phân tích AI"
+                                    )
                                 threading.Thread(
                                     target=self.process_sequence,
-                                    args=(src_ip, seq, elapsed),
+                                    args=(src_ip, seq, elapsed, run_silent),
                                     daemon=True
                                 ).start()
             

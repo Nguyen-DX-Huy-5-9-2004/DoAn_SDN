@@ -661,8 +661,8 @@ def start_network():
         ip='10.0.0.11',
         mac=DOCKER_WEB1_MAC,
         dimage="doan_sdn_web1:py39",
-        mem_limit="512m",  # Tăng RAM để chịu đựng attack
-        cpu_quota=75000,  # Tăng CPU từ 25% lên 75% để không bị chết khi bị tấn công
+        mem_limit="512m",
+        cpu_quota=75000,  #CPU 75% để không bị chết khi bị tấn công
         volumes=[f"{PROJECT_ROOT}/services/my_web_app:/app"],
         dcmd="tail -f /dev/null",
     )

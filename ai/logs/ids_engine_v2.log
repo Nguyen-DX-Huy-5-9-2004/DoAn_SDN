@@ -1852,3 +1852,401 @@ AttributeError: 'IDSEngineV2' object has no attribute 'blocked_ips'
 2026-05-07 18:55:42,801 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đã thu thập đủ 10 mẫu trong 84.78s - Bắt đầu phân tích AI
 2026-05-07 18:55:42,802 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] 🔬 Phân tích AI
 2026-05-07 18:55:46,253 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-12 18:18:37,217 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 18:18:37,218 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-12 18:18:37,218 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 18:18:37,218 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-12 18:18:37,218 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-12 18:18:37,218 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-12 18:18:37,218 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-12 18:18:37,219 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-12 18:18:38,446 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-12 18:18:38,446 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-12 18:18:38,446 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-12 18:18:38,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 18:18:38,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 18:18:38,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 18:18:38,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 18:18:38,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 18:18:38,911 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 18:34:28,667 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-12 20:08:08,427 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 20:08:08,428 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-12 20:08:08,428 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 20:08:08,428 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-12 20:08:08,428 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-12 20:08:08,428 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-12 20:08:08,428 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-12 20:08:08,428 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-12 20:08:09,646 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-12 20:08:09,646 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-12 20:08:09,646 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-12 20:08:09,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:08:09,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:08:09,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:08:09,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:08:09,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:08:09,910 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:08:09,911 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,911 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,912 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,912 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,912 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,913 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,913 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,913 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,914 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,914 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,914 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,915 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,915 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,917 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,918 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,919 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,919 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,921 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (0.26s) → phân tích AI
+2026-05-12 20:08:09,992 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 0.26s | Phân tích: 73.7ms | Tổng: 335.8ms
+2026-05-12 20:08:09,992 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 0.26s | Phân tích: 74.5ms | Tổng: 335.9ms
+2026-05-12 20:08:09,992 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 0.26s | Phân tích: 73.3ms | Tổng: 336.1ms
+2026-05-12 20:08:09,993 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 0.26s | Phân tích: 71.5ms | Tổng: 336.2ms
+2026-05-12 20:08:09,993 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 0.26s | Phân tích: 72.8ms | Tổng: 336.4ms
+2026-05-12 20:08:09,993 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 0.26s | Phân tích: 77.4ms | Tổng: 336.6ms
+2026-05-12 20:08:09,996 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (90.9%) | Kiểm tra định kỳ
+2026-05-12 20:08:09,996 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (85.1%) | Kiểm tra định kỳ
+2026-05-12 20:08:09,996 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (87.5%) | Kiểm tra định kỳ
+2026-05-12 20:08:09,997 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-05-12 20:08:10,000 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (88.9%) | Kiểm tra định kỳ
+2026-05-12 20:08:10,002 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (89.2%) | Kiểm tra định kỳ
+2026-05-12 20:08:10,003 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (83.8%) | Kiểm tra định kỳ
+2026-05-12 20:08:10,494 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (0.84s) → phân tích AI
+2026-05-12 20:08:10,494 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (0.84s) → phân tích AI
+2026-05-12 20:08:10,495 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (0.84s) → phân tích AI
+2026-05-12 20:08:10,505 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 0.84s | Phân tích: 11.0ms | Tổng: 849.0ms
+2026-05-12 20:08:10,505 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 0.84s | Phân tích: 9.8ms | Tổng: 849.3ms
+2026-05-12 20:08:10,506 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 0.84s | Phân tích: 11.6ms | Tổng: 850.0ms
+2026-05-12 20:08:10,508 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (95.1%) | Thu thập: 0.84s | Phân tích: 9.8ms | Tổng: 849.3ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:08:10,508 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (97.7%) | Thu thập: 0.84s | Phân tích: 11.6ms | Tổng: 850.0ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:08:11,518 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (1.86s) → phân tích AI
+2026-05-12 20:08:11,529 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 1.86s | Phân tích: 4.3ms | Tổng: 1866.5ms
+2026-05-12 20:08:11,530 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (98.1%) | Thu thập: 1.86s | Phân tích: 4.3ms | Tổng: 1866.5ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:08:13,566 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (3.91s) → phân tích AI
+2026-05-12 20:08:13,567 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (3.91s) → phân tích AI
+2026-05-12 20:08:13,575 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 3.91s | Phân tích: 8.7ms | Tổng: 3918.5ms
+2026-05-12 20:08:13,575 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 3.91s | Phân tích: 7.9ms | Tổng: 3918.6ms
+2026-05-12 20:08:21,758 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (12.10s) → phân tích AI
+2026-05-12 20:08:21,763 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 12.10s | Phân tích: 4.5ms | Tổng: 12106.3ms
+2026-05-12 20:08:23,806 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (14.15s) → phân tích AI
+2026-05-12 20:08:23,807 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (14.15s) → phân tích AI
+2026-05-12 20:08:23,808 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (14.15s) → phân tích AI
+2026-05-12 20:08:23,817 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 14.15s | Phân tích: 10.7ms | Tổng: 14161.0ms
+2026-05-12 20:08:23,819 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 14.15s | Phân tích: 11.3ms | Tổng: 14162.4ms
+2026-05-12 20:08:23,819 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 14.15s | Phân tích: 11.1ms | Tổng: 14162.8ms
+2026-05-12 20:08:26,878 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (17.22s) → phân tích AI
+2026-05-12 20:08:26,878 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (17.22s) → phân tích AI
+2026-05-12 20:08:26,886 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 17.22s | Phân tích: 7.9ms | Tổng: 17229.9ms
+2026-05-12 20:08:26,887 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 17.22s | Phân tích: 8.1ms | Tổng: 17230.7ms
+2026-05-12 20:08:35,070 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (25.41s) → phân tích AI
+2026-05-12 20:08:35,074 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 25.41s | Phân tích: 3.6ms | Tổng: 25417.3ms
+2026-05-12 20:08:37,119 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (27.46s) → phân tích AI
+2026-05-12 20:08:37,123 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 27.46s | Phân tích: 4.3ms | Tổng: 27467.2ms
+2026-05-12 20:08:37,124 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (96.9%) | Thu thập: 27.46s | Phân tích: 4.3ms | Tổng: 27467.2ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:08:38,142 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (28.49s) → phân tích AI
+2026-05-12 20:08:38,142 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (28.49s) → phân tích AI
+2026-05-12 20:08:38,143 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (28.49s) → phân tích AI
+2026-05-12 20:08:38,154 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 28.49s | Phân tích: 10.8ms | Tổng: 28497.3ms
+2026-05-12 20:08:38,154 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 28.49s | Phân tích: 12.0ms | Tổng: 28497.8ms
+2026-05-12 20:08:38,155 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 28.49s | Phân tích: 11.2ms | Tổng: 28498.8ms
+2026-05-12 20:08:40,190 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (30.53s) → phân tích AI
+2026-05-12 20:08:40,195 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 30.53s | Phân tích: 4.9ms | Tổng: 30539.0ms
+2026-05-12 20:08:40,196 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-05-12 20:08:50,430 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (40.77s) → phân tích AI
+2026-05-12 20:08:50,431 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (40.77s) → phân tích AI
+2026-05-12 20:08:50,432 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (40.78s) → phân tích AI
+2026-05-12 20:08:50,433 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (40.78s) → phân tích AI
+2026-05-12 20:08:50,446 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 40.77s | Phân tích: 16.0ms | Tổng: 40789.6ms
+2026-05-12 20:08:50,446 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 40.77s | Phân tích: 14.9ms | Tổng: 40789.7ms
+2026-05-12 20:08:50,446 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 40.78s | Phân tích: 12.9ms | Tổng: 40790.2ms
+2026-05-12 20:08:50,448 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (97.8%) | Thu thập: 40.77s | Phân tích: 14.9ms | Tổng: 40789.7ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:08:50,450 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 40.78s | Phân tích: 17.5ms | Tổng: 40793.4ms
+2026-05-12 20:08:50,452 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (96.1%) | Thu thập: 40.78s | Phân tích: 17.5ms | Tổng: 40793.4ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:08:51,454 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (41.80s) → phân tích AI
+2026-05-12 20:08:51,458 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 41.80s | Phân tích: 4.3ms | Tổng: 41802.1ms
+2026-05-12 20:08:52,478 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (42.82s) → phân tích AI
+2026-05-12 20:08:52,484 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 42.82s | Phân tích: 6.1ms | Tổng: 42828.3ms
+2026-05-12 20:09:00,670 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (51.01s) → phân tích AI
+2026-05-12 20:09:00,671 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (51.01s) → phân tích AI
+2026-05-12 20:09:00,679 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 51.01s | Phân tích: 7.5ms | Tổng: 51022.3ms
+2026-05-12 20:09:00,679 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 51.01s | Phân tích: 8.5ms | Tổng: 51022.4ms
+2026-05-12 20:09:02,718 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (53.06s) → phân tích AI
+2026-05-12 20:09:02,723 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 53.06s | Phân tích: 4.7ms | Tổng: 53067.0ms
+2026-05-12 20:09:04,767 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (55.11s) → phân tích AI
+2026-05-12 20:09:04,767 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (55.11s) → phân tích AI
+2026-05-12 20:09:04,776 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 55.11s | Phân tích: 9.0ms | Tổng: 55119.8ms
+2026-05-12 20:09:04,776 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 55.11s | Phân tích: 8.7ms | Tổng: 55120.0ms
+2026-05-12 20:09:06,814 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (57.16s) → phân tích AI
+2026-05-12 20:09:06,819 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 57.16s | Phân tích: 4.5ms | Tổng: 57163.0ms
+2026-05-12 20:09:13,982 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (64.33s) → phân tích AI
+2026-05-12 20:09:13,987 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 64.33s | Phân tích: 5.5ms | Tổng: 64331.2ms
+2026-05-12 20:09:13,988 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (93.7%) | Kiểm tra định kỳ
+2026-05-12 20:09:17,054 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (67.40s) → phân tích AI
+2026-05-12 20:09:17,055 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (67.40s) → phân tích AI
+2026-05-12 20:09:17,064 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 67.40s | Phân tích: 9.7ms | Tổng: 67407.4ms
+2026-05-12 20:09:17,066 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (86.5%) | Kiểm tra định kỳ
+2026-05-12 20:09:17,066 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 67.40s | Phân tích: 10.9ms | Tổng: 67409.8ms
+2026-05-12 20:09:18,086 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (68.43s) → phân tích AI
+2026-05-12 20:09:18,087 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (68.43s) → phân tích AI
+2026-05-12 20:09:18,088 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (68.43s) → phân tích AI
+2026-05-12 20:09:18,097 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 68.43s | Phân tích: 11.1ms | Tổng: 68441.0ms
+2026-05-12 20:09:18,099 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 68.43s | Phân tích: 11.4ms | Tổng: 68442.4ms
+2026-05-12 20:09:18,099 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 68.43s | Phân tích: 10.7ms | Tổng: 68442.6ms
+2026-05-12 20:09:18,100 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (85.6%) | Kiểm tra định kỳ
+2026-05-12 20:09:28,325 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (78.66s) → phân tích AI
+2026-05-12 20:09:28,330 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (78.67s) → phân tích AI
+2026-05-12 20:09:28,330 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (78.67s) → phân tích AI
+2026-05-12 20:09:28,357 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 78.67s | Phân tích: 27.5ms | Tổng: 78701.1ms
+2026-05-12 20:09:28,366 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 78.66s | Phân tích: 39.9ms | Tổng: 78703.5ms
+2026-05-12 20:09:28,366 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 78.67s | Phân tích: 32.9ms | Tổng: 78707.0ms
+2026-05-12 20:09:29,342 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (79.69s) → phân tích AI
+2026-05-12 20:09:29,354 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 79.69s | Phân tích: 11.6ms | Tổng: 79697.9ms
+2026-05-12 20:09:30,367 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (80.71s) → phân tích AI
+2026-05-12 20:09:30,373 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 80.71s | Phân tích: 5.4ms | Tổng: 80716.6ms
+2026-05-12 20:09:34,462 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (84.81s) → phân tích AI
+2026-05-12 20:09:34,466 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 84.81s | Phân tích: 4.3ms | Tổng: 84810.0ms
+2026-05-12 20:09:42,654 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (93.00s) → phân tích AI
+2026-05-12 20:09:42,655 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (93.00s) → phân tích AI
+2026-05-12 20:09:42,656 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (93.00s) → phân tích AI
+2026-05-12 20:09:42,657 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (93.00s) → phân tích AI
+2026-05-12 20:09:42,669 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 93.00s | Phân tích: 13.8ms | Tổng: 93012.8ms
+2026-05-12 20:09:42,669 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 93.00s | Phân tích: 11.6ms | Tổng: 93013.0ms
+2026-05-12 20:09:42,670 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (92.3%) | Kiểm tra định kỳ
+2026-05-12 20:09:42,671 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 93.00s | Phân tích: 16.6ms | Tổng: 93014.8ms
+2026-05-12 20:09:42,672 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 93.00s | Phân tích: 15.0ms | Tổng: 93014.9ms
+2026-05-12 20:09:43,678 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (94.02s) → phân tích AI
+2026-05-12 20:09:43,682 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 94.02s | Phân tích: 4.2ms | Tổng: 94025.9ms
+2026-05-12 20:09:46,750 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (97.09s) → phân tích AI
+2026-05-12 20:09:46,755 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 97.09s | Phân tích: 4.7ms | Tổng: 97099.2ms
+2026-05-12 20:09:48,599 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-12 20:20:29,835 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 20:20:29,836 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-12 20:20:29,836 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 20:20:29,836 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-12 20:20:29,836 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-12 20:20:29,836 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-12 20:20:29,836 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-12 20:20:29,836 - [INFO] - IDS_V2 - [CONFIG] Trusted re-analysis interval: 45.0s (IP đã Bình thường — khoảng cách giữa hai lần thu đủ chuỗi)
+2026-05-12 20:20:29,836 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-12 20:20:31,100 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-12 20:20:31,100 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-12 20:20:31,100 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-12 20:20:31,573 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:20:31,574 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:20:31,574 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:20:31,574 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:20:31,574 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:20:31,574 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:20:59,581 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (28.47s) → phân tích AI
+2026-05-12 20:20:59,654 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 28.47s | Phân tích: 72.3ms | Tổng: 28546.6ms
+2026-05-12 20:20:59,656 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (96.4%) | Thu thập: 28.47s | Phân tích: 72.3ms | Tổng: 28546.6ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:20:59,656 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-05-12 20:21:03,678 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (32.57s) → phân tích AI
+2026-05-12 20:21:03,682 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 32.57s | Phân tích: 3.7ms | Tổng: 32574.4ms
+2026-05-12 20:21:03,682 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (93.0%) | Kiểm tra định kỳ
+2026-05-12 20:21:04,702 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (33.59s) → phân tích AI
+2026-05-12 20:21:04,706 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 33.59s | Phân tích: 3.8ms | Tổng: 33598.8ms
+2026-05-12 20:21:04,716 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (85.5%) | Kiểm tra định kỳ
+2026-05-12 20:21:05,725 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (34.62s) → phân tích AI
+2026-05-12 20:21:05,726 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (34.62s) → phân tích AI
+2026-05-12 20:21:05,727 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (34.62s) → phân tích AI
+2026-05-12 20:21:05,738 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 34.62s | Phân tích: 10.3ms | Tổng: 34630.3ms
+2026-05-12 20:21:05,738 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 34.62s | Phân tích: 11.4ms | Tổng: 34630.4ms
+2026-05-12 20:21:05,739 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (97.0%) | Thu thập: 34.62s | Phân tích: 11.4ms | Tổng: 34630.4ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:21:05,739 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (93.2%) | Kiểm tra định kỳ
+2026-05-12 20:21:05,740 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 34.62s | Phân tích: 14.3ms | Tổng: 34632.4ms
+2026-05-12 20:21:05,740 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (95.0%) | Kiểm tra định kỳ
+2026-05-12 20:21:15,966 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (44.86s) → phân tích AI
+2026-05-12 20:21:15,970 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 44.86s | Phân tích: 3.4ms | Tổng: 44862.4ms
+2026-05-12 20:21:15,970 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (96.8%) | Thu thập: 44.86s | Phân tích: 3.4ms | Tổng: 44862.4ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:21:19,038 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (47.93s) → phân tích AI
+2026-05-12 20:21:19,039 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (47.93s) → phân tích AI
+2026-05-12 20:21:19,047 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 47.93s | Phân tích: 9.1ms | Tổng: 47939.5ms
+2026-05-12 20:21:19,050 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 47.93s | Phân tích: 10.4ms | Tổng: 47941.8ms
+2026-05-12 20:21:19,050 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (96.5%) | Thu thập: 47.93s | Phân tích: 10.4ms | Tổng: 47941.8ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:21:22,109 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (51.00s) → phân tích AI
+2026-05-12 20:21:22,114 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 51.00s | Phân tích: 3.8ms | Tổng: 51006.0ms
+2026-05-12 20:21:22,114 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (96.2%) | Thu thập: 51.00s | Phân tích: 3.8ms | Tổng: 51006.0ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:21:29,278 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (58.17s) → phân tích AI
+2026-05-12 20:21:29,282 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 58.17s | Phân tích: 3.6ms | Tổng: 58174.3ms
+2026-05-12 20:21:29,282 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (96.8%) | Thu thập: 58.17s | Phân tích: 3.6ms | Tổng: 58174.3ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:21:55,902 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (84.79s) → phân tích AI
+2026-05-12 20:21:55,906 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 84.79s | Phân tích: 3.8ms | Tổng: 84798.6ms
+2026-05-12 20:21:55,906 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-05-12 20:22:04,094 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (92.99s) → phân tích AI
+2026-05-12 20:22:04,099 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 92.99s | Phân tích: 4.1ms | Tổng: 92991.3ms
+2026-05-12 20:22:15,359 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (104.25s) → phân tích AI
+2026-05-12 20:22:15,364 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 104.25s | Phân tích: 4.7ms | Tổng: 104256.0ms
+2026-05-12 20:22:18,430 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (107.32s) → phân tích AI
+2026-05-12 20:22:18,435 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 107.32s | Phân tích: 4.5ms | Tổng: 107327.0ms
+2026-05-12 20:22:19,454 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (108.35s) → phân tích AI
+2026-05-12 20:22:19,458 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 108.35s | Phân tích: 3.7ms | Tổng: 108350.5ms
+2026-05-12 20:22:26,622 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (115.51s) → phân tích AI
+2026-05-12 20:22:26,625 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 115.51s | Phân tích: 3.4ms | Tổng: 115517.8ms
+2026-05-12 20:22:53,246 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (142.14s) → phân tích AI
+2026-05-12 20:22:53,250 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 142.14s | Phân tích: 4.3ms | Tổng: 142142.6ms
+2026-05-12 20:22:53,252 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (95.5%) | Kiểm tra định kỳ
+2026-05-12 20:22:59,391 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (148.28s) → phân tích AI
+2026-05-12 20:22:59,396 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 148.28s | Phân tích: 4.6ms | Tổng: 148288.4ms
+2026-05-12 20:22:59,396 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (80.1%) | Kiểm tra định kỳ
+2026-05-12 20:23:12,703 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (161.60s) → phân tích AI
+2026-05-12 20:23:12,704 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (161.60s) → phân tích AI
+2026-05-12 20:23:12,711 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 161.60s | Phân tích: 8.3ms | Tổng: 161603.9ms
+2026-05-12 20:23:12,712 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (93.6%) | Kiểm tra định kỳ
+2026-05-12 20:23:12,713 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 161.60s | Phân tích: 8.5ms | Tổng: 161605.0ms
+2026-05-12 20:23:12,713 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (96.8%) | Kiểm tra định kỳ
+2026-05-12 20:23:15,775 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (164.67s) → phân tích AI
+2026-05-12 20:23:15,779 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 164.67s | Phân tích: 3.6ms | Tổng: 164671.5ms
+2026-05-12 20:23:15,779 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (96.3%) | Kiểm tra định kỳ
+2026-05-12 20:23:26,014 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (174.91s) → phân tích AI
+2026-05-12 20:23:26,018 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 174.91s | Phân tích: 3.6ms | Tổng: 174910.4ms
+2026-05-12 20:23:26,019 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (91.7%) | Kiểm tra định kỳ
+2026-05-12 20:23:51,614 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (200.51s) → phân tích AI
+2026-05-12 20:23:51,618 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 200.51s | Phân tích: 3.7ms | Tổng: 200510.2ms
+2026-05-12 20:23:53,662 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (202.55s) → phân tích AI
+2026-05-12 20:23:53,666 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 202.55s | Phân tích: 4.2ms | Tổng: 202558.5ms
+2026-05-12 20:24:09,022 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (217.91s) → phân tích AI
+2026-05-12 20:24:09,026 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 217.91s | Phân tích: 4.3ms | Tổng: 217919.0ms
+2026-05-12 20:24:11,071 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (219.96s) → phân tích AI
+2026-05-12 20:24:11,075 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 219.96s | Phân tích: 4.1ms | Tổng: 219967.3ms
+2026-05-12 20:24:12,094 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (220.99s) → phân tích AI
+2026-05-12 20:24:12,100 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 220.99s | Phân tích: 4.5ms | Tổng: 220991.8ms
+2026-05-12 20:24:19,261 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (228.15s) → phân tích AI
+2026-05-12 20:24:19,267 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 228.15s | Phân tích: 5.1ms | Tổng: 228159.3ms
+2026-05-12 20:24:19,425 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-12 20:30:04,876 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 20:30:04,876 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-12 20:30:04,876 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 20:30:04,877 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-12 20:30:04,877 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-12 20:30:04,877 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-12 20:30:04,877 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-12 20:30:04,877 - [INFO] - IDS_V2 - [CONFIG] Trusted re-analysis interval: 45.0s (IP đã Bình thường — khoảng cách giữa hai lần thu đủ chuỗi)
+2026-05-12 20:30:04,877 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-12 20:30:05,965 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-12 20:30:05,965 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-12 20:30:05,965 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-12 20:30:06,356 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:30:06,356 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:30:06,356 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:30:06,356 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:30:06,357 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:30:06,357 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 20:30:06,359 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (0.39s) → phân tích AI
+2026-05-12 20:30:06,360 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (0.39s) → phân tích AI
+2026-05-12 20:30:06,362 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (0.39s) → phân tích AI
+2026-05-12 20:30:06,363 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (0.39s) → phân tích AI
+2026-05-12 20:30:06,364 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (0.39s) → phân tích AI
+2026-05-12 20:30:06,367 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (0.39s) → phân tích AI
+2026-05-12 20:30:06,391 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 0.39s | Phân tích: 32.0ms
+2026-05-12 20:30:06,398 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (97.7%) | Thu thập: 0.39s | Phân tích: 32.0ms | Tổng: 418.3ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:30:06,400 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-05-12 20:30:06,400 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 0.39s | Phân tích: 39.7ms
+2026-05-12 20:30:06,404 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (95.7%) | Thu thập: 0.39s | Phân tích: 39.7ms | Tổng: 427.3ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:30:06,405 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 0.39s | Phân tích: 40.7ms
+2026-05-12 20:30:06,406 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 0.39s | Phân tích: 37.1ms
+2026-05-12 20:30:06,406 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 0.39s | Phân tích: 43.5ms
+2026-05-12 20:30:06,406 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 0.39s | Phân tích: 40.8ms
+2026-05-12 20:30:06,409 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (95.4%) | Thu thập: 0.39s | Phân tích: 40.7ms | Tổng: 431.1ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:30:06,413 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (56.7%) | Kiểm tra định kỳ
+2026-05-12 20:30:06,415 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (94.2%) | Kiểm tra định kỳ
+2026-05-12 20:30:06,419 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (95.2%) | Thu thập: 0.39s | Phân tích: 37.1ms | Tổng: 431.4ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:30:07,422 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (1.45s) → phân tích AI
+2026-05-12 20:30:07,427 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 1.45s | Phân tích: 4.7ms
+2026-05-12 20:30:09,470 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (3.50s) → phân tích AI
+2026-05-12 20:30:09,476 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 3.50s | Phân tích: 6.0ms
+2026-05-12 20:30:19,710 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (13.74s) → phân tích AI
+2026-05-12 20:30:19,716 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 13.74s | Phân tích: 5.4ms
+2026-05-12 20:30:22,782 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (16.81s) → phân tích AI
+2026-05-12 20:30:22,786 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 16.81s | Phân tích: 4.0ms
+2026-05-12 20:30:34,046 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (28.07s) → phân tích AI
+2026-05-12 20:30:34,047 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (28.07s) → phân tích AI
+2026-05-12 20:30:34,055 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 28.07s | Phân tích: 7.7ms
+2026-05-12 20:30:34,055 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 28.07s | Phân tích: 9.0ms
+2026-05-12 20:30:46,335 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (40.36s) → phân tích AI
+2026-05-12 20:30:46,340 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 40.36s | Phân tích: 4.4ms
+2026-05-12 20:30:46,343 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (97.3%) | Thu thập: 40.36s | Phân tích: 4.4ms | Tổng: 40366.5ms | [Từ giờ sẽ kiểm tra ngầm, không log nữa cho đến khi có bất thường]
+2026-05-12 20:30:46,343 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-05-12 20:30:47,357 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (41.38s) → phân tích AI
+2026-05-12 20:30:47,362 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 41.38s | Phân tích: 4.2ms
+2026-05-12 20:30:51,454 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (45.48s) → phân tích AI
+2026-05-12 20:30:51,454 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (45.48s) → phân tích AI
+2026-05-12 20:30:51,455 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (45.48s) → phân tích AI
+2026-05-12 20:30:51,457 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (45.48s) → phân tích AI
+2026-05-12 20:30:51,468 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 45.48s | Phân tích: 14.2ms
+2026-05-12 20:30:51,469 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 45.48s | Phân tích: 14.2ms
+2026-05-12 20:30:51,471 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 45.48s | Phân tích: 13.3ms
+2026-05-12 20:30:51,471 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 45.48s | Phân tích: 14.6ms
+2026-05-12 20:30:51,571 - [INFO] - IDS_V2 - [EXIT] Interrupted by user
+2026-05-12 21:01:52,478 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - IDS Engine v2.1 - AI DDoS Detection + SDN Mitigation
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - ======================================================================
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - [CONFIG] ONOS URL: http://127.0.0.1:8181/onos/v1
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - [CONFIG] Model Path: 
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - [CONFIG] EMA Alpha: 0.02
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - [CONFIG] Cooldown: 300s
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - [CONFIG] Trusted silent recheck interval: 45.0s (whitelist benign — chỉ phân tích ngầm khi hết luồng ưu tiên)
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - [CONFIG] Attack watchlist recheck interval: 45.0s
+2026-05-12 21:01:52,479 - [INFO] - IDS_V2 - [IDS] Initializing IDS Engine v2.1...
+2026-05-12 21:01:53,558 - [INFO] - IDS_V2 - [V7] Đã load feature weights từ training
+2026-05-12 21:01:53,558 - [INFO] - IDS_V2 - [IDS] Engine ready on device: cpu
+2026-05-12 21:01:53,558 - [INFO] - IDS_V2 - [IDS] Base threshold: 0.0180
+2026-05-12 21:01:53,797 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 21:01:53,797 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 21:01:53,798 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 21:01:53,798 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 21:01:53,798 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 21:01:53,798 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] 📝 Bắt đầu thu thập luồng (0/10)
+2026-05-12 21:01:53,800 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (0.23s) → phân tích AI
+2026-05-12 21:01:53,801 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (0.23s) → phân tích AI
+2026-05-12 21:01:53,802 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (0.24s) → phân tích AI
+2026-05-12 21:01:53,803 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (0.24s) → phân tích AI
+2026-05-12 21:01:53,806 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (0.24s) → phân tích AI
+2026-05-12 21:01:53,807 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (0.24s) → phân tích AI
+2026-05-12 21:01:53,834 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 0.23s | Phân tích: 32.3ms
+2026-05-12 21:01:53,839 - [INFO] - IDS_V2 - [RESULT] [10.0.2.63] BÌNH THƯỜNG (96.4%) | Thu thập: 0.23s | Phân tích: 32.3ms | Tổng: 266.7ms | [Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]
+2026-05-12 21:01:53,840 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0216 (+20.0%)
+2026-05-12 21:01:53,842 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 0.24s | Phân tích: 34.2ms
+2026-05-12 21:01:53,846 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (89.0%) | Kiểm tra định kỳ
+2026-05-12 21:01:53,848 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 0.24s | Phân tích: 40.6ms
+2026-05-12 21:01:53,848 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 0.23s | Phân tích: 47.5ms
+2026-05-12 21:01:53,849 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 0.24s | Phân tích: 47.1ms
+2026-05-12 21:01:53,853 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (92.7%) | Kiểm tra định kỳ
+2026-05-12 21:01:53,854 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 0.24s | Phân tích: 49.0ms
+2026-05-12 21:01:53,857 - [INFO] - IDS_V2 - [RESULT] [10.0.2.60] BÌNH THƯỜNG (96.2%) | Thu thập: 0.24s | Phân tích: 47.1ms | Tổng: 282.5ms | [Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]
+2026-05-12 21:01:53,860 - [INFO] - IDS_V2 - [RESULT] [10.0.2.65] BÌNH THƯỜNG (96.5%) | Thu thập: 0.23s | Phân tích: 47.5ms | Tổng: 281.3ms | [Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]
+2026-05-12 21:01:53,865 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (84.6%) | Kiểm tra định kỳ
+2026-05-12 21:01:54,110 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (0.54s) → phân tích AI
+2026-05-12 21:01:54,111 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.62] ✅ Đủ 10 mẫu (0.54s) → phân tích AI
+2026-05-12 21:01:54,119 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.62] ✅ Thu thập: 0.54s | Phân tích: 8.1ms
+2026-05-12 21:01:54,121 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 0.54s | Phân tích: 11.2ms
+2026-05-12 21:01:54,121 - [INFO] - IDS_V2 - [RESULT] [10.0.2.62] BÌNH THƯỜNG (95.8%) | Thu thập: 0.54s | Phân tích: 8.1ms | Tổng: 552.5ms | [Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]
+2026-05-12 21:01:56,158 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (2.59s) → phân tích AI
+2026-05-12 21:01:56,161 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 2.59s | Phân tích: 3.5ms
+2026-05-12 21:01:56,163 - [INFO] - IDS_V2 - [RESULT] [10.0.2.64] BÌNH THƯỜNG (96.0%) | Thu thập: 2.59s | Phân tích: 3.5ms | Tổng: 2594.7ms | [Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]
+2026-05-12 21:02:05,374 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (11.81s) → phân tích AI
+2026-05-12 21:02:05,378 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 11.81s | Phân tích: 4.1ms
+2026-05-12 21:02:18,687 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (25.12s) → phân tích AI
+2026-05-12 21:02:18,691 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 25.12s | Phân tích: 3.7ms
+2026-05-12 21:02:31,997 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (38.43s) → phân tích AI
+2026-05-12 21:02:32,002 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 38.43s | Phân tích: 4.2ms
+2026-05-12 21:02:32,004 - [INFO] - IDS_V2 - [RESULT] [10.0.2.61] BÌNH THƯỜNG (96.4%) | Thu thập: 38.43s | Phân tích: 4.2ms | Tổng: 38435.3ms | [Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]
+2026-05-12 21:02:32,004 - [INFO] - IDS_V2 - [ADAPT] Threshold: 0.0180 → 0.0899 (+380.0%)
+2026-05-12 21:02:40,191 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.63] ✅ Đủ 10 mẫu (46.62s) → phân tích AI
+2026-05-12 21:02:40,191 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.60] ✅ Đủ 10 mẫu (46.63s) → phân tích AI
+2026-05-12 21:02:40,198 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.63] ✅ Thu thập: 46.62s | Phân tích: 7.5ms
+2026-05-12 21:02:40,201 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.60] ✅ Thu thập: 46.63s | Phân tích: 9.1ms
+2026-05-12 21:02:41,214 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.65] ✅ Đủ 10 mẫu (47.65s) → phân tích AI
+2026-05-12 21:02:41,218 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.65] ✅ Thu thập: 47.65s | Phân tích: 3.8ms
+2026-05-12 21:02:51,454 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.64] ✅ Đủ 10 mẫu (57.89s) → phân tích AI
+2026-05-12 21:02:51,458 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.64] ✅ Thu thập: 57.89s | Phân tích: 4.1ms
+2026-05-12 21:03:26,270 - [INFO] - IDS_V2 - [COLLECT] [10.0.2.61] ✅ Đủ 10 mẫu (92.70s) → phân tích AI
+2026-05-12 21:03:26,274 - [INFO] - IDS_V2 - [ANALYZE] [10.0.2.61] ✅ Thu thập: 92.70s | Phân tích: 4.2ms
+2026-05-12 21:03:30,888 - [INFO] - IDS_V2 - [EXIT] Interrupted by user

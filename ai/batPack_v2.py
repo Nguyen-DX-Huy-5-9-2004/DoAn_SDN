@@ -759,6 +759,25 @@ def extract_features(flow):
     
     return features
 
+def flow_export_key(flow) -> str:
+    """
+    Định danh ổn định cho mỗi bản ghi NFStream xuất ra FIFO.
+    Giúp IDS bỏ qua khi cùng một flow được gửi lặp (batch/flush trùng).
+    """
+    fid = getattr(flow, "id", None)
+    if fid is not None:
+        try:
+            return str(int(fid))
+        except (TypeError, ValueError):
+            return str(fid)
+    fs = getattr(flow, "bidirectional_first_seen_ms", None)
+    if fs is None:
+        fs = getattr(flow, "first_seen_ms", 0) or 0
+    sp = int(pick_attribute(flow, "src_port", "sport", default=0))
+    dp = int(pick_attribute(flow, "dst_port", "dport", default=0))
+    pr = int(pick_attribute(flow, "protocol", default=0))
+    return f"{flow.src_ip}|{flow.dst_ip}|{sp}|{dp}|{pr}|{int(fs)}"
+
 # =====================================================================
 # BATPACK CAPTURE ENGINE (MAIN LOOP)
 # =====================================================================
@@ -973,6 +992,7 @@ class BatPackEngine:
                     "src_ip": flow.src_ip,
                     "dst_ip": flow.dst_ip,
                     "dst_port": dst_port,
+                    "flow_key": flow_export_key(flow),
                     "features": features
                 }
                 json_line = json.dumps(json_record) + "\n"
@@ -1117,6 +1137,7 @@ class BatPackEngine:
                     json_record = {
                         "src_ip": flow.src_ip,
                         "dst_ip": flow.dst_ip,
+                        "flow_key": flow_export_key(flow),
                         "dst_port": dst_port,
                         "features": features
                     }

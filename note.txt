@@ -58,7 +58,7 @@ py [net.get(f'h{i}').cmd('python3 attack/http_flood.py http://10.0.0.10:8000 jso
 Slowloris: Botnet h16-h20 ngâm kết nối
 py [net.get(f'h{i}').cmd('python3 attack/slowloris.py http://10.0.0.11:8000 &') for i in range(16, 19)]
 ter2: cd ai
-sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python ai/run_onos_v2.py
+sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python run_onos_v2.py
 
 ter3: cd ai
 sudo /home/tgf/Documents/DoAn_SDN/sdn_env/bin/python batPack_v2.py

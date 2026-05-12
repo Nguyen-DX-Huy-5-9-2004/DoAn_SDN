@@ -17,6 +17,7 @@ UNIFIED_METRICS_FILE = RUNTIME / "unified_metrics.json"
 ONOS_FILE = RUNTIME / "onos_metrics.json"
 HTTP_LOG_FILE = RUNTIME / "http_requests.csv"
 IDS_ALERTS_FILE = RUNTIME / "ids_alerts.json"
+IDS_IP_STATUS_FILE = RUNTIME / "ids_ip_status.json"
 WEB1_STATUS_URL = os.environ.get("WEB1_STATUS_URL", "http://127.0.0.1:8000/api/system_status")
 
 # Cache configuration - 0.5s để phù hợp với CPU sampling interval 0.1s
@@ -25,7 +26,8 @@ _cache = {
     "onos": {"data": {"ports": []}, "ts": 0, "status": "offline"},
     "system": {"data": {"cpu_percent": 0, "ram_percent": 0, "connections": 0}, "ts": 0, "status": "offline"},
     "logs": {"data": {"rows": []}, "ts": 0},
-    "ids_alerts": {"data": {"alerts": []}, "ts": 0}
+    "ids_alerts": {"data": {"alerts": []}, "ts": 0},
+    "ids_ip_status": {"data": {}, "ts": 0},
 }
 
 class Handler(BaseHTTPRequestHandler):
@@ -176,6 +178,27 @@ class Handler(BaseHTTPRequestHandler):
                     pass
             data = {"alerts": alerts[-20:]}  # Last 20 alerts
             _cache["ids_alerts"] = {"data": data, "ts": now}
+            self._send_json(data)
+            return
+
+        if path == "/api/ids_ip_status":
+            if now - _cache["ids_ip_status"]["ts"] < CACHE_EXPIRY:
+                self._send_json(_cache["ids_ip_status"]["data"])
+                return
+            payload = {
+                "updated_at": 0,
+                "benign_whitelist": [],
+                "attack_watchlist": [],
+                "stats_snapshot": {},
+            }
+            if IDS_IP_STATUS_FILE.exists():
+                try:
+                    if now - IDS_IP_STATUS_FILE.stat().st_mtime < 120:
+                        payload = json.loads(IDS_IP_STATUS_FILE.read_text(encoding="utf-8"))
+                except Exception:
+                    pass
+            data = payload
+            _cache["ids_ip_status"] = {"data": data, "ts": now}
             self._send_json(data)
             return
         
