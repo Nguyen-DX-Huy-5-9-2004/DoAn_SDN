@@ -252,7 +252,10 @@ class IDSEngineV2:
         self.last_collect_log = {}  # [OPT] Track last collection log time per IP
         self.ip_warmup_count = {}   # 2 chuỗi đầu / IP: đốt trong collector, không gọi AI
         self.last_sequence_analysis_at = {}  # wall time sau mỗi lần phân tích (whitelist / watchlist)
-        self.ai_attack_track = {}  # IP đã mitigated: {last_analysis, attack_name, action, since}
+        self.ai_attack_track = {}  # IP đã mitigated/watchlist: {last_analysis, attack_name, action, since}
+        self.last_result_phase = {}  # Track last printed phase to avoid duplicate result panels
+        self._processing_sequence = set()  # IPs currently analyzed to prevent duplicate parallel processing
+        self.last_background_check_log = {}  # One-time silent-check log markers per IP
 
         # 2. Bật lại luồng chạy ngầm để lưu trạng thái (Save Worker)
         threading.Thread(target=self._save_threshold_worker, daemon=True).start()
@@ -315,10 +318,18 @@ class IDSEngineV2:
             mean_mse = np.mean(recent_mse)
             std_mse = np.std(recent_mse)
             
-            # NỚI LỎNG KHIÊN 1: Tăng k_factor từ 3.5 lên 4.5
-            # Mức 4.5 giúp loại bỏ hầu như toàn bộ nhiễu mạng (False Positives)
-            k_factor = 4.5  
-            new_threshold = mean_mse + (k_factor * std_mse)
+            # Sử dụng thống kê robust để tránh một outlier AE đẩy threshold lên quá cao
+            # nếu dữ liệu bình thường vẫn có một vài MSE rất lớn do nhiễu hoặc Chuỗi một lần.
+            if len(recent_mse) >= 5:
+                median_mse = np.median(recent_mse)
+                mad = np.median(np.abs(recent_mse - median_mse))
+                robust_scale = max(mad, std_mse)
+                k_factor = 4.0
+                new_threshold = median_mse + (k_factor * robust_scale)
+            else:
+                # Khi dữ liệu chưa đủ, dùng mean+std để khởi tạo
+                k_factor = 4.5
+                new_threshold = mean_mse + (k_factor * std_mse)
             
             self.dynamic_threshold = (
                 SDNConfigV2.EMA_ALPHA * new_threshold +
@@ -451,9 +462,11 @@ class IDSEngineV2:
         # logger.warning(f"[MITIGATION] Đã chuyển hướng {src_ip} sang Honeypot (10.0.0.201)")
         pass
 
-    def log_attack_panel(self, src_ip, attack_name, confidence, action_str, color_str):
+    def log_attack_panel(self, src_ip, attack_name, confidence, action_str, color_str, timestamp=None):
         """Hiển thị thông báo tấn công lên console"""
-        msg = f"[bold]IP:[/bold] {src_ip}\n"
+        ts = timestamp or time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        msg = f"[bold]Timestamp:[/bold] {ts}\n"
+        msg += f"[bold]IP:[/bold] {src_ip}\n"
         msg += f"[bold]Type:[/bold] {attack_name}\n"
         msg += f"[bold]Confidence:[/bold] {confidence:.1f}%\n"
         msg += f"[bold]Action:[/bold] [{color_str}]{action_str}[/{color_str}]"
@@ -520,6 +533,8 @@ class IDSEngineV2:
                     "whitelist_count": len(benign),
                     "watchlist_count": len(attacks),
                     "processed": self.stats.get("processed", 0),
+                    "blocked": self.stats.get("blocked", 0),
+                    "zero_day": self.stats.get("zero_day", 0),
                 },
             }
             with open(path, "w", encoding="utf-8") as f:
@@ -539,13 +554,19 @@ class IDSEngineV2:
                     return True
             return False
 
-    def log_normal_panel(self, src_ip, normal_prob, mse, threshold, latency_ms=0, collection_time=0):
+    def log_normal_panel(self, src_ip, normal_prob, mse, threshold, latency_ms=0, collection_time=0, timestamp=None):
         """
         Panel BENIGN — tiêu đề ghi khiên chính; gợi ý giải thích đặt sau Action.
         \"Hai khiên không đồng thuận rõ\": CLS không >80%, AE không báo Normal rõ — code vẫn có thể kết luận BENIGN thận trọng (nhánh elif / conservative).
         """
         th = max(float(threshold), 1e-9)
-        ae_normal_trust_pct = max(0.0, min(100.0, (1.0 - (mse / th)) * 100.0))
+        if mse <= th:
+            ae_normal_trust_pct = 80.0 + 20.0 * (1.0 - (mse / th))
+        else:
+            ae_ratio = mse / th
+            ae_normal_trust_pct = max(0.0, 80.0 - min((ae_ratio - 1.0) * 10.0, 80.0))
+        ae_normal_trust_pct = max(0.0, min(100.0, ae_normal_trust_pct))
+        ts = timestamp or time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
         if normal_prob > 80.0:
             mode_label = "Khiên 2 (CLS)"
@@ -560,16 +581,20 @@ class IDSEngineV2:
                 "kết luận BENIGN theo luật thận trọng trong code (không đủ tin tấn công)."
             )
 
-        msg = f"[bold]IP:[/bold] {src_ip}\n"
-        msg += f"[bold]Loại luồng:[/bold] [green]{mode_label}[/green] — [green]NORMAL · BENIGN[/green] (CLS Normal={normal_prob:.1f}%)\n"
+        msg = f"[bold]Timestamp:[/bold] {ts}\n"
+        msg += f"[bold]IP:[/bold] {src_ip}\n"
+        msg += f"[bold]Loại luồng:[/bold] [green]NORMAL · BENIGN[/green] (CLS Normal={normal_prob:.1f}%)\n"
         msg += f"[bold]Khiên 1 (AE):[/bold] MSE={mse:.4f} | Ngưỡng={threshold:.4f} | "
         msg += f"Trạng thái={'Normal' if mse < threshold else 'Anomaly (xem CLS)'} | "
         msg += f"Tin Normal (AE)≈{ae_normal_trust_pct:.0f}%\n"
         msg += f"[bold]Khiên 2 (CLS):[/bold] Normal={normal_prob:.1f}% | "
         msg += f"{'Confident' if normal_prob > 80 else 'Uncertain'}\n"
         msg += f"[bold]Timing:[/bold] Thu thập={collection_time:.2f}s | Phân tích={latency_ms:.1f}ms\n"
-        msg += f"[bold]Action:[/bold] [green]ALLOW[/green]"
-        msg += f"\n\n[dim]{mode_hint}[/dim]"
+        msg += f"[bold]Action:[/bold] [green]ALLOW[/green]\n"
+        msg += "\n"
+        msg += "[dim]Kết hợp (dự phòng): AE và CLS cùng ghi nhận để tránh false positive. "
+        msg += "Nếu chỉ một khiên báo bất thường, hệ thống ưu tiên kết luận BENIGN thận trọng.[/dim]\n"
+        msg += f"[dim]{mode_hint}[/dim]"
 
         if ae_normal_trust_pct > 80.0:
             msg += (
@@ -577,7 +602,7 @@ class IDSEngineV2:
                 "[/bold red]"
             )
 
-        panel_title = f"[bold green]{mode_label} · NORMAL TRAFFIC[/bold green]"
+        panel_title = "[bold green]NORMAL TRAFFIC[/bold green]"
         console.print(Panel(msg, title=panel_title, expand=False))
             
     def save_to_feedback_loop(self, src_ip, sequence_data, metadata):
@@ -792,23 +817,47 @@ class IDSEngineV2:
             is_trusted = src_ip in self.trusted_normal_ips
             last_log = self.last_normal_log.get(src_ip, 0)
             
-            if not silent and not is_trusted and confidence > 95.0:
-                self.trusted_normal_ips[src_ip] = now
+            current_phase = "NORMAL_TRUSTED" if is_trusted else "NORMAL"
+            prev_phase = self.last_result_phase.get(src_ip)
+            should_print_panel = False
+
+            if not silent:
+                if prev_phase != current_phase:
+                    should_print_panel = True
+                elif not is_trusted and now - last_log > 300:
+                    # Periodic summary only, không in panel nếu kết quả vẫn giống cũ
+                    self.last_normal_log[src_ip] = now
+                    logger.info(
+                        f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | "
+                        f"Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms | "
+                        f"Trạng thái không đổi, tiếp tục giám sát nhẹ nhàng"
+                    )
+
+            if should_print_panel and not silent:
                 self.last_normal_log[src_ip] = now
-                if src_ip in self.ai_attack_track:
-                    del self.ai_attack_track[src_ip]
+                phase_to_store = current_phase
+                if not is_trusted and confidence > 95.0:
+                    self.trusted_normal_ips[src_ip] = now
+                    if src_ip in self.ai_attack_track:
+                        del self.ai_attack_track[src_ip]
+                    phase_to_store = "NORMAL_TRUSTED"
+                self.last_result_phase[src_ip] = phase_to_store
                 self.log_normal_panel(
-                    src_ip, normal_prob, mse, self.dynamic_threshold, latency_ms, collection_time
+                    src_ip, normal_prob, mse, self.dynamic_threshold, latency_ms, collection_time,
+                    timestamp=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(now))
                 )
-                logger.info(f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | "
-                          f"Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms | "
-                          f"[Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]")
-            elif not silent and not is_trusted and now - last_log > 60:
-                self.last_normal_log[src_ip] = now
-                self.log_normal_panel(
-                    src_ip, normal_prob, mse, self.dynamic_threshold, latency_ms, collection_time
-                )
-                logger.info(f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | Kiểm tra định kỳ")
+                if is_trusted:
+                    logger.info(
+                        f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | Thu thập: {collection_time:.2f}s | "
+                        f"Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms | "
+                        f"[Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]"
+                    )
+                else:
+                    logger.info(
+                        f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | "
+                        f"Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms | "
+                        f"[Giữ trạng thái bình thường; xem dashboard]"
+                    )
             
             # Update threshold on benign
             if pred_idx == 0:
@@ -903,6 +952,9 @@ class IDSEngineV2:
                         # Whitelist check
                         if src_ip in SDNConfigV2.WHITELIST or src_ip.startswith(SDNConfigV2.INFRA_PREFIX):
                             continue
+
+                        if src_ip in self._processing_sequence:
+                            continue
                         
                         now_check = time.time()
                         # Cooldown check
@@ -913,9 +965,11 @@ class IDSEngineV2:
                                 del self.stats["blocked_ips"][src_ip]
                                 self.stats["blocked"] = max(0, self.stats["blocked"] - 1)
                         
-                        # AI whitelist (benign): chỉ kiểm tra ngầm đủ chu kỳ và khi không còn luồng ưu tiên
+                        # AI whitelist/watchlist: kiểm tra ngầm chỉ khi không có IP ưu tiên mới
                         silent_buf = False
+                        list_name = None
                         if src_ip in self.trusted_normal_ips:
+                            list_name = "whitelist"
                             gap = now_check - self.last_sequence_analysis_at.get(src_ip, 0)
                             if gap < SDNConfigV2.TRUSTED_SEQUENCE_INTERVAL_SEC:
                                 continue
@@ -923,12 +977,19 @@ class IDSEngineV2:
                                 continue
                             silent_buf = True
                         elif src_ip in self.ai_attack_track:
+                            list_name = "watchlist"
                             gap = now_check - self.ai_attack_track[src_ip].get("last_analysis", 0)
                             if gap < SDNConfigV2.ATTACK_RECHECK_INTERVAL_SEC:
                                 continue
                             if self._has_priority_traffic_pending(src_ip):
                                 continue
                             silent_buf = True
+                        
+                        if silent_buf and list_name is not None:
+                            last_bg = self.last_background_check_log.get(src_ip, 0)
+                            if now_check - last_bg > 60:
+                                logger.info(f"[BACKGROUND] [{src_ip}] Đang nhận diện luồng trong {list_name} (kiểm tra ngầm)")
+                                self.last_background_check_log[src_ip] = now_check
                         
                         flow_key = data.get("flow_key")
                         
