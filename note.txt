@@ -30,6 +30,12 @@ sudo python3 attack/icmp_flood.py 10.0.0.10 1400
 
 web1 sh -c "cat /tmp/django.pid 2>/dev/null | xargs kill -9 2>/dev/null; sleep 2; cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 & echo \$! > /tmp/django.pid"
 
+py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') for i in range(60, 66)]
+py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]
+
+1 normal
+2 udp -> slowloris -> https
+3 kill attack + restart web -> udp, tcp, http, slow
 web1 sh -c "cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &"
 check lệnh drop: sh ovs-ofctl dump-flows s1 -O OpenFlow13
 h1 wget --no-check-certificate https://10.0.0.10
@@ -38,9 +44,7 @@ h1 wget -qO- http://10.0.0.11 > /dev/null
 h60 curl -I -m 3 http://10.0.0.11:8000
 h60 curl -I -m 3 http://10.0.0.10:8000
 
-py [net.get(f'h{i}').cmd('python3 traffic/normal.py http://10.0.0.10:8000 &') for i in range(60, 66)]
-py [net.get(f'h{i}').cmd('pkill -f traffic/normal.py') for i in range(60, 66)]
-py [net.get(f'h{i}').cmd('pkill -f attack/ &') for i in range(1, 21)]
+py [net.get(f'h{i}').cmd('pkill -f attack/') for i in range(1, 21)]
 
 ter1: ./start.sh
 UDP flood: Byte Rate / Packet Rate
@@ -144,7 +148,7 @@ git remote set-url origin git@github.com:Nguyen-DX-Huy-5-9-2004/DoAn_SDN.git
 git remote -v
 
 git add .
-git commit -m "Đã điều chỉnh 2 luồng thu data và logic chọn dữ liệu cho ai"
+git commit -m "Điều chỉnh hiện thị runonoos sắp xong"
 git branch -M main
 git push origin main
 

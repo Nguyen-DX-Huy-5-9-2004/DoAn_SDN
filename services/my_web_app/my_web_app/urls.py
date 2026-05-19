@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse, JsonResponse
 import os
+from pathlib import Path
 import psutil
 import time
 from django.contrib.auth.hashers import make_password
@@ -23,6 +24,14 @@ json_attack_start_time = None
 
 # Xóa tracker files cũ khi khởi động (để tránh hiển thị boost sai sau restart)
 import os
+# Sửa từ parents[3] thành parents[1] vì trong container web1:
+# /app/my_web_app/urls.py -> parents[0] = /app/my_web_app, parents[1] = /app, parents[2] = /
+REPO_ROOT = Path(__file__).resolve().parents[1]
+# Sử dụng /app/monitor/runtime cho AI mitigation flag (được mount từ host trong system.py)
+# run_onos_v2.py ghi vào host: /home/tgf/Documents/DoAn_SDN/monitor/runtime/ai_mitigation_active.json
+# web1 đọc từ container: /app/monitor/runtime/ai_mitigation_active.json
+AI_RUNTIME_STATE_DIR = Path(os.environ.get("AI_RUNTIME_STATE_DIR", REPO_ROOT / "monitor" / "runtime"))
+AI_MITIGATION_FLAG_FILE = AI_RUNTIME_STATE_DIR / "ai_mitigation_active.json"
 for f in [HASH_TRACKER_FILE, JSON_TRACKER_FILE]:
     if os.path.exists(f):
         os.remove(f)
@@ -63,6 +72,22 @@ def read_hash_tracker():
         print(f"[TRACKER READ ERROR] {e}")
     print(f"[TRACKER READ] Using defaults (file not found or error)")
     return {'last_hash_request': 0, 'hash_count_last_5s': 0, 'is_under_hash_attack': False, 'last_reset': 0}
+
+def read_ai_mitigation_flag():
+    """Read the AI mitigation flag written by run_onos_v2."""
+    try:
+        if AI_MITIGATION_FLAG_FILE.exists():
+            with open(AI_MITIGATION_FLAG_FILE, 'r') as f:
+                data = json.load(f)
+            age = time.time() - data.get('since', 0)
+            if data.get('mitigation_active') and age < 30:
+                return data
+            # Cờ đã hết hạn, bỏ qua và để ghi đè lần tiếp theo
+            return None
+    except Exception as e:
+        print(f"[MITIGATION FLAG READ ERROR] {e}")
+    return None
+
 
 def write_hash_tracker(data):
     """Ghi tracker vào file"""
@@ -193,7 +218,17 @@ def system_status(request):
     current_time = time.time()
     display_cpu = cpu_percent
     hash_attack_detected = False
-    
+
+    mitigation_state = read_ai_mitigation_flag()
+    mitigation_active = False
+    if mitigation_state:
+        age = current_time - mitigation_state.get('since', 0)
+        if mitigation_state.get('mitigation_active') and age < 30:
+            mitigation_active = True
+            debug_info.append(
+                f"AI mitigation active: {mitigation_state.get('attack_name')} from {mitigation_state.get('src_ip')} ({age:.1f}s ago)"
+            )
+
     # Kiểm tra nếu đang bị tấn công hash (>2 request trong 15s và request gần đây < 15s)
     time_since_last_hash = current_time - tracker.get('last_hash_request', 0)
     hash_count = tracker.get('hash_count_last_5s', 0)
@@ -204,7 +239,10 @@ def system_status(request):
     # Chỉ boost CPU nếu: attack_flag=True HOẶC (có request hash gần đây <15s VÀ count > 1)
     # Giảm ngưỡng xuống 1 để boost nhanh hơn (chỉ cần 2 request)
     global hash_attack_start_time
-    if is_under_attack or (time_since_last_hash < 15 and hash_count > 1):
+    if mitigation_active:
+        debug_info.append("AI mitigation active - suppressing hash/boot CPU boost and kill logic")
+        display_cpu = cpu_percent
+    elif is_under_attack or (time_since_last_hash < 15 and hash_count > 1):
         hash_attack_detected = True
         # Cộng thêm 70-80% để tổng CPU đạt ngưỡng 90%+ cho demo ấn tượng
         boost_value = random.uniform(70.0, 80.0)
@@ -241,7 +279,9 @@ def system_status(request):
     display_ram = ram_percent  # Mặc định là giá trị thực
     
     # Giảm ngưỡng xuống 1 để boost nhanh hơn (chỉ cần 2 request)
-    if is_under_json_attack or (time_since_last_json < 15 and json_count > 1):
+    if mitigation_active:
+        debug_info.append("AI mitigation active - suppressing JSON/boot RAM boost and kill logic")
+    elif is_under_json_attack or (time_since_last_json < 15 and json_count > 1):
         # Boost RAM lên 90%+ (cộng thêm 70-80%)
         ram_boost = random.uniform(70.0, 80.0)
         display_ram = min(98.0, ram_percent + ram_boost)

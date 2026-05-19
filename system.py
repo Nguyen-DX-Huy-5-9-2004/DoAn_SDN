@@ -663,7 +663,10 @@ def start_network():
         dimage="doan_sdn_web1:py39",
         mem_limit="512m",
         cpu_quota=75000,  #CPU 75% để không bị chết khi bị tấn công
-        volumes=[f"{PROJECT_ROOT}/services/my_web_app:/app"],
+        volumes=[
+            f"{PROJECT_ROOT}/services/my_web_app:/app",
+            f"{PROJECT_ROOT}/monitor/runtime:/app/monitor/runtime:ro"  # Mount để web1 đọc AI mitigation flag
+        ],
         dcmd="tail -f /dev/null",
     )
     proxy1 = net.addDocker(
@@ -786,6 +789,26 @@ def start_services(net):
     web1 = net.get("web1")
     # Chạy Django development server - mặc định đã có threading
     web1.cmd("sh -c 'cd /app && python manage.py runserver 0.0.0.0:8000 > /tmp/django.log 2>&1 &'")
+    
+    # Chờ Django khởi động thành công
+    print("[SYSTEM] Đang chờ Django khởi động (tối đa 30s)...")
+    for i in range(30):
+        try:
+            # Thử ping Django qua socket connection từ trong container
+            # Kiểm tra process Django đang chạy thay vì socket connection
+            result = web1.cmd("ps aux | grep 'manage.py runserver' | grep -v grep")
+            if result and 'manage.py runserver' in result:
+                print("[OK] Django đã sẵn sàng trên port 8000!")
+                break
+        except Exception as e:
+            print(f"[DEBUG] Django check error: {e}")
+        if i % 5 == 0:
+            print(f"  [{i}s] Chờ Django...", end="", flush=True)
+        time.sleep(1)
+    else:
+        # Django không sẵn sàng, kiểm tra log
+        log_output = web1.cmd("tail -20 /tmp/django.log 2>&1").strip()
+        print(f"\n[!] Django không sẵn sàng sau 30s. Log:\n{log_output}")
 # -------------------------------------------------
 # NORMAL TRAFFIC
 # -------------------------------------------------
@@ -949,6 +972,23 @@ def main():
     # Khởi chạy các dịch vụ web, dns, ids...
     start_services(net)
     time.sleep(5)
+
+    # Khởi động dashboard SAU KHI web1 đã sẵn sàng
+    print("[SYSTEM] Khởi động Dashboard monitoring...")
+    dashboard_cmd = [
+        "sudo", "env",
+        f"PYTHONPATH={PROJECT_ROOT}/sdn_env/lib/python3.12/site-packages",
+        f"{PROJECT_ROOT}/sdn_env/bin/python3",
+        f"{PROJECT_ROOT}/dashboard/server.py"
+    ]
+    subprocess.Popen(
+        dashboard_cmd,
+        stdout=open("/tmp/sdn_dashboard.log", "w"),
+        stderr=open("/tmp/sdn_dashboard.log", "a"),
+        start_new_session=True
+    )
+    print("[SYSTEM] Dashboard đã khởi động tại http://127.0.0.1:8050")
+    time.sleep(2)  # Chờ dashboard khởi động
 
     # Tạo lưu lượng nền (Normal Traffic)
     start_normal_traffic(net)

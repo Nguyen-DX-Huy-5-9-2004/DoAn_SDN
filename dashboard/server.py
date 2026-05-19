@@ -18,7 +18,18 @@ ONOS_FILE = RUNTIME / "onos_metrics.json"
 HTTP_LOG_FILE = RUNTIME / "http_requests.csv"
 IDS_ALERTS_FILE = RUNTIME / "ids_alerts.json"
 IDS_IP_STATUS_FILE = RUNTIME / "ids_ip_status.json"
-WEB1_STATUS_URL = os.environ.get("WEB1_STATUS_URL", "http://127.0.0.1:8000/api/system_status")
+WEB1_STATUS_URL = os.environ.get("WEB1_STATUS_URL")
+_raw_web1_urls = [
+    WEB1_STATUS_URL,
+    "http://127.0.0.1:8000/api/system_status",
+    "http://10.0.0.10:8000/api/system_status",
+    "http://10.0.0.11:8000/api/system_status",
+    "http://10.0.0.100:8000/api/system_status",
+]
+WEB1_STATUS_URLS = []
+for url in _raw_web1_urls:
+    if url and url not in WEB1_STATUS_URLS:
+        WEB1_STATUS_URLS.append(url)
 
 # Cache configuration - 0.5s để phù hợp với CPU sampling interval 0.1s
 CACHE_EXPIRY = 0.5  # seconds
@@ -67,17 +78,29 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _fetch_with_retry(self, url, retries=5, backoff=0.5):
-        for i in range(retries):
-            try:
-                # Timeout 15s để kịp chờ web1 xử lý (CPU sampling 0.5s + hash processing)
-                r = requests.get(url, timeout=15)
-                if r.status_code == 200:
-                    return r.json()
-            except Exception:
-                pass
-            if i < retries - 1:
-                time.sleep(backoff * (i + 1))
+    def _fetch_with_retry(self, urls, retries=5, backoff=0.5):
+        if isinstance(urls, str):
+            urls = [urls]
+
+        for url in urls:
+            for i in range(retries):
+                try:
+                    # Timeout 15s để kịp chờ web1 xử lý (CPU sampling 0.5s + hash processing)
+                    r = requests.get(url, timeout=15)
+                    if r.status_code == 200:
+                        try:
+                            return r.json()
+                        except ValueError as e:
+                            print(f"[DASHBOARD] Web1 URL {url} returned non-JSON payload: {e}")
+                            return None
+                    else:
+                        print(f"[DASHBOARD] Web1 URL {url} returned HTTP {r.status_code}")
+                except Exception as e:
+                    if i == 0:
+                        print(f"[DASHBOARD] Web1 fetch error for {url}: {e}")
+                if i < retries - 1:
+                    time.sleep(backoff * (i + 1))
+            print(f"[DASHBOARD] Web1 URL {url} failed after {retries} attempts")
         return None
 
     def do_GET(self):  # noqa: N802
@@ -128,8 +151,8 @@ class Handler(BaseHTTPRequestHandler):
                 return
             
             # Debug log to console
-            print(f"[DASHBOARD] Fetching status from: {WEB1_STATUS_URL}")
-            data = self._fetch_with_retry(WEB1_STATUS_URL)
+            print(f"[DASHBOARD] Fetching Web1 status from candidates: {WEB1_STATUS_URLS}")
+            data = self._fetch_with_retry(WEB1_STATUS_URLS)
             if data:
                 print(f"[DASHBOARD] Web1 status OK: {data.get('hostname', 'unknown')}")
                 status = "online"

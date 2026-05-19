@@ -49,3 +49,12 @@ monitor/runtime/
 dashboard/__pycache__/
 zeek_stream.json
 threshold_state.json
+
+# Configuration Files với IP Private (KHÔNG PUSH GIT)
+attack/.env
+attack/.env.local
+*.env
+*.env.local
+attack/config.local.py
+config.local.py
+attack/scan_ip.py

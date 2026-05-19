@@ -373,6 +373,7 @@ class IDSEngineV2:
                     self.stats["blocked_ips"][f"{src_ip}_action"] = "DROP"
                     self.stats["blocked_ips"][src_ip] = time.time()
                     self.log_attack_panel(src_ip, attack_name, confidence, "DROP (UPGRADED)", "red")
+                    self.write_ai_mitigation_flag(src_ip, attack_name, "DROP (UPGRADED)", 2)
                 # [FIX] Remove from processing set before return
                 self.processing_ips.discard(src_ip)
                 return
@@ -423,6 +424,7 @@ class IDSEngineV2:
 
         # [PRO] Write to dashboard real-time feed
         self.write_dashboard_alert(src_ip, attack_name, confidence, action_str, level, is_zero_day)
+        self.write_ai_mitigation_flag(src_ip, attack_name, action_str, level)
         
         # [FIX] Remove from processing set after done
         with self.lock:
@@ -508,6 +510,24 @@ class IDSEngineV2:
         except Exception as e:
             logger.debug(f"[DASHBOARD ALERT] Không thể ghi alert: {e}")
 
+    def write_ai_mitigation_flag(self, src_ip, attack_name, action, level):
+        """Signal web1 status endpoint to suppress boot/kill logic while AI mitigates attack."""
+        try:
+            flag_file = _RUNTIME_STATE_DIR / "ai_mitigation_active.json"
+            os.makedirs(flag_file.parent, exist_ok=True)
+            payload = {
+                "mitigation_active": True,
+                "attack_name": attack_name,
+                "action": action,
+                "level": level,
+                "src_ip": src_ip,
+                "since": time.time()
+            }
+            with open(flag_file, "w", encoding="utf-8") as f:
+                json.dump(payload, f)
+        except Exception as e:
+            logger.debug(f"[MITIGATION FLAG] Không thể ghi cờ AI mitigation: {e}")
+
     def write_dashboard_ip_status(self):
         """Ghi trạng thái whitelist benign / watchlist tấn công cho dashboard."""
         try:
@@ -516,11 +536,22 @@ class IDSEngineV2:
             now = time.time()
             benign = []
             with self.lock:
+                config_whitelist = set(SDNConfigV2.WHITELIST)
+                for ip in sorted(config_whitelist):
+                    benign.append({
+                        "ip": ip,
+                        "listed_since": None,
+                        "last_analysis": None,
+                        "source": "config",
+                    })
                 for ip, ts in list(self.trusted_normal_ips.items()):
+                    if ip in config_whitelist:
+                        continue
                     benign.append({
                         "ip": ip,
                         "listed_since": ts,
                         "last_analysis": self.last_sequence_analysis_at.get(ip),
+                        "source": "ai",
                     })
                 attacks = []
                 for ip, meta in list(self.ai_attack_track.items()):
@@ -706,7 +737,7 @@ class IDSEngineV2:
         self.stats["avg_latency_ms"] = (self.stats["avg_latency_ms"] * 0.9) + (latency_ms * 0.1)
         
         if not silent:
-            logger.info(f"[ANALYZE] [{src_ip}] ✅ Thu thập: {collection_time:.2f}s | Phân tích: {latency_ms:.1f}ms")
+            logger.info(f"[ANALYZE] [{src_ip}] ✅ Thu thập: {collection_time:.2f}ms | Phân tích: {latency_ms:.1f}ms")
         
         # [V7 UPDATE] Decision logic - 2 Shield Strategy (Bảo vệ Normal)
         is_attack = False
@@ -721,7 +752,11 @@ class IDSEngineV2:
         top_attack_prob = torch.max(attack_probs).item() * 100
         top_attack_idx = torch.argmax(attack_probs).item() + 1  # +1 vì attack bắt đầu từ index 1
 
-        # [CRITICAL] Bảo vệ Normal: Nếu Classifier nói là Normal (>80%) -> TIN NGAY
+        # [PHỦ QUYẾT] Hiện tại cơ chế phủ quyết là:
+        # - Nếu CLS cho Normal > 80%: tin ngay Normal, bỏ qua AE dù AE có cao hơn threshold.
+        # - Nếu AE anomaly và CLS đồng ý attack với confidence cao: coi là attack.
+        # - Nếu AE anomaly nhưng CLS không chắc attack: sẽ giữ conservative BENIGN.
+        # - Nếu AE bình thường nhưng CLS phát hiện attack rất chắc (>98%): coi là evasive attack.
         if normal_prob > 80.0:
             # Shield 2 đã chắc chắn là Normal, bất chấp Shield 1 nói gì
             is_attack = False
@@ -759,7 +794,11 @@ class IDSEngineV2:
                 self.dynamic_threshold_update(mse)
             if src_ip in self.ai_attack_track:
                 del self.ai_attack_track[src_ip]
-                logger.warning(f"[IDS] [{src_ip}] Kiểm tra ngầm: không còn dấu hiệu tấn công — gỡ khỏi watchlist.")
+                if normal_prob > 95.0:
+                    self.trusted_normal_ips[src_ip] = now
+                    logger.info(f"[IDS] [{src_ip}] Watchlist cleared và đưa vào whitelist AI do Normal confidence {normal_prob:.1f}%.")
+                else:
+                    logger.warning(f"[IDS] [{src_ip}] Kiểm tra ngầm: không còn dấu hiệu tấn công — gỡ khỏi watchlist.")
             self.stats["processed"] += 1
             return
         
@@ -848,7 +887,7 @@ class IDSEngineV2:
                 )
                 if is_trusted:
                     logger.info(
-                        f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | Thu thập: {collection_time:.2f}s | "
+                        f"[RESULT] [{src_ip}] BÌNH THƯỜNG ({confidence:.1f}%) | Thu thập: {collection_time:.2f}ms | "
                         f"Phân tích: {latency_ms:.1f}ms | Tổng: {total_time_ms:.1f}ms | "
                         f"[Đưa vào whitelist AI — kiểm tra ngầm định kỳ; xem dashboard]"
                     )
@@ -1008,6 +1047,7 @@ class IDSEngineV2:
                                     "seen_key_set": set(),
                                     "last": now,
                                     "silent": silent_buf,
+                                    "silent_type": list_name if silent_buf else None,
                                 }
                                 self.ip_collection_start[src_ip] = now
                                 last_log = self.last_collect_log.get(src_ip, 0)
@@ -1039,6 +1079,7 @@ class IDSEngineV2:
                                 elapsed = time.time() - self.ip_collection_start[src_ip]
                                 seq = np.array(buf["data"])
                                 run_silent = buf.get("silent", False)
+                                silent_desc = buf.get("silent_type", "background")
                                 
                                 self.ip_warmup_count[src_ip] = self.ip_warmup_count.get(src_ip, 0) + 1
                                 wc = self.ip_warmup_count[src_ip]
@@ -1051,10 +1092,12 @@ class IDSEngineV2:
                                 
                                 self._processing_sequence.add(src_ip)
                                 
-                                if not run_silent:
+                                if run_silent:
                                     logger.info(
-                                        f"[COLLECT] [{src_ip}] ✅ Đủ {SEQ_LEN} mẫu ({elapsed:.2f}s) → phân tích AI"
+                                        f"[BACKGROUND] [{src_ip}] ✅ Đủ {SEQ_LEN} mẫu ({elapsed:.2f}s) → Xử lý nền ({silent_desc})"
                                     )
+                                # [ANALYZE] sẽ được in bởi process_sequence() sau khi phân tích xong
+                                
                                 threading.Thread(
                                     target=self.process_sequence,
                                     args=(src_ip, seq, elapsed, run_silent),

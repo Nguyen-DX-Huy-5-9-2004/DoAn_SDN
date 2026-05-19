@@ -39,15 +39,10 @@ sudo env \
   "${SCRIPT_DIR}/sdn_env/bin/python3" "${SCRIPT_DIR}/monitor/onos_metrics_collector.py" \
   > /tmp/onos_metrics_collector.log 2>&1 &
 ONOS_COLLECTOR_PID=$!
-#Chạy web dashboard để monitoring
-sudo env \
-  PYTHONPATH="${SCRIPT_DIR}/sdn_env/lib/python3.12/site-packages" \
-  "${SCRIPT_DIR}/sdn_env/bin/python3" "${SCRIPT_DIR}/dashboard/server.py" \
-  > /tmp/sdn_dashboard.log 2>&1 &
-DASHBOARD_PID=$!
 
 cleanup() {
-  sudo kill "$ONOS_COLLECTOR_PID" "$DASHBOARD_PID" 2>/dev/null || true
+  sudo kill "$ONOS_COLLECTOR_PID" 2>/dev/null || true
+  [ -n "$DASHBOARD_PID" ] && sudo kill "$DASHBOARD_PID" 2>/dev/null || true
 }
 trap cleanup EXIT INT TERM
 
